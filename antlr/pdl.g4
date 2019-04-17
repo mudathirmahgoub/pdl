@@ -4,45 +4,78 @@ grammar pdl;
 
 pdl : formula;
 
-formula : equivalence | implication | or | and | subformula;
+formula : falsity
+          | truth
+          | atomicFormula
+          | LeftParenthesis formula RightParenthesis
+          | Not formula // negation
+          | LeftSquareBracket program RightSquareBracket formula
+          | LeftAngle program RightAngle formula
+          | formula And formula
+          | formula Or formula
+          | formula RightArrow formula // implication
+          | formula LeftRightArrow formula // equivalence
+          | hoarePartialCorrectness ;
 
-subformula : falsity | truth | Identifier |
-             necessity | possibility  | negation |
-             '(' formula ')';
 
-necessity : '[' program ']' subformula ;
-
-possibility : '<' program '>' subformula ;
-
-implication : subformula RightArrow formula ;
-
-equivalence : subformula LeftRightArrow formula ;
-
-or : subformula Or formula ;
-
-and : subformula And formula ;
-
-negation : Not formula ;
+hoarePartialCorrectness : LeftCurlyBracket formula RightCurlyBracket program LeftCurlyBracket formula RightCurlyBracket ;
 
 falsity : '0' ;
 
 truth : '1' ;
 
+atomicFormula : Identifier;
 
-program : subprogram  | sequence | choice | iteration | test ;
+program : | skip
+          | fail
+          | alternativeGuardedCommand
+          | iterativeGuardedCommand
+          | atomicProgram
+          | program Star
+          | program Semicolon program
+          | program Union program
+          | LeftParenthesis program RightParenthesis
+          | formula QuestionMark;
 
-subprogram : Identifier; // ToDo: review precedence
+skip : Skip ;
 
-sequence : subprogram ';' program ;
+fail : Fail ;
 
-choice : subprogram Union program ;
+atomicProgram : Identifier;
 
-iteration : subprogram '*';
+alternativeGuardedCommand : If guardedCommand+ Fi ;
 
-test : subformula '?';
+iterativeGuardedCommand : Do guardedCommand+ Od ;
 
+guardedCommand : formula RightArrow program ;
 
 // lexer rules
+
+Star : '*' ;
+
+Semicolon : ';' ;
+
+QuestionMark : '?' ;
+
+Skip : 'skip' ;
+
+Fail : 'fail' ;
+
+If : 'if';
+
+Fi : 'fi' ;
+
+Do : 'do' ;
+ 
+Od : 'od' ;
+
+Then : 'then' ;
+
+Else : 'else' ;
+
+While : 'while';
+
+Until : 'until' ; 
 
 Union : '∪' | 'union' ;
 
@@ -51,6 +84,22 @@ Or : 'or' | '∨' ;
 And : 'and' | '∧';
 
 Not : 'not' | '¬';
+
+LeftParenthesis : '(' ;
+
+RightParenthesis : ')' ;
+
+LeftSquareBracket : '[';
+
+RightSquareBracket : ']';
+
+LeftCurlyBracket : '{';
+
+RightCurlyBracket : '}';
+
+LeftAngle : '<';
+
+RightAngle : '>';
 
 Identifier : IdentifierLetter (IdentifierLetter | Digit)* ;
 
