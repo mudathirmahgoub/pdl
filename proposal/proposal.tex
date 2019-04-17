@@ -1,0 +1,29 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Mudathir Mahgoub}
+\title{Project proposal}
+\begin{document}
+
+\maketitle
+
+\section{Propositional dynamic logic solver}
+The idea of the project is to implement a solver for propositional dynamic logic (PDL). The input would be a formula in PDL and optionally a kripke structure for that formula. The output (result) is either \textit{unsat}, \textit{sat} or \textit{unknown}. If a kripke structure is given as input, the result scope would be restricted to this kripke structure. Otherwise, the result scope would be all kripke structures. 
+
+\section{Implementation}
+The project is primarily code and would use the SMT solver CVC4 as a back end and apply the relation theory to implement the semantics of PDL. The project would import CVC4 abstract syntax tree (AST) for relations from another project that I am working on (Alloy2SMT translator)\footnote{\url{https://github.com/CVC4/org.alloytools.alloy/tree/cvc4/alloy2smt}} which also supports type checking and parsing SMT models. In this project I would write a translator from PDL to CVC4 AST and display back the SMT models returned from CVC4 as Kripke structre and dot files for graphvis.
+
+
+\section{Preferences for presentation day}
+I prefer April 30 for my presentation day.
+
+\end{document}
