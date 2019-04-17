@@ -4,22 +4,23 @@ grammar pdl;
 
 pdl : formula;
 
-formula :   falsity | truth | Identifier |
-            necessity | possibility |
-            implication | equivalence | or | and | negation |
-            falsity | truth ;
+formula : equivalence | implication | or | and | subformula;
 
-necessity : '[' program ']' formula ;
+subformula : falsity | truth | Identifier |
+             necessity | possibility  | negation |
+             '(' formula ')';
 
-possibility : '<' program '>' formula ;
+necessity : '[' program ']' subformula ;
 
-implication : formula RightArrow formula ;
+possibility : '<' program '>' subformula ;
 
-equivalence : formula LeftRightArrow formula ;
+implication : subformula RightArrow formula ;
 
-or : formula Or formula ;
+equivalence : subformula LeftRightArrow formula ;
 
-and : formula And formula ;
+or : subformula Or formula ;
+
+and : subformula And formula ;
 
 negation : Not formula ;
 
@@ -28,28 +29,38 @@ falsity : '0' ;
 truth : '1' ;
 
 
-program : Identifier | sequence | choice | iteration | test ;
+program : subprogram  | sequence | choice | iteration | test ;
 
-sequence : program ';' program ;
+subprogram : Identifier; // ToDo: review precedence
 
-choice : program UNION program ;
+sequence : subprogram ';' program ;
 
-iteration : program '*';
+choice : subprogram Union program ;
 
-test : formula '?';
+iteration : subprogram '*';
+
+test : subformula '?';
+
 
 // lexer rules
+
+Union : '∪' | 'union' ;
+
+Or : 'or' | '∨' ;
+
+And : 'and' | '∧';
+
+Not : 'not' | '¬';
+
 Identifier : IdentifierLetter (IdentifierLetter | Digit)* ;
 
 IdentifierLetter : 'a'..'z'|'A'..'Z'|'_' ;
 
 Integer : Digit+ ;
 
-RightArrow : '->';
+RightArrow : '->' | '→';
 
-LeftRightArrow : '<->' ;
-
-Union : '∪' | 'union' ;
+LeftRightArrow : '<->' | '↔' ;
 
 Digit : '0'..'9' ;
 
