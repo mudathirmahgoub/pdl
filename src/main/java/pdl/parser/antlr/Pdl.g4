@@ -1,4 +1,4 @@
-grammar pdl;
+grammar Pdl;
 
 // pdl.parser rules
 
