@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2019.1.9)  18 APR 2019 12:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2019.1.9)  18 APR 2019 13:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -694,31 +694,38 @@ LaTeX Font Info:    Try loading font information for OT1+lmtt on input line 23.
 
 (/usr/share/texlive/texmf-dist/tex/latex/lm/ot1lmtt.fd
 File: ot1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) (./proposal.bbl)
+)
+LaTeX Font Info:    Try loading font information for U+euf on input line 27.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueuf.fd
+File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
+) (./proposal.bbl
 [1
 
-{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
+{/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]) [2]
 (./proposal.aux) ) 
 Here is how much of TeX's memory you used:
- 3544 strings out of 493064
- 46540 string characters out of 6138154
+ 3556 strings out of 493064
+ 46775 string characters out of 6138154
  114082 words of memory out of 5000000
- 6969 multiletter control sequences out of 15000+600000
- 70843 words of font info for 77 fonts, out of 8000000 for 9000
+ 6976 multiletter control sequences out of 15000+600000
+ 71551 words of font info for 80 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
- 37i,8n,24p,715b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,8n,24p,765b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/lm/lm-rmtt.enc
-}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/lm/lmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/lm/lmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/lm/lmr7.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/lm/lmtt10.pfb>
-Output written on proposal.pdf (1 page, 158424 bytes).
+}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texliv
+e/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}</usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/euler/eufm10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/lm/lmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/l
+m/lmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/lm/lmr12.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/lm/lmr17.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/lm/lmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/lm/
+lmri12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on proposal.pdf (2 pages, 165049 bytes).
 PDF statistics:
- 38 PDF objects out of 1000 (max. 8388607)
- 27 compressed objects within 1 object stream
+ 50 PDF objects out of 1000 (max. 8388607)
+ 36 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
