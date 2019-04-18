@@ -102,4 +102,25 @@ public class PdlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Pd
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitGuardedCommand(PdlParser.GuardedCommandContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitIteProgram(PdlParser.IteProgramContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitWhileProgram(PdlParser.WhileProgramContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitRepeatProgram(PdlParser.RepeatProgramContext ctx) { return visitChildren(ctx); }
 }

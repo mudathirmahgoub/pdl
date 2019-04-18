@@ -88,4 +88,22 @@ public interface PdlVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGuardedCommand(PdlParser.GuardedCommandContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#iteProgram}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIteProgram(PdlParser.IteProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#whileProgram}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhileProgram(PdlParser.WhileProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#repeatProgram}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRepeatProgram(PdlParser.RepeatProgramContext ctx);
 }

@@ -31,6 +31,9 @@ program : | skip
           | alternativeGuardedCommand
           | iterativeGuardedCommand
           | atomicProgram
+          | iteProgram
+          | whileProgram
+          | repeatProgram
           | program Star
           | program Semicolon program
           | program Union program
@@ -48,6 +51,12 @@ alternativeGuardedCommand : If guardedCommand+ Fi ;
 iterativeGuardedCommand : Do guardedCommand+ Od ;
 
 guardedCommand : formula RightArrow program ;
+
+iteProgram : If formula Then program Else program ;
+
+whileProgram : While formula Do program ;
+
+repeatProgram : Repeat program Until formula ;
 
 // lexer rules
 
@@ -74,6 +83,8 @@ Then : 'then' ;
 Else : 'else' ;
 
 While : 'while';
+
+Repeat : 'repeat' ;
 
 Until : 'until' ; 
 

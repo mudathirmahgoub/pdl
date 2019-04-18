@@ -137,4 +137,34 @@ public interface PdlListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGuardedCommand(PdlParser.GuardedCommandContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#iteProgram}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteProgram(PdlParser.IteProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#iteProgram}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteProgram(PdlParser.IteProgramContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#whileProgram}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhileProgram(PdlParser.WhileProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#whileProgram}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhileProgram(PdlParser.WhileProgramContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#repeatProgram}.
+	 * @param ctx the parse tree
+	 */
+	void enterRepeatProgram(PdlParser.RepeatProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#repeatProgram}.
+	 * @param ctx the parse tree
+	 */
+	void exitRepeatProgram(PdlParser.RepeatProgramContext ctx);
 }
