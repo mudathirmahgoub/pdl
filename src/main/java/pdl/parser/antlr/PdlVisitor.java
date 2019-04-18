@@ -17,6 +17,36 @@ public interface PdlVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPdl(PdlParser.PdlContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PdlParser#kripkeFrame}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitKripkeFrame(PdlParser.KripkeFrameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#states}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStates(PdlParser.StatesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#propositionMeaning}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPropositionMeaning(PdlParser.PropositionMeaningContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#programMeaning}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgramMeaning(PdlParser.ProgramMeaningContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PdlParser#pair}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPair(PdlParser.PairContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PdlParser#formula}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

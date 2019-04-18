@@ -18,6 +18,56 @@ public interface PdlListener extends ParseTreeListener {
 	 */
 	void exitPdl(PdlParser.PdlContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PdlParser#kripkeFrame}.
+	 * @param ctx the parse tree
+	 */
+	void enterKripkeFrame(PdlParser.KripkeFrameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#kripkeFrame}.
+	 * @param ctx the parse tree
+	 */
+	void exitKripkeFrame(PdlParser.KripkeFrameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#states}.
+	 * @param ctx the parse tree
+	 */
+	void enterStates(PdlParser.StatesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#states}.
+	 * @param ctx the parse tree
+	 */
+	void exitStates(PdlParser.StatesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#propositionMeaning}.
+	 * @param ctx the parse tree
+	 */
+	void enterPropositionMeaning(PdlParser.PropositionMeaningContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#propositionMeaning}.
+	 * @param ctx the parse tree
+	 */
+	void exitPropositionMeaning(PdlParser.PropositionMeaningContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#programMeaning}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgramMeaning(PdlParser.ProgramMeaningContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#programMeaning}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgramMeaning(PdlParser.ProgramMeaningContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PdlParser#pair}.
+	 * @param ctx the parse tree
+	 */
+	void enterPair(PdlParser.PairContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PdlParser#pair}.
+	 * @param ctx the parse tree
+	 */
+	void exitPair(PdlParser.PairContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PdlParser#formula}.
 	 * @param ctx the parse tree
 	 */
