@@ -2,7 +2,20 @@ grammar Pdl;
 
 // pdl.parser rules
 
-pdl : formula;
+pdl : kripkeFrame? formula;
+
+kripkeFrame : states propositionMeaning* programMeaning* ;
+
+states : 'K' '=' LeftCurlyBracket Identifier (',' Identifier)* RightCurlyBracket ;
+
+propositionMeaning : 'm' LeftParenthesis Identifier RightParenthesis '='
+                       LeftCurlyBracket Identifier? (',' Identifier)*  RightCurlyBracket;
+
+programMeaning : 'm' LeftParenthesis Identifier RightParenthesis '='
+                       LeftCurlyBracket pair? (',' pair)*  RightCurlyBracket ;
+
+pair : LeftParenthesis Identifier ',' Identifier RightParenthesis ;
+
 
 formula : falsity
           | truth
