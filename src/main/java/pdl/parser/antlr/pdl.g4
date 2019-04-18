@@ -1,6 +1,6 @@
 grammar pdl;
 
-// parser rules
+// pdl.parser rules
 
 pdl : formula;
 

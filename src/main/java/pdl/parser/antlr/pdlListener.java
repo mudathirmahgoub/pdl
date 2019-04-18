@@ -1,5 +1,5 @@
 // Generated from pdl.g4 by ANTLR 4.7.2
-package pdl;
+package pdl.parser.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
