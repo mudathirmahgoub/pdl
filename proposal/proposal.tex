@@ -20,11 +20,17 @@
 The idea of the project is to implement a solver for propositional dynamic logic (PDL). The input would be a formula in PDL and optionally a kripke structure for that formula. The output result is either \textit{unsat}, \textit{sat} or \textit{unknown}. If a kripke structure is given, the result scope would be restricted to this kripke structure. Otherwise, the result scope would be all possible kripke structures. 
 
 \section{Implementation}
-The project is primarily code and would use the SMT solver CVC4 as a back end and apply the relation theory to implement the semantics of PDL. The project would import CVC4 abstract syntax tree (AST) for relations from another project that I am working on (Alloy2SMT translator\footnote{\url{https://github.com/CVC4/org.alloytools.alloy/tree/cvc4/alloy2smt}}) which supports type checking and SMT models parsing. For this project I would write a translator from PDL to CVC4 AST and display back the SMT models returned from CVC4 as Kripke structures and dot files for visualization using software like graphvis.
+The project is primarily code and would use the SMT solver CVC4 as a back end and apply the relation theory to implement the semantics of PDL. The project would import CVC4 abstract syntax tree (AST) for relations from another project that I am working on (Alloy2SMT translator\footnote{\url{https://github.com/CVC4/org.alloytools.alloy/tree/cvc4/alloy2smt}}) which supports type checking and SMT models parsing. For this project I would write a translator from PDL AST to CVC4 AST and display back the SMT models returned from CVC4 as Kripke structures and dot files for visualization using software like graphvis.
 
 \section{Progress so far}
 
+Since the imported CVC4 AST is written in Java, I have created a java project for PDL  using gradle\footnote{\url{https://github.com/mudathirmahgoub/pdl}}. I have written an ANTLR4 grammar for PDL following the syntax in chapter 5 in \cite{dynamic}. Lastly I  prepared classes for PDL AST for formulas and programs. Next task is to integrate all these together and finish the implementation. 
+
 \section{Preferences for presentation day}
 I prefer April 30 for my presentation day.
+
+\bibliographystyle{plain}
+
+\bibliography{references}
 
 \end{document}
