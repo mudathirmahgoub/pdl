@@ -136,6 +136,22 @@ public class PdlProgramVisitorTests
     public void ite()
     {
         String pdl = "[if p then a else b] q";
-        throw new UnsupportedOperationException();
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p", "q")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a", "b")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Formula q = new AtomicFormula("q");
+        Program a = new AtomicProgram("a");
+        Program b = new AtomicProgram("b");
+        Program ite = new ITEProgram(p, a, b);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, ite, q);
+        Assertions.assertEquals(expectedFormula, actualFormula);
     }
 }

@@ -199,6 +199,10 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         {
             return visitIterativeGuardedCommand(ctx.iterativeGuardedCommand());
         }
+        if(ctx.iteProgram() != null)
+        {
+            return visitIteProgram(ctx.iteProgram());
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -224,5 +228,14 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         Formula formula = (Formula) this.visitFormula(ctx.formula());
         Program program = (Program) this.visitProgram(ctx.program());
         return new GuardedCommand(formula, program);
+    }
+
+    @Override
+    public PdlAst visitIteProgram(PdlParser.IteProgramContext ctx)
+    {
+        Formula condition = (Formula) this.visitFormula(ctx.formula());
+        Program thenProgram = (Program) this.visitProgram(ctx.program(0));
+        Program elseProgram = (Program) this.visitProgram(ctx.program(1));
+        return new ITEProgram(condition, thenProgram, elseProgram);
     }
 }

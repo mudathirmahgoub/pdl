@@ -1,12 +1,12 @@
 package pdl.ast;
 
-public class ITEFormula
+public class ITEProgram extends Program
 {
     private final Formula condition;
     private final Program thenProgram;
     private final Program elseProgram;
 
-    public ITEFormula(Formula condition, Program thenProgram, Program elseProgram)
+    public ITEProgram(Formula condition, Program thenProgram, Program elseProgram)
     {
         if(condition == null)
         {
@@ -40,5 +40,22 @@ public class ITEFormula
     public Program getElseProgram()
     {
         return elseProgram;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof ITEProgram))
+        {
+            return false;
+        }
+        ITEProgram ite = (ITEProgram) object;
+        return condition.equals(ite.condition) &&
+                thenProgram.equals(ite.thenProgram) &&
+                elseProgram.equals(ite.elseProgram);
     }
 }
