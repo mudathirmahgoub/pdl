@@ -1,6 +1,6 @@
 package pdl.ast;
 
-public class AtomicProgram
+public class AtomicProgram extends Program
 {
     private final String symbol;
     public AtomicProgram(String symbol)

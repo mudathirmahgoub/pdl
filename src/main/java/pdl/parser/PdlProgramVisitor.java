@@ -161,6 +161,30 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     @Override
     public PdlAst visitProgram(PdlParser.ProgramContext ctx)
     {
+        if(ctx.skip() != null)
+        {
+            return Skip.getInstance();
+        }
+        if(ctx.fail() != null)
+        {
+            return Fail.getInstance();
+        }
+        if(ctx.atomicProgram() != null)
+        {
+            String program = ctx.atomicProgram().getText();
+            if(!frame.getPrograms().keySet().contains(program))
+            {
+                if(kripkeFrameProvided)
+                {
+                    throw new RuntimeException(String.format("Atomic program '%s' is not defined in the kripke frame", program));
+                }
+                else
+                {
+                    frame.addProgram(program);
+                }
+            }
+            return new AtomicProgram(program);
+        }
         throw new UnsupportedOperationException();
     }
 

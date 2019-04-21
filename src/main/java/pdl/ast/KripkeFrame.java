@@ -38,4 +38,10 @@ public class KripkeFrame extends PdlAst
         List<String> propositionStates = new ArrayList<>();
         this.propositions.put(proposition, propositionStates);
     }
+
+    public void addProgram(String program)
+    {
+        List<Transition> transitions = new ArrayList<>();
+        this.programs.put(program, transitions);
+    }
 }

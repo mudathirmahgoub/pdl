@@ -2,10 +2,10 @@ package pdl.ast;
 
 public class Fail extends Program
 {
-    private Fail instance = new Fail();
+    private final static Fail instance = new Fail();
     private Fail() {}
 
-    public Fail getInstance()
+    public static Fail getInstance()
     {
         return instance;
     }

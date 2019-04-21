@@ -6,10 +6,7 @@ package pdl;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import pdl.ast.AtomicFormula;
-import pdl.ast.KripkeFrame;
-import pdl.ast.PdlProgram;
-import pdl.ast.Transition;
+import pdl.ast.*;
 import pdl.translator.PdlUtils;
 
 import java.util.Arrays;
@@ -35,5 +32,27 @@ public class PdlProgramVisitorTests
         Assertions.assertEquals(Arrays.asList(new Transition("u", "v")), frame.getPrograms().get("a"));
 
         Assertions.assertEquals(new AtomicFormula("p"), program.getFormula());
+    }
+
+    @Test
+    public void testBoxFormula()
+    {
+        String pdl = "[a]p";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p")), frame.getPropositions().keySet());
+        Assertions.assertEquals(0, frame.getPropositions().get("p").size());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a")), frame.getPrograms().keySet());
+        Assertions.assertEquals(0, frame.getPrograms().get("a").size());
+        ModalFormula modal = (ModalFormula) program.getFormula();
+        Assertions.assertEquals(ModalFormula.Op.Box, modal.getOP());
+        AtomicProgram atomicProgram = (AtomicProgram) modal.getProgram();
+        AtomicFormula atomicFormula = (AtomicFormula) modal.getFormula();
+        Assertions.assertEquals("a", atomicProgram.getSymbol());
+        Assertions.assertEquals("p", atomicFormula.getSymbol());
     }
 }
