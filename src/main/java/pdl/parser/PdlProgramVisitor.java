@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
 {
     private KripkeFrame frame;
-    private boolean kripkeFrameProvided;
+    private boolean isFrameProvided;
 
     @Override
     public PdlAst visitPdl(PdlParser.PdlContext ctx)
@@ -22,7 +22,7 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         if (ctx.kripkeFrame() != null)
         {
             frame = (KripkeFrame) this.visitKripkeFrame(ctx.kripkeFrame());
-            kripkeFrameProvided = true;
+            isFrameProvided = true;
         }
         else
         {
@@ -30,10 +30,10 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             Map<String, List<String>> propositions = new HashMap<>();
             Map<String, List<Transition>> programs = new HashMap<>();
             frame = new KripkeFrame(states, propositions, programs);
-            kripkeFrameProvided = false;
+            isFrameProvided = false;
         }
         Formula formula = (Formula) this.visitFormula(ctx.formula());
-        return new PdlProgram(frame, formula);
+        return new PdlProgram(frame, formula, isFrameProvided);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             String proposition = ctx.atomicFormula().getText();
             if (!frame.getPropositions().containsKey(proposition))
             {
-                if (kripkeFrameProvided)
+                if (isFrameProvided)
                 {
                     throw new RuntimeException(String.format("Proposition '%s' is not defined in the kripke frame", proposition));
                 }
@@ -185,7 +185,7 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             String program = ctx.atomicProgram().getText();
             if (!frame.getPrograms().keySet().contains(program))
             {
-                if (kripkeFrameProvided)
+                if (isFrameProvided)
                 {
                     throw new RuntimeException(String.format("Atomic program '%s' is not defined in the kripke frame", program));
                 }

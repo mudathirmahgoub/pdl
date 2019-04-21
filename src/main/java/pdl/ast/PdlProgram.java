@@ -4,9 +4,11 @@ public class PdlProgram extends PdlAst
 {
     private final KripkeFrame frame;
     private final Formula formula;
+    private final boolean isFrameProvided;
 
-    public PdlProgram(KripkeFrame frame, Formula formula)
+    public PdlProgram(KripkeFrame frame, Formula formula, boolean isFrameProvided)
     {
+        this.isFrameProvided = isFrameProvided;
         // frame can be null
         this.frame = frame;
         // formula should not be null
@@ -25,6 +27,11 @@ public class PdlProgram extends PdlAst
     public KripkeFrame getFrame()
     {
         return frame;
+    }
+
+    public boolean isFrameProvided()
+    {
+        return isFrameProvided;
     }
 
     @Override
