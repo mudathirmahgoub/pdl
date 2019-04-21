@@ -106,6 +106,67 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             }
             return new AtomicFormula(proposition);
         }
+        if(ctx.LeftParenthesis() != null)
+        {
+            return this.visitFormula(ctx.formula(0));
+        }
+        if(ctx.Not() != null)
+        {
+            Formula formula = (Formula) this.visitFormula(ctx.formula(0));
+            return new UnaryFormula(UnaryFormula.Op.Not, formula);
+        }
+        if(ctx.LeftSquareBracket() != null)
+        {
+            Program program = (Program) this.visitProgram(ctx.program());
+            Formula formula = (Formula) this.visitFormula(ctx.formula(0));
+            return new ModalFormula(ModalFormula.Op.Box, program, formula);
+        }
+        if(ctx.LeftAngle() != null)
+        {
+            Program program = (Program) this.visitProgram(ctx.program());
+            Formula formula = (Formula) this.visitFormula(ctx.formula(0));
+            return new ModalFormula(ModalFormula.Op.Diamond, program, formula);
+        }
+        if(ctx.And() != null)
+        {
+            Formula left = (Formula) this.visitFormula(ctx.formula(0));
+            Formula right = (Formula) this.visitFormula(ctx.formula(1));
+            return new BinaryFormula(BinaryFormula.Op.And, left, right);
+        }
+        if(ctx.Or() != null)
+        {
+            Formula left = (Formula) this.visitFormula(ctx.formula(0));
+            Formula right = (Formula) this.visitFormula(ctx.formula(1));
+            return new BinaryFormula(BinaryFormula.Op.Or, left, right);
+        }
+        if(ctx.RightArrow() != null)
+        {
+            Formula left = (Formula) this.visitFormula(ctx.formula(0));
+            Formula right = (Formula) this.visitFormula(ctx.formula(1));
+            return new BinaryFormula(BinaryFormula.Op.Implies, left, right);
+        }
+        if(ctx.LeftRightArrow() != null)
+        {
+            Formula left = (Formula) this.visitFormula(ctx.formula(0));
+            Formula right = (Formula) this.visitFormula(ctx.formula(1));
+            return new BinaryFormula(BinaryFormula.Op.Equivalence, left, right);
+        }
+        if(ctx.hoarePartialCorrectness() != null)
+        {
+            return this.visitHoarePartialCorrectness(ctx.hoarePartialCorrectness());
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PdlAst visitProgram(PdlParser.ProgramContext ctx)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PdlAst visitHoarePartialCorrectness(PdlParser.HoarePartialCorrectnessContext ctx)
+    {
         throw new UnsupportedOperationException();
     }
 }
