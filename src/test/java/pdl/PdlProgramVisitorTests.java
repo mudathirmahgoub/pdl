@@ -104,4 +104,38 @@ public class PdlProgramVisitorTests
 
         Assertions.assertEquals(expectedFormula, actualFormula);
     }
+
+    @Test
+    public void iterativeGuardedCommand()
+    {
+        String pdl = "[do p -> a | q -> b od] r";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p", "q", "r")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a", "b")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Formula q = new AtomicFormula("q");
+        Formula r = new AtomicFormula("r");
+        Program a = new AtomicProgram("a");
+        Program b = new AtomicProgram("b");
+        GuardedCommand pa = new GuardedCommand(p, a);
+        GuardedCommand qb = new GuardedCommand(q, b);
+        Program alternative = new MultiGurardedCommand(MultiGurardedCommand.Op.Do, Arrays.asList(pa, qb));
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, alternative, r);
+
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+    @Test
+    public void ite()
+    {
+        String pdl = "[if p then a else b] q";
+        throw new UnsupportedOperationException();
+    }
 }
