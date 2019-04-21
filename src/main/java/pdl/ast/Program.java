@@ -1,5 +1,6 @@
 package pdl.ast;
 
-public class Program extends PdlAst
+public abstract class Program extends PdlAst
 {
+    abstract public boolean equals(Object object);
 }

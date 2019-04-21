@@ -1,5 +1,7 @@
 package pdl.ast;
 
-public class Formula extends PdlAst
+public abstract class Formula extends PdlAst
 {
+    @Override
+    abstract public boolean equals(Object object);
 }

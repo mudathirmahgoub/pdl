@@ -29,4 +29,20 @@ public class While extends Program
     {
         return program;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof While))
+        {
+            return false;
+        }
+        While whileProgram = (While) object;
+        return this.program.equals(whileProgram.program) &&
+                this.formula.equals(whileProgram.formula);
+    }
 }

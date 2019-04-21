@@ -16,4 +16,19 @@ public class AtomicProgram extends Program
     {
         return symbol;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof AtomicProgram))
+        {
+            return false;
+        }
+        AtomicProgram program = (AtomicProgram) object;
+        return this.symbol.equals(program.symbol);
+    }
 }

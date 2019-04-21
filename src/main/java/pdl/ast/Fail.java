@@ -9,4 +9,18 @@ public class Fail extends Program
     {
         return instance;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof Fail))
+        {
+            return false;
+        }
+        return true;
+    }
 }

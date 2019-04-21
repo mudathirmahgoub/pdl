@@ -44,4 +44,21 @@ public class KripkeFrame extends PdlAst
         List<Transition> transitions = new ArrayList<>();
         this.programs.put(program, transitions);
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof KripkeFrame))
+        {
+            return false;
+        }
+        KripkeFrame frame = (KripkeFrame) object;
+        return this.states.equals(frame.states) &&
+                this.propositions.equals(frame.propositions) &&
+                this.programs.equals(frame.programs);
+    }
 }

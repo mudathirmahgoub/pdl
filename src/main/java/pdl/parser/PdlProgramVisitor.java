@@ -159,6 +159,12 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     }
 
     @Override
+    public PdlAst visitHoarePartialCorrectness(PdlParser.HoarePartialCorrectnessContext ctx)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public PdlAst visitProgram(PdlParser.ProgramContext ctx)
     {
         if(ctx.skip() != null)
@@ -185,12 +191,38 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             }
             return new AtomicProgram(program);
         }
+        if(ctx.alternativeGuardedCommand() != null)
+        {
+            return visitAlternativeGuardedCommand(ctx.alternativeGuardedCommand());
+        }
+        if(ctx.iterativeGuardedCommand() != null)
+        {
+            return visitIterativeGuardedCommand(ctx.iterativeGuardedCommand());
+        }
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PdlAst visitHoarePartialCorrectness(PdlParser.HoarePartialCorrectnessContext ctx)
+    public PdlAst visitAlternativeGuardedCommand(PdlParser.AlternativeGuardedCommandContext ctx)
     {
-        throw new UnsupportedOperationException();
+        List<GuardedCommand> commands = ctx.guardedCommand()
+                .stream().map(c -> (GuardedCommand) visitGuardedCommand(c)).collect(Collectors.toList());
+        return new MultiGurardedCommand(MultiGurardedCommand.Op.If, commands);
+    }
+
+    @Override
+    public PdlAst visitIterativeGuardedCommand(PdlParser.IterativeGuardedCommandContext ctx)
+    {
+        List<GuardedCommand> commands = ctx.guardedCommand()
+                                           .stream().map(c -> (GuardedCommand) visitGuardedCommand(c)).collect(Collectors.toList());
+        return new MultiGurardedCommand(MultiGurardedCommand.Op.Do, commands);
+    }
+
+    @Override
+    public PdlAst visitGuardedCommand(PdlParser.GuardedCommandContext ctx)
+    {
+        Formula formula = (Formula) this.visitFormula(ctx.formula());
+        Program program = (Program) this.visitProgram(ctx.program());
+        return new GuardedCommand(formula, program);
     }
 }

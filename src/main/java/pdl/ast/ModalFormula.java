@@ -55,4 +55,20 @@ public class ModalFormula extends Formula
             return this.opStr;
         }
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof ModalFormula))
+        {
+            return false;
+        }
+        ModalFormula modal = (ModalFormula) object;
+        return this.program.equals(modal.program) &&
+                this.formula.equals(modal.formula);
+    }
 }

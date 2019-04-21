@@ -38,4 +38,21 @@ public class PartialCorrectnessFormula extends Formula
     {
         return this.postcondition;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof PartialCorrectnessFormula))
+        {
+            return false;
+        }
+        PartialCorrectnessFormula formula = (PartialCorrectnessFormula) object;
+        return this.precondition.equals(formula.precondition) &&
+                this.program.equals(formula.program) &&
+                this.postcondition.equals(formula.postcondition);
+    }
 }

@@ -46,4 +46,20 @@ public class MultiGurardedCommand extends Program
             return this.opStr;
         }
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof MultiGurardedCommand))
+        {
+            return false;
+        }
+        MultiGurardedCommand command = (MultiGurardedCommand) object;
+        return this.op == command.op &&
+                this.guardedCommands.equals(command.guardedCommands);
+    }
 }

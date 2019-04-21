@@ -56,4 +56,21 @@ public class BinaryFormula extends Formula
             return this.opStr;
         }
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof BinaryFormula))
+        {
+            return false;
+        }
+        BinaryFormula formula = (BinaryFormula) object;
+        return this.op == formula.op &&
+                this.left.equals(formula.left) &&
+                this.right.equals(formula.right);
+    }
 }

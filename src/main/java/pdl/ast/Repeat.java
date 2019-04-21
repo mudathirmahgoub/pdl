@@ -29,4 +29,20 @@ public class Repeat extends Program
     {
         return program;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof Repeat))
+        {
+            return false;
+        }
+        Repeat repeat = (Repeat) object;
+        return this.program.equals(repeat.program) &&
+                this.formula.equals(repeat.formula);
+    }
 }

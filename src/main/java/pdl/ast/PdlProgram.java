@@ -26,4 +26,20 @@ public class PdlProgram extends PdlAst
     {
         return frame;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof PdlProgram))
+        {
+            return false;
+        }
+        PdlProgram program = (PdlProgram) object;
+        return this.frame.equals(program.frame) &&
+                this.formula.equals(program.formula);
+    }
 }

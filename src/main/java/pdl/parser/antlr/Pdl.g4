@@ -59,9 +59,9 @@ fail : Fail ;
 
 atomicProgram : Identifier;
 
-alternativeGuardedCommand : If guardedCommand+ Fi ;
+alternativeGuardedCommand : If guardedCommand (Bar guardedCommand)* Fi ;
 
-iterativeGuardedCommand : Do guardedCommand+ Od ;
+iterativeGuardedCommand : Do guardedCommand (Bar guardedCommand)* Od ;
 
 guardedCommand : formula RightArrow program ;
 
@@ -78,6 +78,8 @@ Star : '*' ;
 Semicolon : ';' ;
 
 QuestionMark : '?' ;
+
+Bar : '|';
 
 Skip : 'skip' ;
 

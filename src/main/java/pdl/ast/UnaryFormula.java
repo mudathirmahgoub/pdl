@@ -42,4 +42,20 @@ public class UnaryFormula extends Formula
             return this.opStr;
         }
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof UnaryFormula))
+        {
+            return false;
+        }
+        UnaryFormula unary = (UnaryFormula) object;
+        return this.op == unary.op &&
+                this.formula.equals(unary.formula);
+    }
 }

@@ -12,4 +12,19 @@ public class Iteration extends Program
         }
         this.program = program;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof Iteration))
+        {
+            return false;
+        }
+        Iteration iteration = (Iteration) object;
+        return this.program.equals(iteration.program);
+    }
 }
