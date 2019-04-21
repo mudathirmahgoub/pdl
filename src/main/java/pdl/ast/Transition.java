@@ -9,4 +9,20 @@ public class Transition
         this.inputState = inputState;
         this.outputState = outputState;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof Transition))
+        {
+            return false;
+        }
+        Transition transition = (Transition) object ;
+        return inputState.equals(transition.inputState) &&
+                outputState.equals(transition.outputState);
+    }
 }

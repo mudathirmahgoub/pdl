@@ -16,4 +16,19 @@ public class AtomicFormula extends Formula
     {
         return symbol;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof AtomicFormula))
+        {
+            return false;
+        }
+        AtomicFormula formula = (AtomicFormula) object ;
+        return symbol.equals(formula.symbol);
+    }
 }
