@@ -175,6 +175,10 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         {
             return Fail.getInstance();
         }
+        if(ctx.LeftParenthesis() != null)
+        {
+            return visitProgram(ctx.program(0));
+        }
         if(ctx.atomicProgram() != null)
         {
             String program = ctx.atomicProgram().getText();
@@ -202,6 +206,36 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         if(ctx.iteProgram() != null)
         {
             return visitIteProgram(ctx.iteProgram());
+        }
+        if(ctx.whileProgram() != null)
+        {
+            return visitWhileProgram(ctx.whileProgram());
+        }
+        if(ctx.repeatProgram() != null)
+        {
+            return visitRepeatProgram(ctx.repeatProgram());
+        }
+        if(ctx.Star() != null)
+        {
+            Program program = (Program) visitProgram(ctx.program(0));
+            return new Iteration(program);
+        }
+        if(ctx.Semicolon() != null)
+        {
+            Program left = (Program) visitProgram(ctx.program(0));
+            Program right = (Program) visitProgram(ctx.program(1));
+            return new BinaryProgram(BinaryProgram.Op.Composition, left, right);
+        }
+        if(ctx.Union() != null)
+        {
+            Program left = (Program) visitProgram(ctx.program(0));
+            Program right = (Program) visitProgram(ctx.program(1));
+            return new BinaryProgram(BinaryProgram.Op.Choice, left, right);
+        }
+        if(ctx.QuestionMark() != null)
+        {
+            Formula formula = (Formula) visitFormula(ctx.formula());
+            return new Test(formula);
         }
         throw new UnsupportedOperationException();
     }
@@ -237,5 +271,21 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         Program thenProgram = (Program) this.visitProgram(ctx.program(0));
         Program elseProgram = (Program) this.visitProgram(ctx.program(1));
         return new ITEProgram(condition, thenProgram, elseProgram);
+    }
+
+    @Override
+    public PdlAst visitWhileProgram(PdlParser.WhileProgramContext ctx)
+    {
+        Formula formula = (Formula) this.visitFormula(ctx.formula());
+        Program program = (Program) this.visitProgram(ctx.program());
+        return new While(formula, program);
+    }
+
+    @Override
+    public PdlAst visitRepeatProgram(PdlParser.RepeatProgramContext ctx)
+    {
+        Formula formula = (Formula) this.visitFormula(ctx.formula());
+        Program program = (Program) this.visitProgram(ctx.program());
+        return new Repeat(program, formula);
     }
 }

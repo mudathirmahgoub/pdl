@@ -154,4 +154,159 @@ public class PdlProgramVisitorTests
         Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, ite, q);
         Assertions.assertEquals(expectedFormula, actualFormula);
     }
+
+    @Test
+    public void whileProgram()
+    {
+        String pdl = "[while p do a] q";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p", "q")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Formula q = new AtomicFormula("q");
+        Program a = new AtomicProgram("a");
+        Program whileProgram = new While(p, a);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, whileProgram, q);
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+    @Test
+    public void repeatProgram()
+    {
+        String pdl = "[repeat a until p] q";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p", "q")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Formula q = new AtomicFormula("q");
+        Program a = new AtomicProgram("a");
+        Program repeatProgram = new Repeat(a, p);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, repeatProgram, q);
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+    @Test
+    public void iterationProgram()
+    {
+        String pdl = "[a*] p";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Program a = new AtomicProgram("a");
+        Program iterationProgram = new Iteration(a);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, iterationProgram, p);
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+    @Test
+    public void sequentialComposition()
+    {
+        String pdl = "[a;b] p";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a", "b")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Program a = new AtomicProgram("a");
+        Program b = new AtomicProgram("b");
+        Program sequence = new BinaryProgram(BinaryProgram.Op.Composition, a, b);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, sequence, p);
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+    @Test
+    public void choice()
+    {
+        String pdl = "[a union b] p";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p")), frame.getPropositions().keySet());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a", "b")), frame.getPrograms().keySet());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Program a = new AtomicProgram("a");
+        Program b = new AtomicProgram("b");
+        Program union = new BinaryProgram(BinaryProgram.Op.Choice, a, b);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, union, p);
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+    @Test
+    public void nestedProgramFormula()
+    {
+        String pdl = "[(a)](p)";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p")), frame.getPropositions().keySet());
+        Assertions.assertEquals(0, frame.getPropositions().get("p").size());
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("a")), frame.getPrograms().keySet());
+        Assertions.assertEquals(0, frame.getPrograms().get("a").size());
+        ModalFormula modal = (ModalFormula) program.getFormula();
+        Assertions.assertEquals(ModalFormula.Op.Box, modal.getOP());
+        AtomicProgram atomicProgram = (AtomicProgram) modal.getProgram();
+        AtomicFormula atomicFormula = (AtomicFormula) modal.getFormula();
+        Assertions.assertEquals("a", atomicProgram.getSymbol());
+        Assertions.assertEquals("p", atomicFormula.getSymbol());
+    }
+
+
+    @Test
+    public void test()
+    {
+        String pdl = "[p?] q";
+        PdlProgram program = PdlUtils.parseProgram(pdl);
+        Assertions.assertNotNull(program);
+        Assertions.assertNotNull(program.getFrame());
+
+        KripkeFrame frame = program.getFrame();
+
+        Assertions.assertEquals(new HashSet<>(Arrays.asList("p", "q")), frame.getPropositions().keySet());
+        Assertions.assertEquals(0 , frame.getPrograms().keySet().size());
+
+        Formula actualFormula = program.getFormula();
+        Formula p = new AtomicFormula("p");
+        Formula q = new AtomicFormula("q");
+        Program test = new pdl.ast.Test(p);
+        Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, test, q);
+        Assertions.assertEquals(expectedFormula, actualFormula);
+    }
+
+
 }

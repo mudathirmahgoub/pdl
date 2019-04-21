@@ -1,6 +1,6 @@
 package pdl.ast;
 
-public class BinaryProgram
+public class BinaryProgram extends Program
 {
     private final Op op;
     private final Program left;
@@ -34,6 +34,23 @@ public class BinaryProgram
     public Program getRight()
     {
         return this.right;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if(this == object)
+        {
+            return true;
+        }
+        if(!(object instanceof BinaryProgram))
+        {
+            return false;
+        }
+        BinaryProgram binary = (BinaryProgram) object;
+        return op.equals(binary.op) &&
+                left.equals(binary.left) &&
+                right.equals(binary.right);
     }
 
     public enum Op
