@@ -6,17 +6,17 @@ public class PartialCorrectnessFormula extends Formula
     private final Formula precondition;
     private final Formula postcondition;
 
-    public PartialCorrectnessFormula(Formula precondition, Program program ,Formula postcondition)
+    public PartialCorrectnessFormula(Formula precondition, Program program, Formula postcondition)
     {
-        if(program == null)
+        if (program == null)
         {
             throw new RuntimeException("Program is null");
         }
-        if(precondition == null)
+        if (precondition == null)
         {
             throw new RuntimeException("Precondition is null");
         }
-        if(postcondition == null)
+        if (postcondition == null)
         {
             throw new RuntimeException("Postcondition is null");
         }
@@ -34,6 +34,7 @@ public class PartialCorrectnessFormula extends Formula
     {
         return this.precondition;
     }
+
     public Formula getPostcondition()
     {
         return this.postcondition;
@@ -42,11 +43,11 @@ public class PartialCorrectnessFormula extends Formula
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof PartialCorrectnessFormula))
+        if (!(object instanceof PartialCorrectnessFormula))
         {
             return false;
         }

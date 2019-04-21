@@ -3,11 +3,12 @@ package pdl.ast;
 public class AtomicFormula extends Formula
 {
     private final String symbol;
+
     public AtomicFormula(String symbol)
     {
-        if(symbol.isEmpty())
+        if (symbol.isEmpty())
         {
-           throw new RuntimeException("Symbol is an empty string");
+            throw new RuntimeException("Symbol is an empty string");
         }
         this.symbol = symbol;
     }
@@ -24,11 +25,11 @@ public class AtomicFormula extends Formula
         {
             return true;
         }
-        if(!(object instanceof AtomicFormula))
+        if (!(object instanceof AtomicFormula))
         {
             return false;
         }
-        AtomicFormula formula = (AtomicFormula) object ;
+        AtomicFormula formula = (AtomicFormula) object;
         return symbol.equals(formula.symbol);
     }
 }

@@ -3,7 +3,10 @@ package pdl.ast;
 public class Skip extends Program
 {
     private final static Skip instance = new Skip();
-    private Skip() {}
+
+    private Skip()
+    {
+    }
 
     public static Skip getInstance()
     {
@@ -13,11 +16,11 @@ public class Skip extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof Skip))
+        if (!(object instanceof Skip))
         {
             return false;
         }

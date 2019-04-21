@@ -3,9 +3,10 @@ package pdl.ast;
 public class AtomicProgram extends Program
 {
     private final String symbol;
+
     public AtomicProgram(String symbol)
     {
-        if(symbol.isEmpty())
+        if (symbol.isEmpty())
         {
             throw new RuntimeException("Symbol is an empty string");
         }
@@ -20,11 +21,11 @@ public class AtomicProgram extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof AtomicProgram))
+        if (!(object instanceof AtomicProgram))
         {
             return false;
         }

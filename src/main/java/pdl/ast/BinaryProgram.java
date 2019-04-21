@@ -9,11 +9,11 @@ public class BinaryProgram extends Program
     public BinaryProgram(Op op, Program left, Program right)
     {
         this.op = op;
-        if(left == null)
+        if (left == null)
         {
             throw new RuntimeException("Left program is null");
         }
-        if(right == null)
+        if (right == null)
         {
             throw new RuntimeException("Right program is null");
         }
@@ -39,11 +39,11 @@ public class BinaryProgram extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof BinaryProgram))
+        if (!(object instanceof BinaryProgram))
         {
             return false;
         }
@@ -55,8 +55,8 @@ public class BinaryProgram extends Program
 
     public enum Op
     {
-        Composition (";"),
-        Choice ("union");
+        Composition(";"),
+        Choice("union");
 
         private final String opStr;
 

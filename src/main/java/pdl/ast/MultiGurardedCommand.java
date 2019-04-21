@@ -11,7 +11,7 @@ public class MultiGurardedCommand extends Program
     public MultiGurardedCommand(Op op, List<GuardedCommand> guardedCommands)
     {
         this.op = op;
-        if(guardedCommands == null || guardedCommands.size() == 0)
+        if (guardedCommands == null || guardedCommands.size() == 0)
         {
             throw new RuntimeException("Empty list of guarded commands");
         }
@@ -30,8 +30,8 @@ public class MultiGurardedCommand extends Program
 
     public enum Op
     {
-        If ("if"),
-        Do ("do");
+        If("if"),
+        Do("do");
 
         private final String opStr;
 
@@ -50,11 +50,11 @@ public class MultiGurardedCommand extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof MultiGurardedCommand))
+        if (!(object instanceof MultiGurardedCommand))
         {
             return false;
         }

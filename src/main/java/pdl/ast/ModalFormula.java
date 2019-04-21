@@ -6,14 +6,14 @@ public class ModalFormula extends Formula
     private final Program program;
     private final Formula formula;
 
-    public ModalFormula(Op op, Program program ,Formula formula)
+    public ModalFormula(Op op, Program program, Formula formula)
     {
         this.op = op;
-        if(program == null)
+        if (program == null)
         {
             throw new RuntimeException("Program is null");
         }
-        if(formula == null)
+        if (formula == null)
         {
             throw new RuntimeException("Formula is null");
         }
@@ -38,7 +38,7 @@ public class ModalFormula extends Formula
 
     public enum Op
     {
-        Box ("box"),
+        Box("box"),
         Diamond("diamond"),
         ;
 
@@ -59,11 +59,11 @@ public class ModalFormula extends Formula
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof ModalFormula))
+        if (!(object instanceof ModalFormula))
         {
             return false;
         }

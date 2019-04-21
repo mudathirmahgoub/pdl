@@ -7,11 +7,11 @@ public class While extends Program
 
     public While(Formula formula, Program program)
     {
-        if(formula == null)
+        if (formula == null)
         {
             throw new RuntimeException("Formula is null");
         }
-        if(program == null)
+        if (program == null)
         {
             throw new RuntimeException("Program is null");
         }
@@ -33,11 +33,11 @@ public class While extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof While))
+        if (!(object instanceof While))
         {
             return false;
         }

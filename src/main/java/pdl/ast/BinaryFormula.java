@@ -9,11 +9,11 @@ public class BinaryFormula extends Formula
     public BinaryFormula(Op op, Formula left, Formula right)
     {
         this.op = op;
-        if(left == null)
+        if (left == null)
         {
             throw new RuntimeException("Left formula is null");
         }
-        if(right == null)
+        if (right == null)
         {
             throw new RuntimeException("Right formula is null");
         }
@@ -38,8 +38,8 @@ public class BinaryFormula extends Formula
 
     public enum Op
     {
-        And ("and"),
-        Or ("or"),
+        And("and"),
+        Or("or"),
         Implies("->"),
         Equivalence("<->");
 
@@ -60,11 +60,11 @@ public class BinaryFormula extends Formula
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof BinaryFormula))
+        if (!(object instanceof BinaryFormula))
         {
             return false;
         }

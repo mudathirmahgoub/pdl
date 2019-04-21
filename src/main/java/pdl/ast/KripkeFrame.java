@@ -48,11 +48,11 @@ public class KripkeFrame extends PdlAst
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof KripkeFrame))
+        if (!(object instanceof KripkeFrame))
         {
             return false;
         }

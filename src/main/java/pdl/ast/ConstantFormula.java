@@ -3,6 +3,7 @@ package pdl.ast;
 public class ConstantFormula extends Formula
 {
     private final boolean value;
+
     public ConstantFormula(boolean value)
     {
         this.value = value;
@@ -16,11 +17,11 @@ public class ConstantFormula extends Formula
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof ConstantFormula))
+        if (!(object instanceof ConstantFormula))
         {
             return false;
         }

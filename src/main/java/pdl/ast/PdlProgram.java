@@ -10,7 +10,7 @@ public class PdlProgram extends PdlAst
         // frame can be null
         this.frame = frame;
         // formula should not be null
-        if(formula == null)
+        if (formula == null)
         {
             throw new RuntimeException("Formula is null");
         }
@@ -30,11 +30,11 @@ public class PdlProgram extends PdlAst
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof PdlProgram))
+        if (!(object instanceof PdlProgram))
         {
             return false;
         }

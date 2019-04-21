@@ -7,12 +7,12 @@ public class UnaryFormula extends Formula
 
     public UnaryFormula(Op op, Formula formula)
     {
-        this.op     = op;
-        if(formula == null)
+        this.op = op;
+        if (formula == null)
         {
             throw new RuntimeException("Formula is null");
         }
-        this.formula   = formula;
+        this.formula = formula;
     }
 
     public Op getOP()
@@ -27,7 +27,7 @@ public class UnaryFormula extends Formula
 
     public enum Op
     {
-        Not ("not") ;
+        Not("not");
 
         private final String opStr;
 
@@ -46,11 +46,11 @@ public class UnaryFormula extends Formula
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof UnaryFormula))
+        if (!(object instanceof UnaryFormula))
         {
             return false;
         }

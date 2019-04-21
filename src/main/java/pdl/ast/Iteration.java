@@ -6,7 +6,7 @@ public class Iteration extends Program
 
     public Iteration(Program program)
     {
-        if(program == null)
+        if (program == null)
         {
             throw new RuntimeException("Program is null");
         }
@@ -16,11 +16,11 @@ public class Iteration extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof Iteration))
+        if (!(object instanceof Iteration))
         {
             return false;
         }

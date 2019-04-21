@@ -19,9 +19,9 @@ public class PdlUtils
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         PdlParser parser = new PdlParser(tokenStream);
 
-        ParseTree tree =  parser.pdl();
+        ParseTree tree = parser.pdl();
         PdlProgramVisitor visitor = new PdlProgramVisitor();
         PdlProgram program = (PdlProgram) visitor.visit(tree);
-        return  program;
+        return program;
     }
 }

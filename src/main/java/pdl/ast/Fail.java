@@ -3,7 +3,10 @@ package pdl.ast;
 public class Fail extends Program
 {
     private final static Fail instance = new Fail();
-    private Fail() {}
+
+    private Fail()
+    {
+    }
 
     public static Fail getInstance()
     {
@@ -13,11 +16,11 @@ public class Fail extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof Fail))
+        if (!(object instanceof Fail))
         {
             return false;
         }

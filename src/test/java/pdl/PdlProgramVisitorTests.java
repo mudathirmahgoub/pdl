@@ -298,7 +298,7 @@ public class PdlProgramVisitorTests
         KripkeFrame frame = program.getFrame();
 
         Assertions.assertEquals(new HashSet<>(Arrays.asList("p", "q")), frame.getPropositions().keySet());
-        Assertions.assertEquals(0 , frame.getPrograms().keySet().size());
+        Assertions.assertEquals(0, frame.getPrograms().keySet().size());
 
         Formula actualFormula = program.getFormula();
         Formula p = new AtomicFormula("p");

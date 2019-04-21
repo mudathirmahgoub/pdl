@@ -15,10 +15,11 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
 {
     private KripkeFrame frame;
     private boolean kripkeFrameProvided;
+
     @Override
     public PdlAst visitPdl(PdlParser.PdlContext ctx)
     {
-        if(ctx.kripkeFrame() != null)
+        if (ctx.kripkeFrame() != null)
         {
             frame = (KripkeFrame) this.visitKripkeFrame(ctx.kripkeFrame());
             kripkeFrameProvided = true;
@@ -39,26 +40,26 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     public PdlAst visitKripkeFrame(PdlParser.KripkeFrameContext ctx)
     {
         List<String> states = ctx.states().Identifier()
-                .stream().map(n -> n.getText())
-                .collect(Collectors.toList());
+                                 .stream().map(n -> n.getText())
+                                 .collect(Collectors.toList());
         Map<String, List<String>> propositions = new HashMap<>();
 
-        if(ctx.propositionMeaning().size() > 0)
+        if (ctx.propositionMeaning().size() > 0)
         {
             propositions = ctx.propositionMeaning()
-                    .stream()
-                    .collect(Collectors.toMap(c -> c.Identifier(0).getText(),
-                            c -> getPropositionStates(c)));
+                              .stream()
+                              .collect(Collectors.toMap(c -> c.Identifier(0).getText(),
+                                      c -> getPropositionStates(c)));
         }
 
         Map<String, List<Transition>> programs = new HashMap<>();
 
-        if(ctx.programMeaning().size() > 0)
+        if (ctx.programMeaning().size() > 0)
         {
             programs = ctx.programMeaning()
-                    .stream()
-                    .collect(Collectors.toMap(c -> c.Identifier().getText(),
-                            c -> getProgramStates(c)));
+                          .stream()
+                          .collect(Collectors.toMap(c -> c.Identifier().getText(),
+                                  c -> getProgramStates(c)));
         }
         return new KripkeFrame(states, propositions, programs);
     }
@@ -66,8 +67,8 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     private List<Transition> getProgramStates(PdlParser.ProgramMeaningContext c)
     {
         List<Transition> transitions = c.pair().stream()
-                .map(p -> new Transition(p.Identifier(0).getText(), p.Identifier(1).getText()))
-                .collect(Collectors.toList());
+                                        .map(p -> new Transition(p.Identifier(0).getText(), p.Identifier(1).getText()))
+                                        .collect(Collectors.toList());
 
         return transitions;
     }
@@ -82,20 +83,20 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     @Override
     public PdlAst visitFormula(PdlParser.FormulaContext ctx)
     {
-        if(ctx.falsity() != null)
+        if (ctx.falsity() != null)
         {
             return new ConstantFormula(false);
         }
-        if(ctx.truth() != null)
+        if (ctx.truth() != null)
         {
             return new ConstantFormula(true);
         }
-        if(ctx.atomicFormula() != null)
+        if (ctx.atomicFormula() != null)
         {
             String proposition = ctx.atomicFormula().getText();
-            if(! frame.getPropositions().containsKey(proposition))
+            if (!frame.getPropositions().containsKey(proposition))
             {
-                if(kripkeFrameProvided)
+                if (kripkeFrameProvided)
                 {
                     throw new RuntimeException(String.format("Proposition '%s' is not defined in the kripke frame", proposition));
                 }
@@ -106,52 +107,52 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             }
             return new AtomicFormula(proposition);
         }
-        if(ctx.LeftParenthesis() != null)
+        if (ctx.LeftParenthesis() != null)
         {
             return this.visitFormula(ctx.formula(0));
         }
-        if(ctx.Not() != null)
+        if (ctx.Not() != null)
         {
             Formula formula = (Formula) this.visitFormula(ctx.formula(0));
             return new UnaryFormula(UnaryFormula.Op.Not, formula);
         }
-        if(ctx.LeftSquareBracket() != null)
+        if (ctx.LeftSquareBracket() != null)
         {
             Program program = (Program) this.visitProgram(ctx.program());
             Formula formula = (Formula) this.visitFormula(ctx.formula(0));
             return new ModalFormula(ModalFormula.Op.Box, program, formula);
         }
-        if(ctx.LeftAngle() != null)
+        if (ctx.LeftAngle() != null)
         {
             Program program = (Program) this.visitProgram(ctx.program());
             Formula formula = (Formula) this.visitFormula(ctx.formula(0));
             return new ModalFormula(ModalFormula.Op.Diamond, program, formula);
         }
-        if(ctx.And() != null)
+        if (ctx.And() != null)
         {
             Formula left = (Formula) this.visitFormula(ctx.formula(0));
             Formula right = (Formula) this.visitFormula(ctx.formula(1));
             return new BinaryFormula(BinaryFormula.Op.And, left, right);
         }
-        if(ctx.Or() != null)
+        if (ctx.Or() != null)
         {
             Formula left = (Formula) this.visitFormula(ctx.formula(0));
             Formula right = (Formula) this.visitFormula(ctx.formula(1));
             return new BinaryFormula(BinaryFormula.Op.Or, left, right);
         }
-        if(ctx.RightArrow() != null)
+        if (ctx.RightArrow() != null)
         {
             Formula left = (Formula) this.visitFormula(ctx.formula(0));
             Formula right = (Formula) this.visitFormula(ctx.formula(1));
             return new BinaryFormula(BinaryFormula.Op.Implies, left, right);
         }
-        if(ctx.LeftRightArrow() != null)
+        if (ctx.LeftRightArrow() != null)
         {
             Formula left = (Formula) this.visitFormula(ctx.formula(0));
             Formula right = (Formula) this.visitFormula(ctx.formula(1));
             return new BinaryFormula(BinaryFormula.Op.Equivalence, left, right);
         }
-        if(ctx.hoarePartialCorrectness() != null)
+        if (ctx.hoarePartialCorrectness() != null)
         {
             return this.visitHoarePartialCorrectness(ctx.hoarePartialCorrectness());
         }
@@ -167,24 +168,24 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     @Override
     public PdlAst visitProgram(PdlParser.ProgramContext ctx)
     {
-        if(ctx.skip() != null)
+        if (ctx.skip() != null)
         {
             return Skip.getInstance();
         }
-        if(ctx.fail() != null)
+        if (ctx.fail() != null)
         {
             return Fail.getInstance();
         }
-        if(ctx.LeftParenthesis() != null)
+        if (ctx.LeftParenthesis() != null)
         {
             return visitProgram(ctx.program(0));
         }
-        if(ctx.atomicProgram() != null)
+        if (ctx.atomicProgram() != null)
         {
             String program = ctx.atomicProgram().getText();
-            if(!frame.getPrograms().keySet().contains(program))
+            if (!frame.getPrograms().keySet().contains(program))
             {
-                if(kripkeFrameProvided)
+                if (kripkeFrameProvided)
                 {
                     throw new RuntimeException(String.format("Atomic program '%s' is not defined in the kripke frame", program));
                 }
@@ -195,44 +196,44 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             }
             return new AtomicProgram(program);
         }
-        if(ctx.alternativeGuardedCommand() != null)
+        if (ctx.alternativeGuardedCommand() != null)
         {
             return visitAlternativeGuardedCommand(ctx.alternativeGuardedCommand());
         }
-        if(ctx.iterativeGuardedCommand() != null)
+        if (ctx.iterativeGuardedCommand() != null)
         {
             return visitIterativeGuardedCommand(ctx.iterativeGuardedCommand());
         }
-        if(ctx.iteProgram() != null)
+        if (ctx.iteProgram() != null)
         {
             return visitIteProgram(ctx.iteProgram());
         }
-        if(ctx.whileProgram() != null)
+        if (ctx.whileProgram() != null)
         {
             return visitWhileProgram(ctx.whileProgram());
         }
-        if(ctx.repeatProgram() != null)
+        if (ctx.repeatProgram() != null)
         {
             return visitRepeatProgram(ctx.repeatProgram());
         }
-        if(ctx.Star() != null)
+        if (ctx.Star() != null)
         {
             Program program = (Program) visitProgram(ctx.program(0));
             return new Iteration(program);
         }
-        if(ctx.Semicolon() != null)
+        if (ctx.Semicolon() != null)
         {
             Program left = (Program) visitProgram(ctx.program(0));
             Program right = (Program) visitProgram(ctx.program(1));
             return new BinaryProgram(BinaryProgram.Op.Composition, left, right);
         }
-        if(ctx.Union() != null)
+        if (ctx.Union() != null)
         {
             Program left = (Program) visitProgram(ctx.program(0));
             Program right = (Program) visitProgram(ctx.program(1));
             return new BinaryProgram(BinaryProgram.Op.Choice, left, right);
         }
-        if(ctx.QuestionMark() != null)
+        if (ctx.QuestionMark() != null)
         {
             Formula formula = (Formula) visitFormula(ctx.formula());
             return new Test(formula);
@@ -244,7 +245,7 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     public PdlAst visitAlternativeGuardedCommand(PdlParser.AlternativeGuardedCommandContext ctx)
     {
         List<GuardedCommand> commands = ctx.guardedCommand()
-                .stream().map(c -> (GuardedCommand) visitGuardedCommand(c)).collect(Collectors.toList());
+                                           .stream().map(c -> (GuardedCommand) visitGuardedCommand(c)).collect(Collectors.toList());
         return new MultiGurardedCommand(MultiGurardedCommand.Op.If, commands);
     }
 

@@ -7,11 +7,11 @@ public class GuardedCommand extends PdlAst
 
     public GuardedCommand(Formula formula, Program program)
     {
-        if(formula == null)
+        if (formula == null)
         {
             throw new RuntimeException("Formula is null");
         }
-        if(program == null)
+        if (program == null)
         {
             throw new RuntimeException("Program is null");
         }
@@ -33,11 +33,11 @@ public class GuardedCommand extends PdlAst
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof GuardedCommand))
+        if (!(object instanceof GuardedCommand))
         {
             return false;
         }

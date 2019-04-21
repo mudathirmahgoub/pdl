@@ -6,7 +6,7 @@ public class Test extends Program
 
     public Test(Formula formula)
     {
-        if(formula == null)
+        if (formula == null)
         {
             throw new RuntimeException("Formula is null");
         }
@@ -21,11 +21,11 @@ public class Test extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof Test))
+        if (!(object instanceof Test))
         {
             return false;
         }

@@ -8,16 +8,16 @@ public class ITEProgram extends Program
 
     public ITEProgram(Formula condition, Program thenProgram, Program elseProgram)
     {
-        if(condition == null)
+        if (condition == null)
         {
             throw new RuntimeException("Formula is null");
         }
-        if(thenProgram == null)
+        if (thenProgram == null)
         {
             throw new RuntimeException("Then program is null");
         }
 
-        if(elseProgram == null)
+        if (elseProgram == null)
         {
             throw new RuntimeException("Else program is null");
         }
@@ -45,11 +45,11 @@ public class ITEProgram extends Program
     @Override
     public boolean equals(Object object)
     {
-        if(this == object)
+        if (this == object)
         {
             return true;
         }
-        if(!(object instanceof ITEProgram))
+        if (!(object instanceof ITEProgram))
         {
             return false;
         }
