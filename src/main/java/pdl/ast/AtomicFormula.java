@@ -1,6 +1,7 @@
 package pdl.ast;
 
 import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.smtAst.Variable;
 import pdl.translator.PdlToSmtTranslator;
 
 public class AtomicFormula extends Formula
@@ -39,6 +40,13 @@ public class AtomicFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        if(translator.propositionMap.containsKey(symbol))
+        {
+            return new Variable(translator.propositionMap.get(symbol));
+        }
+        else
+        {
+            throw new RuntimeException(String.format("Proposition %s is undefined", symbol));
+        }
     }
 }
