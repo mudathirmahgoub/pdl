@@ -8,8 +8,8 @@
 
 package edu.uiowa.smt.smtAst;
 
-import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.printers.SmtAstVisitor;
+import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class QuantifiedExpression extends Expression
 {
-    private final Expression expr;
+    private final Expression                  expr;
     private final List<VariableDeclaration>   boundVars;
     private final Op                          op;
     

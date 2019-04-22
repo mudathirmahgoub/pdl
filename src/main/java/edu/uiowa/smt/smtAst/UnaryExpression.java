@@ -8,8 +8,8 @@
 
 package edu.uiowa.smt.smtAst;
 
-import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.printers.SmtAstVisitor;
+import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class UnaryExpression extends Expression
         return this.op;
     }
     
-    public Expression getExpression()
+    public Expression getExpression() 
     {
         return this.expr;
     }

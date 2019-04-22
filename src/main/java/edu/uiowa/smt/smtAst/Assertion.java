@@ -12,7 +12,7 @@ import edu.uiowa.smt.printers.SmtAstVisitor;
 
 public class Assertion extends SmtAst
 {
-    private final Expression expression;
+    private final Expression  expression;
 
     private final String      name;
 

@@ -5,8 +5,8 @@
  */
 package edu.uiowa.smt.smtAst;
 
-import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.printers.SmtAstVisitor;
+import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.Map;
 
@@ -16,9 +16,9 @@ import java.util.Map;
  */
 public class ITEExpression extends Expression
 {
-    private final Expression condExpr;
-    private final Expression thenExpr;
-    private final Expression elseExpr;
+    private final Expression                  condExpr;
+    private final Expression                  thenExpr;
+    private final Expression                  elseExpr;
     private final Op                          op = Op.ITE;
     
     public ITEExpression(Expression condExpr, Expression thenExpr, Expression elseExpr)

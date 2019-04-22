@@ -6,7 +6,6 @@
 package edu.uiowa.smt.smtAst;
 
 import edu.uiowa.smt.printers.SmtAstVisitor;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ import java.util.Map;
  */
 public class LetExpression extends Expression
 {
-    private final Expression expr;
+    private final Expression                  expr;
     private final Map<String, Expression>     letVars;
     private final Op                          op;
     

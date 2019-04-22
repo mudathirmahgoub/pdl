@@ -8,8 +8,8 @@
 
 package edu.uiowa.smt.smtAst;
 
-import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.printers.SmtAstVisitor;
+import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,8 @@ import java.util.Map;
 public class BinaryExpression extends Expression
 {
     private final Op            op;
-    private Expression lhsExpr;
-    private Expression rhsExpr;
+    private Expression    lhsExpr;
+    private Expression    rhsExpr;
 
     public BinaryExpression(Expression lhsExpr, Op op, Expression rhsExpr)
     {
@@ -261,11 +261,11 @@ public class BinaryExpression extends Expression
             case OR: return AbstractTranslator.boolSort;
             case AND: return AbstractTranslator.boolSort ;
             case IMPLIES: return AbstractTranslator.boolSort;
-            case PLUS: return lhsExpr.getSort() instanceof IntSort ? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
-            case MINUS: return lhsExpr.getSort() instanceof IntSort ? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
-            case MULTIPLY: return lhsExpr.getSort() instanceof IntSort ? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
-            case DIVIDE: return lhsExpr.getSort() instanceof IntSort ? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
-            case MOD: return lhsExpr.getSort() instanceof IntSort ? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
+            case PLUS: return lhsExpr.getSort() instanceof IntSort? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
+            case MINUS: return lhsExpr.getSort() instanceof IntSort? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
+            case MULTIPLY: return lhsExpr.getSort() instanceof IntSort? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
+            case DIVIDE: return lhsExpr.getSort() instanceof IntSort? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
+            case MOD: return lhsExpr.getSort() instanceof IntSort? AbstractTranslator.intSort: AbstractTranslator.setOfUninterpretedIntTuple;
             case EQ: return AbstractTranslator.boolSort;
             case GTE: return AbstractTranslator.boolSort;
             case LTE: return AbstractTranslator.boolSort;

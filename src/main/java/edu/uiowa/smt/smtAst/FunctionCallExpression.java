@@ -20,7 +20,7 @@ public class FunctionCallExpression extends Expression
     private final FunctionDeclaration function;
     private final List<Expression>  arguments;
 
-    public FunctionCallExpression(FunctionDeclaration function, Expression... arguments)
+    public FunctionCallExpression(FunctionDeclaration function, Expression ... arguments)
     {
         this.function = function;
         this.arguments      = Arrays.asList(arguments);

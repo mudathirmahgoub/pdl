@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class FunctionDefinition extends FunctionDeclaration
 {
-    public final Expression expression;
+    public final Expression                 expression;
     public final List<VariableDeclaration>  inputVariables;
     
     public FunctionDefinition(String name, List<VariableDeclaration> inputVariables, Sort outputSort, Expression expression)

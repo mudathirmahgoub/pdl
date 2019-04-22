@@ -1,16 +1,9 @@
 // Generated from Smt.g4 by ANTLR 4.7.2
 package edu.uiowa.smt.parser.antlr;
-
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNDeserializer;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.*;
 import java.util.List;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
@@ -158,14 +151,14 @@ public class SmtParser extends Parser {
 			setState(47);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,0,_ctx);
-			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
 					setState(44);
 					sortDeclaration();
 					}
-					}
+					} 
 				}
 				setState(49);
 				_errHandler.sync(this);
@@ -572,7 +565,7 @@ public class SmtParser extends Parser {
 			{
 			setState(100);
 			match(T__6);
-			setState(102);
+			setState(102); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -588,10 +581,10 @@ public class SmtParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(104);
+				setState(104); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
-			} while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER );
+			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1082,7 +1075,7 @@ public class SmtParser extends Parser {
 			{
 			setState(138);
 			match(MultiArityOperator);
-			setState(140);
+			setState(140); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -1098,10 +1091,10 @@ public class SmtParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(142);
+				setState(142); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
-			} while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER );
+			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 			}
 		}
 		catch (RecognitionException re) {

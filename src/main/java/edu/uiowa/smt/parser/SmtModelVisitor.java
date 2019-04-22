@@ -8,10 +8,10 @@
 
 package edu.uiowa.smt.parser;
 
-import edu.uiowa.smt.AbstractTranslator;
+import edu.uiowa.smt.smtAst.*;
 import edu.uiowa.smt.parser.antlr.SmtBaseVisitor;
 import edu.uiowa.smt.parser.antlr.SmtParser;
-import edu.uiowa.smt.smtAst.*;
+import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,8 +174,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     public SmtAst visitTernaryExpression(SmtParser.TernaryExpressionContext ctx, List<VariableDeclaration>  arguments)
     {
         List<Expression> expressions = ctx.expression().stream()
-                                          .map(expression -> (Expression) this.visitExpression(expression, arguments))
-                                          .collect(Collectors.toList());
+                .map(expression -> (Expression) this.visitExpression(expression, arguments))
+                .collect(Collectors.toList());
 
         return new ITEExpression(expressions.get(0), expressions.get(1), expressions.get(2));
     }
@@ -183,8 +183,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     public SmtAst visitMultiArityExpression(SmtParser.MultiArityExpressionContext ctx, List<VariableDeclaration>  arguments)
     {
         List<Expression> expressions = ctx.expression().stream()
-                                          .map(expression -> (Expression) this.visitExpression(expression, arguments))
-                                          .collect(Collectors.toList());
+                .map(expression -> (Expression) this.visitExpression(expression, arguments))
+                .collect(Collectors.toList());
 
         MultiArityExpression.Op operator = MultiArityExpression.Op.getOp(ctx.MultiArityOperator().getText());
         return new MultiArityExpression(operator, expressions);
@@ -239,8 +239,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     public SmtAst visitVariable(SmtParser.VariableContext ctx, List<VariableDeclaration>  arguments)
     {
         Expression variable = arguments.stream()
-                                       .filter(argument -> argument.getName().equals(ctx.getText()))
-                                       .findFirst().get().getVariable();
+                .filter(argument -> argument.getName().equals(ctx.getText()))
+                .findFirst().get().getVariable();
         return variable;
     }
 }

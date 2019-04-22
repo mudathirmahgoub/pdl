@@ -298,19 +298,19 @@ public class SmtLibPrettyPrinter implements SmtAstVisitor
         {
             this.visit((Variable) expression);
         }
-        else if (expression instanceof UnaryExpression)
+        else if (expression instanceof  UnaryExpression)
         {
             this.visit((UnaryExpression) expression);
         }
-        else if (expression instanceof BinaryExpression)
+        else if (expression instanceof  BinaryExpression)
         {
             this.visit((BinaryExpression) expression);
         }
-        else if (expression instanceof MultiArityExpression)
+        else if (expression instanceof  MultiArityExpression)
         {
             this.visit((MultiArityExpression) expression);
         }
-        else if (expression instanceof QuantifiedExpression)
+        else if (expression instanceof  QuantifiedExpression)
         {
             this.visit((QuantifiedExpression) expression);
         }
@@ -318,11 +318,11 @@ public class SmtLibPrettyPrinter implements SmtAstVisitor
         {
             this.visit((Sort) expression);
         }
-        else if (expression instanceof IntConstant)
+        else if (expression instanceof  IntConstant)
         {
             this.visit((IntConstant) expression);
         }
-        else if (expression instanceof FunctionCallExpression)
+        else if (expression instanceof  FunctionCallExpression)
         {
             this.visit((FunctionCallExpression) expression);
         }      
@@ -330,11 +330,11 @@ public class SmtLibPrettyPrinter implements SmtAstVisitor
         {
             this.visit((BoolConstant) expression);
         }
-        else if (expression instanceof LetExpression)
+        else if (expression instanceof  LetExpression)
         {
             this.visit((LetExpression) expression);
         }  
-        else if (expression instanceof ITEExpression)
+        else if (expression instanceof  ITEExpression)
         {
             this.visit((ITEExpression) expression);
         }
@@ -350,35 +350,35 @@ public class SmtLibPrettyPrinter implements SmtAstVisitor
 
     public void visit(Sort sort)
     {
-        if (sort instanceof UninterpretedSort)
+        if (sort instanceof  UninterpretedSort)
         {
             this.visit((UninterpretedSort) sort);
         }
-        else if (sort instanceof SetSort)
+        else if (sort instanceof  SetSort)
         {
             this.visit((SetSort) sort);
         }
-        else if (sort instanceof TupleSort)
+        else if (sort instanceof  TupleSort)
         {
             this.visit((TupleSort) sort);
         }
-        else if (sort instanceof IntSort)
+        else if (sort instanceof  IntSort)
         {
             this.visit((IntSort) sort);
         }
-        else if (sort instanceof RealSort)
+        else if (sort instanceof  RealSort)
         {
             this.visit((RealSort) sort);
         }
-        else if (sort instanceof StringSort)
+        else if (sort instanceof  StringSort)
         {
             this.visit((StringSort) sort);
         }
-        else if (sort instanceof StringSort)
+        else if (sort instanceof  StringSort)
         {
             this.visit((StringSort) sort);
         }
-        else if (sort instanceof BoolSort)
+        else if (sort instanceof  BoolSort)
         {
             this.visit((BoolSort) sort);
         }        
@@ -409,7 +409,7 @@ public class SmtLibPrettyPrinter implements SmtAstVisitor
     }
 
     @Override
-    public void visit(ITEExpression aThis)
+    public void visit(ITEExpression aThis) 
     {
         this.stringBuilder.append("(" + aThis.getOp() + " ");
         this.visit(aThis.getCondExpression());

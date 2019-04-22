@@ -8,8 +8,8 @@
 
 package edu.uiowa.smt.smtAst;
 
-import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.printers.SmtAstVisitor;
+import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,7 +62,7 @@ public class MultiArityExpression extends Expression
             case DISTINCT:
             {
                 List<Sort> sorts = this.exprs.stream()
-                                             .map(Expression::getSort).collect(Collectors.toList());
+                                .map(Expression::getSort).collect(Collectors.toList());
                 if(sorts.size() > 1)
                 {
                     throw new RuntimeException("Not all expressions have of the same type");
@@ -73,7 +73,7 @@ public class MultiArityExpression extends Expression
         }
     }
 
-    public MultiArityExpression(Op op, Expression... exprs)
+    public MultiArityExpression(Op op, Expression ... exprs)
     {
         this(op,  Arrays.asList(exprs));
     }    
