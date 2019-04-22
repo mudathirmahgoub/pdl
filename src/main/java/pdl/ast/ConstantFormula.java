@@ -1,7 +1,9 @@
 package pdl.ast;
 
+import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.smtAst.BoolConstant;
 import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.smtAst.UnaryExpression;
 import pdl.translator.PdlToSmtTranslator;
 
 public class ConstantFormula extends Formula
@@ -36,6 +38,13 @@ public class ConstantFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        return new BoolConstant(value);
+        if(value)
+        {
+            return new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
+        }
+        else
+        {
+            return new UnaryExpression(UnaryExpression.Op.EMPTYSET, AbstractTranslator.setOfUnaryAtomSort);
+        }
     }
 }
