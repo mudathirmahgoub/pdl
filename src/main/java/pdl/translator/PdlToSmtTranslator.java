@@ -15,6 +15,6 @@ public class PdlToSmtTranslator extends AbstractTranslator
     @Override
     public SmtProgram translate()
     {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

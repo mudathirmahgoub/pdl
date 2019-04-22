@@ -1,5 +1,11 @@
 package pdl.translator;
 
+import edu.uiowa.smt.AbstractTranslator;
+import edu.uiowa.smt.Result;
+import edu.uiowa.smt.TranslatorUtils;
+import edu.uiowa.smt.cvc4.Cvc4Process;
+import edu.uiowa.smt.printers.SmtLibPrettyPrinter;
+import edu.uiowa.smt.smtAst.SmtProgram;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -23,5 +29,25 @@ public class PdlUtils
         PdlProgramVisitor visitor = new PdlProgramVisitor();
         PdlProgram program = (PdlProgram) visitor.visit(tree);
         return program;
+    }
+
+    public static Result runCVC4(String pdl) throws Exception
+    {
+        Result result = new Result();
+        PdlProgram pdlProgram = parseProgram(pdl);
+        PdlToSmtTranslator translator = new PdlToSmtTranslator(pdlProgram);
+        SmtProgram smtProgram = translator.translate();
+        SmtLibPrettyPrinter printer = new SmtLibPrettyPrinter();
+        printer.visit(smtProgram);
+        String smtScript = printer.getSmtLib();
+        Cvc4Process process = Cvc4Process.start();
+        TranslatorUtils.setSolverOptions(process);
+        result.satResult = process.sendCommand(AbstractTranslator.CHECK_SAT);
+        if(result.satResult.equals("sat"))
+        {
+            String model = process.sendCommand(AbstractTranslator.GET_MODEL);
+            result.smtModel = TranslatorUtils.parseModel(model);
+        }
+        return result;
     }
 }
