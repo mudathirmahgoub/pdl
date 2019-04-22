@@ -1,5 +1,9 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.BoolConstant;
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class ConstantFormula extends Formula
 {
     private final boolean value;
@@ -27,5 +31,11 @@ public class ConstantFormula extends Formula
         }
         ConstantFormula formula = (ConstantFormula) object;
         return this.value == formula.value;
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        return new BoolConstant(value);
     }
 }

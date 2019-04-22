@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class UnaryFormula extends Formula
 {
     private final Op op;
@@ -57,5 +60,11 @@ public class UnaryFormula extends Formula
         UnaryFormula unary = (UnaryFormula) object;
         return this.op == unary.op &&
                 this.formula.equals(unary.formula);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

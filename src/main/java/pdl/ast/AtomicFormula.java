@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class AtomicFormula extends Formula
 {
     private final String symbol;
@@ -31,5 +34,11 @@ public class AtomicFormula extends Formula
         }
         AtomicFormula formula = (AtomicFormula) object;
         return symbol.equals(formula.symbol);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

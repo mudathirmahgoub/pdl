@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class PartialCorrectnessFormula extends Formula
 {
     private final Program program;
@@ -55,5 +58,11 @@ public class PartialCorrectnessFormula extends Formula
         return this.precondition.equals(formula.precondition) &&
                 this.program.equals(formula.program) &&
                 this.postcondition.equals(formula.postcondition);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

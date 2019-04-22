@@ -42,6 +42,7 @@ public class PdlUtils
         String smtScript = printer.getSmtLib();
         Cvc4Process process = Cvc4Process.start();
         TranslatorUtils.setSolverOptions(process);
+        process.sendCommand(smtScript);
         result.satResult = process.sendCommand(AbstractTranslator.CHECK_SAT);
         if(result.satResult.equals("sat"))
         {

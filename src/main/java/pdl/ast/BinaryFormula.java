@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class BinaryFormula extends Formula
 {
     private final Op op;
@@ -72,5 +75,11 @@ public class BinaryFormula extends Formula
         return this.op == formula.op &&
                 this.left.equals(formula.left) &&
                 this.right.equals(formula.right);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }
