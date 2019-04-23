@@ -1,6 +1,8 @@
 package pdl.translator;
 
 import edu.uiowa.smt.Result;
+import edu.uiowa.smt.TranslatorUtils;
+import edu.uiowa.smt.smtAst.FunctionDefinition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,5 +31,7 @@ class PdlToSmtTranslatorTests
         String pdl = "p";
         Result result = PdlUtils.runCVC4(pdl);
         assertEquals("sat", result.satResult);
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+        assertEquals(1, TranslatorUtils.getAtomSet(p).size());
     }
 }
