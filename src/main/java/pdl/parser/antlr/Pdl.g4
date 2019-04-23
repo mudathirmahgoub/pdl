@@ -22,8 +22,8 @@ formula : falsity
           | atomicFormula
           | LeftParenthesis formula RightParenthesis
           | Not formula // negation
-          | LeftSquareBracket program RightSquareBracket formula
-          | LeftAngle program RightAngle formula
+          | LeftSquareBracket program RightSquareBracket formula // necessity
+          | LeftAngle program RightAngle formula // possibility
           | formula And formula
           | formula Or formula
           | formula RightArrow formula // implication
@@ -47,11 +47,11 @@ program : | skip
           | iteProgram
           | whileProgram
           | repeatProgram
-          | program Star
-          | program Semicolon program
-          | program Union program
+          | program Star // iteration
+          | program Semicolon program // composition
+          | program Union program // choice
           | LeftParenthesis program RightParenthesis
-          | formula QuestionMark;
+          | formula QuestionMark // test;
 
 skip : Skip ;
 

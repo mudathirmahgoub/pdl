@@ -42,7 +42,7 @@ public class AtomicFormula extends Formula
     {
         if(translator.propositionMap.containsKey(symbol))
         {
-            return new Variable(translator.propositionMap.get(symbol));
+            return translator.propositionMap.get(symbol).getVariable();
         }
         else
         {

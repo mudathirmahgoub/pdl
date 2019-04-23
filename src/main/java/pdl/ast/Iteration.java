@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class Iteration extends Program
 {
     private final Program program;
@@ -26,5 +29,11 @@ public class Iteration extends Program
         }
         Iteration iteration = (Iteration) object;
         return this.program.equals(iteration.program);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

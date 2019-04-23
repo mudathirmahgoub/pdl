@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class Fail extends Program
 {
     private final static Fail instance = new Fail();
@@ -25,5 +28,11 @@ public class Fail extends Program
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

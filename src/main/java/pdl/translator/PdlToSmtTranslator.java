@@ -17,12 +17,14 @@ public class PdlToSmtTranslator extends AbstractTranslator
 
     public Expression statesUniverse;
     public Map<String, FunctionDeclaration> propositionMap;
+    public Map<String, FunctionDeclaration> programsMap;
 
     PdlToSmtTranslator(PdlProgram program)
     {
         this.pdlProgram = program;
         this.smtProgram = new SmtProgram();
         this.propositionMap = new HashMap<>();
+        this.programsMap = new HashMap<>();
 
         this.smtProgram.addSort(atomSort);
         this.smtProgram.addSort(uninterpretedInt);
@@ -51,7 +53,7 @@ public class PdlToSmtTranslator extends AbstractTranslator
         {
             String name = entry.getKey();
             FunctionDeclaration declaration = new FunctionDeclaration(name, AbstractTranslator.setOfUnaryAtomSort);
-            this.propositionMap.put(entry.getKey(), declaration);
+            this.propositionMap.put(name, declaration);
             this.smtProgram.addFunction(declaration);
             for (String state: entry.getValue())
             {
@@ -61,9 +63,15 @@ public class PdlToSmtTranslator extends AbstractTranslator
 
         for (Map.Entry<String, List<Transition>> entry : frame.getPrograms().entrySet())
         {
-            throw new UnsupportedOperationException();
+            String name = entry.getKey();
+            FunctionDeclaration declaration = new FunctionDeclaration(name, AbstractTranslator.setOfBinaryAtomSort);
+            this.programsMap.put(name, declaration);
+            this.smtProgram.addFunction(declaration);
+            for (Transition transition: entry.getValue())
+            {
+                throw new UnsupportedOperationException();
+            }
         }
-
     }
 
     private void translateFormula()

@@ -1,5 +1,6 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
 import pdl.translator.PdlToSmtTranslator;
 
@@ -78,6 +79,19 @@ public class ModalFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
+        Expression programMeaning = program.translate(translator);
+        Expression formulaMeaning = formula.translate(translator);
+        switch (op)
+        {
+            case Box:
+            {
+                // m([a] p) =  K - (m(a) o (K - m(p)))
+                Expression formulaComplement = new BinaryExpression(translator.statesUniverse, BinaryExpression.Op.SETMINUS, formulaMeaning);
+                Expression join = new BinaryExpression(programMeaning, BinaryExpression.Op.JOIN, formulaComplement);
+                Expression necessity = new BinaryExpression(translator.statesUniverse, BinaryExpression.Op.SETMINUS, join);
+                return necessity;
+            }
+        }
         throw new UnsupportedOperationException();
     }
 }

@@ -1,5 +1,9 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.smtAst.Variable;
+import pdl.translator.PdlToSmtTranslator;
+
 public class AtomicProgram extends Program
 {
     private final String symbol;
@@ -31,5 +35,18 @@ public class AtomicProgram extends Program
         }
         AtomicProgram program = (AtomicProgram) object;
         return this.symbol.equals(program.symbol);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        if(translator.programsMap.containsKey(symbol))
+        {
+            return translator.programsMap.get(symbol).getVariable();
+        }
+        else
+        {
+            throw new RuntimeException(String.format("Program %s is undefined", symbol));
+        }
     }
 }

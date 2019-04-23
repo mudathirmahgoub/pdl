@@ -6,6 +6,7 @@ import edu.uiowa.smt.smtAst.FunctionDefinition;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -141,5 +142,22 @@ class PdlToSmtTranslatorTests
         Set<String> qSet = TranslatorUtils.getAtomSet(q);
         assertEquals(1, pSet.size());
         assertEquals(1, qSet.size());
+    }
+
+    @Test
+    public void necessity() throws Exception
+    {
+        String pdl = "[a] p";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
+
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+
+        Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        assertEquals(1, pSet.size());
+        assertEquals(0, aRelation.size());
     }
 }

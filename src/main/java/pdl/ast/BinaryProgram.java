@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class BinaryProgram extends Program
 {
     private final Op op;
@@ -70,5 +73,11 @@ public class BinaryProgram extends Program
         {
             return this.opStr;
         }
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

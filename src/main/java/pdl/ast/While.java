@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class While extends Program
 {
     private final Formula formula;
@@ -44,5 +47,11 @@ public class While extends Program
         While whileProgram = (While) object;
         return this.program.equals(whileProgram.program) &&
                 this.formula.equals(whileProgram.formula);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 import java.util.List;
 
 public class MultiGurardedCommand extends Program
@@ -61,5 +64,11 @@ public class MultiGurardedCommand extends Program
         MultiGurardedCommand command = (MultiGurardedCommand) object;
         return this.op == command.op &&
                 this.guardedCommands.equals(command.guardedCommands);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

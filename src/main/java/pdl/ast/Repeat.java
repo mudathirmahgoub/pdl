@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class Repeat extends Program
 {
     private final Formula formula;
@@ -44,5 +47,11 @@ public class Repeat extends Program
         Repeat repeat = (Repeat) object;
         return this.program.equals(repeat.program) &&
                 this.formula.equals(repeat.formula);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class ITEProgram extends Program
 {
     private final Formula condition;
@@ -57,5 +60,11 @@ public class ITEProgram extends Program
         return condition.equals(ite.condition) &&
                 thenProgram.equals(ite.thenProgram) &&
                 elseProgram.equals(ite.elseProgram);
+    }
+
+    @Override
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        throw new UnsupportedOperationException();
     }
 }
