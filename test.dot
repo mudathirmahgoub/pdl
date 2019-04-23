@@ -1,0 +1,11 @@
+@startuml
+digraph foo {
+graph [fontname = "Consolas"]
+node [fontname = "Consolas"]
+edge [fontname = "Consolas"]
+0
+1
+0 -> 0[label="a"]
+0 -> 1[label="a"]
+}
+@enduml

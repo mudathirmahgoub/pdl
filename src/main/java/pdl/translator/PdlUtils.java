@@ -43,7 +43,8 @@ public class PdlUtils
         Cvc4Process process = Cvc4Process.start();
         TranslatorUtils.setSolverOptions(process);
         process.sendCommand(smtScript);
-        String smt = smtScript + AbstractTranslator.CHECK_SAT;
+        String smt = smtScript + AbstractTranslator.CHECK_SAT +
+                "\n" + AbstractTranslator.GET_MODEL + "\n";
         String satResult = process.sendCommand(AbstractTranslator.CHECK_SAT);
         PdlResult result = new PdlResult(pdlProgram, smt, satResult);
         if(satResult.equals("sat"))

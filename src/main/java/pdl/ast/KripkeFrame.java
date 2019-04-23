@@ -161,7 +161,7 @@ public class KripkeFrame extends PdlAst
                         "digraph foo {\n" +
                         "graph [fontname = \"Consolas\"]\n" +
                         "node [fontname = \"Consolas\"]\n" +
-                        "edge [fontname = \"Consolas\"]";
+                        "edge [fontname = \"Consolas\"]\n";
         String suffix = "}\n" + (platnuml? "@enduml\n": "");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(prefix);
@@ -244,10 +244,11 @@ public class KripkeFrame extends PdlAst
         try
         {
             FileUtils.writeStringToFile(new File(filePath), stringBuilder.toString(), StandardCharsets.UTF_8);
-            Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath);
+            Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath).waitFor();
         }
-        catch (IOException exception)
+        catch (Exception exception)
         {
+            System.out.println(exception.toString());
             exception.printStackTrace();
         }
     }

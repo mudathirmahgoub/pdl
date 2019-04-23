@@ -36,6 +36,7 @@ public class Main
                 String inputFile = command.getOptionValue("i").trim();
                 String pdl = new String(Files.readAllBytes(Paths.get(inputFile)), StandardCharsets.UTF_8);
                 result = PdlUtils.runCVC4(pdl);
+                output = inputFile;
             }
             else
             {
@@ -60,9 +61,9 @@ public class Main
             if(result.satResult.equals("sat"))
             {
                 KripkeFrame frame = result.getResultFrame();
-                FileUtils.writeStringToFile(new File(name + ".pdl"),
+                FileUtils.writeStringToFile(new File(name + ".kripke"),
                         frame.toString(), StandardCharsets.UTF_8);
-                frame.writeToDotFile(name + ".dot", false);
+                frame.writeToDotFile(name + ".dot", true);
             }
         } catch (ParseException exception)
         {
