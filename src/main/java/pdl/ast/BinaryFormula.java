@@ -1,7 +1,9 @@
 package pdl.ast;
 
+import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.smtAst.UnaryExpression;
 import pdl.translator.PdlToSmtTranslator;
 
 public class BinaryFormula extends Formula
@@ -89,6 +91,10 @@ public class BinaryFormula extends Formula
                 return new BinaryExpression(leftMeaning, BinaryExpression.Op.INTERSECTION, rightMeaning);
             case Or:
                 return new BinaryExpression(leftMeaning, BinaryExpression.Op.UNION, rightMeaning);
+            case Implies:
+                Expression universeSet = new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
+                Expression difference = new BinaryExpression(universeSet, BinaryExpression.Op.SETMINUS, leftMeaning);
+                return new BinaryExpression(difference, BinaryExpression.Op.UNION, rightMeaning);
         }
         throw new UnsupportedOperationException();
     }
