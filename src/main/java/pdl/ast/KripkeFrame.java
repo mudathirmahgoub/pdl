@@ -126,9 +126,8 @@ public class KripkeFrame extends PdlAst
                                 .getFriendlyAtom(propositionStates.get(propositionStates.size() - 1),
                                         atomReplacement)));
             }
+            stringBuilder.append("\n");
         }
-
-        stringBuilder.append("\n");
 
         for (String name : programs.keySet())
         {
@@ -151,9 +150,8 @@ public class KripkeFrame extends PdlAst
                 }
                 stringBuilder.append(String.format("%s}", transitions.get(transitions.size() - 1)));
             }
+            stringBuilder.append("\n");
         }
-
-        stringBuilder.append("\n");
 
         return stringBuilder.toString();
     }

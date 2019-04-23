@@ -1,5 +1,6 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
 import pdl.translator.PdlToSmtTranslator;
 
@@ -39,6 +40,10 @@ public class Test extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        Expression formulaMeaning = formula.translate(translator);
+        Expression product = new BinaryExpression(formulaMeaning, BinaryExpression.Op.PRODUCT, formulaMeaning);
+        Expression intersection = new BinaryExpression(translator.statesIdentity,
+                BinaryExpression.Op.INTERSECTION, product);
+        return intersection;
     }
 }

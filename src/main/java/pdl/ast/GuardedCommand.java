@@ -1,5 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.Expression;
+import pdl.translator.PdlToSmtTranslator;
+
 public class GuardedCommand extends PdlAst
 {
     private final Formula formula;
@@ -44,5 +47,12 @@ public class GuardedCommand extends PdlAst
         GuardedCommand command = (GuardedCommand) object;
         return this.program.equals(command.program) &&
                 this.formula.equals(command.formula);
+    }
+
+    public Expression translate(PdlToSmtTranslator translator)
+    {
+        Program test = new Test(formula);
+        Program composition = new BinaryProgram(BinaryProgram.Op.Composition, test, program);
+        return composition.translate(translator);
     }
 }
