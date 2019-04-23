@@ -1,3 +1,16 @@
+@startuml
+digraph foo {
+node [style=rounded]
+node1 [shape=box]
+node2 [fillcolor=yellow, style="rounded,filled", shape=diamond]
+node3 [shape=record, label="{ a | b | c }"]
+
+node1 -> node2[label="a", weight="5.0"]
+node2 -> node3[weight="100"]
+}
+@enduml
+
+/*
 strict digraph {
     a -> b[label="0.2",weight="0.2"];
     a -> c[label="0.4",weight="0.4"];
@@ -5,4 +18,4 @@ strict digraph {
     c -> e[label="0.6",weight="0.6"];
     e -> e[label="0.1",weight="0.1"];
     e -> b[label="0.7",weight="0.7"];
-}
+} */
