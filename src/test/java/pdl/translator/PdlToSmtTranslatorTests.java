@@ -160,4 +160,21 @@ class PdlToSmtTranslatorTests
         assertEquals(1, pSet.size());
         assertEquals(0, aRelation.size());
     }
+
+    @Test
+    public void possibility() throws Exception
+    {
+        String pdl = "<a> p";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
+
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+
+        Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        assertEquals(1, pSet.size());
+        assertEquals(1, aRelation.size());
+    }
 }

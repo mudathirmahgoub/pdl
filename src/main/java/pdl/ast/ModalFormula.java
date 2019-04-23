@@ -91,6 +91,12 @@ public class ModalFormula extends Formula
                 Expression necessity = new BinaryExpression(translator.statesUniverse, BinaryExpression.Op.SETMINUS, join);
                 return necessity;
             }
+            case Diamond:
+            {
+                // m(<a> p) =  m(a) o m(p)
+                Expression join = new BinaryExpression(programMeaning, BinaryExpression.Op.JOIN, formulaMeaning);
+                return join;
+            }
         }
         throw new UnsupportedOperationException();
     }
