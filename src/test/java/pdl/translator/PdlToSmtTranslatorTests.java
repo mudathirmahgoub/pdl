@@ -51,7 +51,7 @@ class PdlToSmtTranslatorTests
         Set<String> qSet = TranslatorUtils.getAtomSet(q);
         Set<String> pq = new HashSet<>(pSet);
         pq.retainAll(qSet);
-        assertNotEquals(0, pq);
+        assertNotEquals(0, pq.size());
     }
 
     @Test
@@ -67,6 +67,21 @@ class PdlToSmtTranslatorTests
         Set<String> qSet = TranslatorUtils.getAtomSet(q);
         Set<String> pq = new HashSet<>(pSet);
         pq.addAll(qSet);
-        assertNotEquals(0, pq);
+        assertNotEquals(0, pq.size());
+    }
+
+    @Test
+    public void not() throws Exception
+    {
+        String pdl = "not p and q";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+        FunctionDefinition q = TranslatorUtils.getFunctionDefinition(result.smtModel, "q");
+
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        Set<String> qSet = TranslatorUtils.getAtomSet(q);
+        assertEquals(0, pSet.size());
+        assertNotEquals(0, qSet.size());
     }
 }

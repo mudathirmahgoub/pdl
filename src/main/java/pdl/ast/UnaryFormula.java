@@ -1,6 +1,9 @@
 package pdl.ast;
 
+import edu.uiowa.smt.AbstractTranslator;
+import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.smtAst.UnaryExpression;
 import pdl.translator.PdlToSmtTranslator;
 
 public class UnaryFormula extends Formula
@@ -65,6 +68,14 @@ public class UnaryFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
+        Expression translation = formula.translate(translator);
+        switch (op)
+        {
+            case Not:
+                Expression universeSet = new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
+                Expression difference = new BinaryExpression(universeSet, BinaryExpression.Op.SETMINUS, translation);
+                return difference;
+        }
         throw new UnsupportedOperationException();
     }
 }

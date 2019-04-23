@@ -5,7 +5,6 @@ import edu.uiowa.smt.smtAst.*;
 import pdl.ast.KripkeFrame;
 import pdl.ast.PdlProgram;
 import pdl.ast.Transition;
-import pdl.ast.UnaryFormula;
 
 import java.util.HashMap;
 import java.util.List;
