@@ -275,4 +275,20 @@ class PdlToSmtTranslatorTests
                         "m(a) = {(0,0)}\n" +
                         "m(b) = {}\n", frame.toString());
     }
+
+    @Test
+    public void iterativeGuardedCommand1() throws Exception
+    {
+        String pdl = "<do p -> a | q -> b od> (not p or not q)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void iterativeGuardedCommand2() throws Exception
+    {
+        String pdl = "<do p -> a | q -> b od> r";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+    }
 }
