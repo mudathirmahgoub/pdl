@@ -99,7 +99,15 @@ public class MultiGurardedCommand extends Program
                         .stream().map(g -> g.translate(translator))
                         .collect(Collectors.toList());
                 List<Expression> guards = guardedCommands
-                        .stream().map(g -> g.getFormula().translate(translator))
+                        .stream()
+                        .map
+                        (   g -> new BinaryExpression
+                            (
+                                translator.statesUniverse,
+                                BinaryExpression.Op.INTERSECTION,
+                                g.getFormula().translate(translator)
+                            )
+                        )
                         .collect(Collectors.toList());
 
                 Expression union = commandsMeaning.get(0);
