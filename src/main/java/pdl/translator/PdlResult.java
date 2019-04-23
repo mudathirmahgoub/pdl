@@ -85,6 +85,19 @@ public class PdlResult extends Result
 
     public void writeToDotFile(String filePath, boolean platnuml)
     {
+        if(!satResult.equals("sat"))
+        {
+            try
+            {
+                FileUtils.writeStringToFile(new File(filePath), satResult, StandardCharsets.UTF_8);
+            }
+            catch (Exception exception)
+            {
+                System.out.println(exception.toString());
+                exception.printStackTrace();
+            }
+            return;
+        }
         StringBuilder stringBuilder = new StringBuilder();
 
         KripkeFrame frame = getResultFrame();

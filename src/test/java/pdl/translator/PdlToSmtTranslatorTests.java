@@ -279,7 +279,7 @@ class PdlToSmtTranslatorTests
     @Test
     public void iterativeGuardedCommand1() throws Exception
     {
-        String pdl = "<do p -> a | q -> b od> (not p or not q)";
+        String pdl = "<do p -> a | q -> b od> (not p and not q)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("sat", result.satResult);
 

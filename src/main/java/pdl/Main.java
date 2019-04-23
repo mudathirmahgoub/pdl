@@ -58,12 +58,12 @@ public class Main
             String name = FilenameUtils.removeExtension(output);
             FileUtils.writeStringToFile(new File(name + ".smt2"),
                     result.smtProgram, StandardCharsets.UTF_8);
+            result.writeToDotFile(name + ".dot", true);
             if(result.satResult.equals("sat"))
             {
                 KripkeFrame frame = result.getResultFrame();
                 FileUtils.writeStringToFile(new File(name + ".kripke"),
                         frame.toString(), StandardCharsets.UTF_8);
-                result.writeToDotFile(name + ".dot", true);
             }
         } catch (ParseException exception)
         {
