@@ -97,8 +97,7 @@ public class BinaryFormula extends Formula
             }
             case Implies:
             {
-                Expression universeSet = new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
-                Expression difference = new BinaryExpression(universeSet, BinaryExpression.Op.SETMINUS, leftMeaning);
+                Expression difference = new BinaryExpression(translator.statesUniverse, BinaryExpression.Op.SETMINUS, leftMeaning);
                 return new BinaryExpression(difference, BinaryExpression.Op.UNION, rightMeaning);
             }
             case Equivalence:

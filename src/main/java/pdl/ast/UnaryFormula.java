@@ -68,12 +68,11 @@ public class UnaryFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        Expression translation = formula.translate(translator);
+        Expression expression = formula.translate(translator);
         switch (op)
         {
             case Not:
-                Expression universeSet = new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
-                Expression difference = new BinaryExpression(universeSet, BinaryExpression.Op.SETMINUS, translation);
+                Expression difference = new BinaryExpression(translator.statesUniverse, BinaryExpression.Op.SETMINUS, expression);
                 return difference;
         }
         throw new UnsupportedOperationException();

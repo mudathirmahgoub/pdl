@@ -40,7 +40,7 @@ public class ConstantFormula extends Formula
     {
         if(value)
         {
-            return new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
+            return translator.statesUniverse;
         }
         else
         {

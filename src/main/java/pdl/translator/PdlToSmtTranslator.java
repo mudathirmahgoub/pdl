@@ -15,6 +15,7 @@ public class PdlToSmtTranslator extends AbstractTranslator
     private final PdlProgram pdlProgram;
     private final SmtProgram smtProgram;
 
+    public Expression statesUniverse;
     public Map<String, FunctionDeclaration> propositionMap;
 
     PdlToSmtTranslator(PdlProgram program)
@@ -25,6 +26,9 @@ public class PdlToSmtTranslator extends AbstractTranslator
 
         this.smtProgram.addSort(atomSort);
         this.smtProgram.addSort(uninterpretedInt);
+        this.smtProgram.addFunction(atomUniverse);
+        statesUniverse =  AbstractTranslator.atomUniverse.getVariable();
+        this.smtProgram.addAssertion(new Assertion("Universe definition for Atom", new BinaryExpression(atomUniverse.getVariable(), BinaryExpression.Op.EQ, new UnaryExpression(UnaryExpression.Op.UNIVSET, setOfUnaryAtomSort))));
     }
 
     @Override
