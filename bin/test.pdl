@@ -1,1 +1,6 @@
-<a*>[(a;a)*] p and <a*> [(a;a)*] not p
+(p and q) and
+<do p -> a | q -> b od>
+    (
+        (<b> (p and not q))  and
+        (<a> (q and not p))
+    )
