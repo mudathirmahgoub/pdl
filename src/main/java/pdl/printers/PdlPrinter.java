@@ -115,6 +115,7 @@ public class PdlPrinter implements PdlAstVisitor
     @Override
     public void visit(BinaryFormula binaryFormula)
     {
+        stringBuilder.append("(");
         visit(binaryFormula.getLeft());
         switch (binaryFormula.getOp())
         {
@@ -143,6 +144,7 @@ public class PdlPrinter implements PdlAstVisitor
         }
 
         visit(binaryFormula.getRight());
+        stringBuilder.append(")");
     }
 
     @Override
@@ -205,9 +207,7 @@ public class PdlPrinter implements PdlAstVisitor
     @Override
     public void visit(Iteration iteration)
     {
-        stringBuilder.append("(");
         visit(iteration.getProgram());
-        stringBuilder.append(")*");
     }
 
     @Override
@@ -225,6 +225,7 @@ public class PdlPrinter implements PdlAstVisitor
     @Override
     public void visit(BinaryProgram binaryProgram)
     {
+        stringBuilder.append("(");
         visit(binaryProgram.getLeft());
         switch (binaryProgram.getOP())
         {
@@ -242,6 +243,7 @@ public class PdlPrinter implements PdlAstVisitor
                 throw new UnsupportedOperationException();
         }
         visit(binaryProgram.getRight());
+        stringBuilder.append(")");
     }
 
     @Override
