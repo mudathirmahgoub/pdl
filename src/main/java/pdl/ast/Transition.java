@@ -36,4 +36,10 @@ public class Transition
         String output = TranslatorUtils.getFriendlyAtom(outputState, KripkeFrame.atomReplacement);
         return "(" + input + "," + output + ")";
     }
+
+    @Override
+    public int hashCode()
+    {
+        return this.toString().hashCode();
+    }
 }

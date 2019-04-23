@@ -25,6 +25,9 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
 
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
     // https://mvnrepository.com/artifact/org.antlr/antlr4-runtime
     compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.7.2'
 
@@ -34,3 +37,15 @@ dependencies {
 
 // Define the main class for the application
 mainClassName = 'pdl.Main'
+
+
+task pdl(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'pdl.Main'
+    }
+    baseName = 'pdl'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+compileJava.finalizedBy pdl
