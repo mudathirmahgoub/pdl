@@ -1,5 +1,6 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
 import pdl.translator.PdlToSmtTranslator;
 
@@ -80,6 +81,15 @@ public class BinaryFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
+        Expression leftMeaning = left.translate(translator);
+        Expression rightMeaning = right.translate(translator);
+        switch (op)
+        {
+            case And:
+                return new BinaryExpression(leftMeaning, BinaryExpression.Op.INTERSECTION, rightMeaning);
+            case Or:
+                return new BinaryExpression(leftMeaning, BinaryExpression.Op.UNION, rightMeaning);
+        }
         throw new UnsupportedOperationException();
     }
 }
