@@ -14,8 +14,8 @@ plugins {
     id 'application'
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '1.9'
+targetCompatibility = '1.9'
 
 repositories {
     mavenCentral()
@@ -49,3 +49,18 @@ task pdl(type: Jar) {
 }
 
 compileJava.finalizedBy pdl
+
+
+// copy the application jar to bin
+task copyPdl(type: Copy) {
+    from "${buildDir}/libs/pdl.jar"
+    into "${rootProject.projectDir}/bin"
+}
+
+pdl.finalizedBy copyPdl
+
+task removePdl(type: Delete) {
+    delete "${rootProject.projectDir}/bin/pdl.jar"
+}
+
+clean.finalizedBy removePdl

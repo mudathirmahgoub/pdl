@@ -14,7 +14,6 @@ public class Cvc4Process
 
     public static final String OS       = System.getProperty("os.name");
     public static final String SEP      = File.separator;
-    public static final String BIN_PATH = "bin" + SEP;
 
     private Process process;
     private Scanner scanner;
@@ -33,15 +32,15 @@ public class Cvc4Process
 
         if(onWindows())
         {
-            cvc4 = BIN_PATH + "cvc4_win64.exe";
+            cvc4 = "cvc4_win64.exe";
         }
         else if(onMac())
         {
-            cvc4 = BIN_PATH + "cvc4_mac";
+            cvc4 = "cvc4_mac";
         }
         else if(OS.startsWith("Linux"))
         {
-            cvc4 = BIN_PATH + "cvc4_linux";
+            cvc4 = "cvc4_linux";
         }
         else
         {

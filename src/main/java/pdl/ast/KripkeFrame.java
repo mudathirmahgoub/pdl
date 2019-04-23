@@ -6,6 +6,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -244,7 +246,10 @@ public class KripkeFrame extends PdlAst
         try
         {
             FileUtils.writeStringToFile(new File(filePath), stringBuilder.toString(), StandardCharsets.UTF_8);
-            Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath).waitFor();
+            Process process = Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath);
+            process.waitFor();
+            String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            System.out.println(output);
         }
         catch (Exception exception)
         {
