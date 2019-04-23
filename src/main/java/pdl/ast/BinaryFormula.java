@@ -88,13 +88,26 @@ public class BinaryFormula extends Formula
         switch (op)
         {
             case And:
+            {
                 return new BinaryExpression(leftMeaning, BinaryExpression.Op.INTERSECTION, rightMeaning);
+            }
             case Or:
+            {
                 return new BinaryExpression(leftMeaning, BinaryExpression.Op.UNION, rightMeaning);
+            }
             case Implies:
+            {
                 Expression universeSet = new UnaryExpression(UnaryExpression.Op.UNIVSET, AbstractTranslator.setOfUnaryAtomSort);
                 Expression difference = new BinaryExpression(universeSet, BinaryExpression.Op.SETMINUS, leftMeaning);
                 return new BinaryExpression(difference, BinaryExpression.Op.UNION, rightMeaning);
+            }
+            case Equivalence:
+            {
+                Formula implies1 = new BinaryFormula(Op.Implies, left, right);
+                Formula implies2 = new BinaryFormula(Op.Implies, right, left);
+                Formula equivalence = new BinaryFormula(Op.And, implies1, implies2);
+                return equivalence.translate(translator);
+            }
         }
         throw new UnsupportedOperationException();
     }

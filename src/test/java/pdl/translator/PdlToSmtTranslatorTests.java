@@ -112,4 +112,34 @@ class PdlToSmtTranslatorTests
         assertNotEquals(0, pSet.size());
         assertNotEquals(0, qSet.size());
     }
+
+    @Test
+    public void equivalence1() throws Exception
+    {
+        String pdl = "not p and (p <-> q)";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+        FunctionDefinition q = TranslatorUtils.getFunctionDefinition(result.smtModel, "q");
+
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        Set<String> qSet = TranslatorUtils.getAtomSet(q);
+        assertEquals(0, pSet.size());
+        assertEquals(0, qSet.size());
+    }
+
+    @Test
+    public void equivalence2() throws Exception
+    {
+        String pdl = "p and (p <-> q)";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+        FunctionDefinition q = TranslatorUtils.getFunctionDefinition(result.smtModel, "q");
+
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        Set<String> qSet = TranslatorUtils.getAtomSet(q);
+        assertEquals(1, pSet.size());
+        assertEquals(1, qSet.size());
+    }
 }
