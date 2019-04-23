@@ -36,11 +36,12 @@ public class Cvc4Process
         }
         else if(onMac())
         {
-            cvc4 = "cvc4_mac";
+            cvc4 = "./cvc4_mac";
         }
         else if(OS.startsWith("Linux"))
         {
-            cvc4 = "cvc4_linux";
+            System.out.println(System.getProperty("user.dir"));
+            cvc4 = "./cvc4_linux";
         }
         else
         {

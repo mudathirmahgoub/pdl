@@ -2,6 +2,7 @@ package pdl.ast;
 
 import edu.uiowa.smt.TranslatorUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -248,7 +249,7 @@ public class KripkeFrame extends PdlAst
             FileUtils.writeStringToFile(new File(filePath), stringBuilder.toString(), StandardCharsets.UTF_8);
             Process process = Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath);
             process.waitFor();
-            String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            String output = new String(IOUtils.toByteArray(process.getInputStream()), StandardCharsets.UTF_8);
             System.out.println(output);
         }
         catch (Exception exception)
