@@ -1,5 +1,7 @@
 package pdl.ast;
 
+import edu.uiowa.smt.TranslatorUtils;
+
 public class Transition
 {
     public String inputState;
@@ -30,6 +32,8 @@ public class Transition
     @Override
     public String toString()
     {
-        return "(" + inputState + "," + outputState + ")";
+        String input = TranslatorUtils.getFriendlyAtom(inputState, KripkeFrame.atomReplacement);
+        String output = TranslatorUtils.getFriendlyAtom(outputState, KripkeFrame.atomReplacement);
+        return "(" + input + "," + output + ")";
     }
 }

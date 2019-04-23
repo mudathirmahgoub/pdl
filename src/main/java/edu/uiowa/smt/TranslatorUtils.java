@@ -324,4 +324,9 @@ public class TranslatorUtils
         }
         return printer.getSmtLib();
     }
+
+    public static String getFriendlyAtom(String uninterpretedConstant, String replacement)
+    {
+        return uninterpretedConstant.replaceFirst("@uc_Atom_", replacement);
+    }
 }

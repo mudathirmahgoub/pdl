@@ -38,7 +38,7 @@ public class PdlResult extends Result
         FunctionDefinition statesUniverse = TranslatorUtils.getFunctionDefinition(smtModel, AbstractTranslator.atomUniverse.getName());
 
         List<String> states = TranslatorUtils.getAtomSet(statesUniverse)
-                                             .stream().map(s -> getFriendlyString(s))
+                                             .stream()
                                              .collect(Collectors.toList());
 
         Map<String, List<String>> propsotions = new HashMap<>();
@@ -47,7 +47,7 @@ public class PdlResult extends Result
             FunctionDefinition propositionDefinition = TranslatorUtils.getFunctionDefinition(smtModel, proposition);
             List<String> propositionStates = TranslatorUtils
                     .getAtomSet(propositionDefinition)
-                    .stream().map(s -> getFriendlyString(s))
+                    .stream()
                     .collect(Collectors.toList());
             propsotions.put(proposition, propositionStates);
         }
@@ -71,13 +71,8 @@ public class PdlResult extends Result
 
     private Transition getTransition(List<String> tuple)
     {
-        String input = getFriendlyString(tuple.get(0));
-        String output = getFriendlyString(tuple.get(1));
+        String input = tuple.get(0);
+        String output = tuple.get(1);
         return new Transition(input, output);
-    }
-
-    private String getFriendlyString(String s)
-    {
-        return s.replaceFirst("@uc_Atom_", "");
     }
 }

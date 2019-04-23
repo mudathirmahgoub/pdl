@@ -1,5 +1,7 @@
 package pdl.ast;
 
+import edu.uiowa.smt.TranslatorUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,9 @@ public class KripkeFrame extends PdlAst
     private final List<String> states;
     private final Map<String, List<String>> propositions;
     private final Map<String, List<Transition>> programs;
+
+    // replace @uc_Atom_ with empty string
+    public static final String atomReplacement = "";
 
     public KripkeFrame(List<String> states, Map<String, List<String>> propositions, Map<String, List<Transition>> programs)
     {
@@ -66,60 +71,68 @@ public class KripkeFrame extends PdlAst
     public String toString()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        if(states.size() == 0)
+        if (states.size() == 0)
         {
             stringBuilder.append("K = {}");
         }
-        else if(states.size() == 1)
+        else if (states.size() == 1)
         {
-            stringBuilder.append(String.format("K = {%s}", states.get(0)));
+            stringBuilder.append(String.format("K = {%s}",
+                    TranslatorUtils.getFriendlyAtom(states.get(0), atomReplacement)));
         }
         else
         {
             stringBuilder.append("K = {");
             for (int i = 0; i < states.size() - 1; i++)
             {
-                stringBuilder.append(String.format("%s, ", states.get(i)));
+                stringBuilder.append(String.format("%s, ",
+                        TranslatorUtils.getFriendlyAtom(states.get(i), atomReplacement)));
             }
-            stringBuilder.append(String.format("%s}", states.get(states.size() - 1)));
+            stringBuilder.append(String.format("%s}",
+                    TranslatorUtils.getFriendlyAtom(states.get(states.size() - 1), atomReplacement)));
         }
 
         stringBuilder.append("\n");
 
-        for (String name: propositions.keySet())
+        for (String name : propositions.keySet())
         {
             stringBuilder.append(String.format("m(%s) = ", name));
             List<String> propositionStates = propositions.get(name);
-            if(propositionStates.size() == 0)
+            if (propositionStates.size() == 0)
             {
                 stringBuilder.append("{}");
             }
-            else if(propositionStates.size() == 1)
+            else if (propositionStates.size() == 1)
             {
-                stringBuilder.append(String.format("{%s}", propositionStates.get(0)));
+                stringBuilder.append(String.format("{%s}",
+                        TranslatorUtils.getFriendlyAtom(propositionStates.get(0), atomReplacement)));
             }
             else
             {
                 stringBuilder.append("{");
                 for (int i = 0; i < propositionStates.size() - 1; i++)
                 {
-                    stringBuilder.append(String.format("%s, ", propositionStates.get(i)));
+                    stringBuilder.append(String.format("%s, ",
+                            TranslatorUtils.getFriendlyAtom(propositionStates.get(i), atomReplacement)));
                 }
-                stringBuilder.append(String.format("%s}", propositionStates.get(propositionStates.size() - 1)));
+                stringBuilder.append(String.format("%s}",
+                        TranslatorUtils
+                                .getFriendlyAtom(propositionStates.get(propositionStates.size() - 1),
+                                        atomReplacement)));
             }
         }
 
         stringBuilder.append("\n");
 
-        for (String name: programs.keySet())
+        for (String name : programs.keySet())
         {
             stringBuilder.append(String.format("m(%s) = ", name));
             List<Transition> transitions = programs.get(name);
-            if(transitions.size() == 0)
+            if (transitions.size() == 0)
             {
                 stringBuilder.append("{}");
             }
-            else if(transitions.size() == 1)
+            else if (transitions.size() == 1)
             {
                 stringBuilder.append(String.format("{%s}", transitions.get(0)));
             }
@@ -138,4 +151,5 @@ public class KripkeFrame extends PdlAst
 
         return stringBuilder.toString();
     }
+
 }
