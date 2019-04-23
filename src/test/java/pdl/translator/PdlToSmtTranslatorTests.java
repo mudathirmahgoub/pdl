@@ -4,6 +4,7 @@ import edu.uiowa.smt.Result;
 import edu.uiowa.smt.TranslatorUtils;
 import edu.uiowa.smt.smtAst.FunctionDefinition;
 import org.junit.jupiter.api.Test;
+import pdl.ast.KripkeFrame;
 
 import java.util.HashSet;
 import java.util.List;
@@ -241,7 +242,7 @@ class PdlToSmtTranslatorTests
     public void bookExample1() throws Exception
     {
         String pdl = "<a*>[(a;a)*] p and <a*> [(a;a)*] not p";
-        Result result = PdlUtils.runCVC4(pdl);
+        PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("sat", result.satResult);
 
         FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
@@ -252,5 +253,10 @@ class PdlToSmtTranslatorTests
         Set<String> pSet = TranslatorUtils.getAtomSet(p);
         assertEquals(0, pSet.size());
         assertEquals(2, aRelation.size());
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0, 1}\n" +
+                "m(p) = {}\n" +
+                "m(a) = {(0,1), (0,0)}\n", frame.toString());
     }
 }

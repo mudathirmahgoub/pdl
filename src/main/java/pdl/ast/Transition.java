@@ -26,4 +26,10 @@ public class Transition
         return inputState.equals(transition.inputState) &&
                 outputState.equals(transition.outputState);
     }
+
+    @Override
+    public String toString()
+    {
+        return "(" + inputState + "," + outputState + ")";
+    }
 }

@@ -31,7 +31,7 @@ public class PdlUtils
         return program;
     }
 
-    public static Result runCVC4(String pdl) throws Exception
+    public static PdlResult runCVC4(String pdl) throws Exception
     {
 
         PdlProgram pdlProgram = parseProgram(pdl);
@@ -45,7 +45,7 @@ public class PdlUtils
         process.sendCommand(smtScript);
         String smt = smtScript + AbstractTranslator.CHECK_SAT;
         String satResult = process.sendCommand(AbstractTranslator.CHECK_SAT);
-        Result result = new Result(smt, satResult);
+        PdlResult result = new PdlResult(pdlProgram, smt, satResult);
         if(satResult.equals("sat"))
         {
             String model = process.sendCommand(AbstractTranslator.GET_MODEL);
