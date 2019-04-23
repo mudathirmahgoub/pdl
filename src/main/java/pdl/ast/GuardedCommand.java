@@ -1,6 +1,7 @@
 package pdl.ast;
 
 import edu.uiowa.smt.smtAst.Expression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class GuardedCommand extends PdlAst
@@ -54,5 +55,11 @@ public class GuardedCommand extends PdlAst
         Program test = new Test(formula);
         Program composition = new BinaryProgram(BinaryProgram.Op.Composition, test, program);
         return composition.translate(translator);
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

@@ -1,6 +1,7 @@
 package pdl.ast;
 
 import edu.uiowa.smt.smtAst.Expression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class While extends Program
@@ -53,5 +54,11 @@ public class While extends Program
     public Expression translate(PdlToSmtTranslator translator)
     {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

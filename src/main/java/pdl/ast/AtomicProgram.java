@@ -2,6 +2,7 @@ package pdl.ast;
 
 import edu.uiowa.smt.smtAst.Expression;
 import edu.uiowa.smt.smtAst.Variable;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class AtomicProgram extends Program
@@ -35,6 +36,12 @@ public class AtomicProgram extends Program
         }
         AtomicProgram program = (AtomicProgram) object;
         return this.symbol.equals(program.symbol);
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 
     @Override

@@ -2,6 +2,7 @@ package pdl.ast;
 
 import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 import java.util.List;
@@ -91,5 +92,11 @@ public class MultiGurardedCommand extends Program
             }
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

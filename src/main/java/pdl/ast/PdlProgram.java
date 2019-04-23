@@ -1,5 +1,7 @@
 package pdl.ast;
 
+import pdl.printers.PdlAstVisitor;
+
 public class PdlProgram extends PdlAst
 {
     private final KripkeFrame frame;
@@ -48,5 +50,11 @@ public class PdlProgram extends PdlAst
         PdlProgram program = (PdlProgram) object;
         return this.frame.equals(program.frame) &&
                 this.formula.equals(program.formula);
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

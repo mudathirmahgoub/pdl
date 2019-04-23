@@ -3,6 +3,7 @@ package pdl.ast;
 import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.TranslatorUtils;
 import edu.uiowa.smt.smtAst.*;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class Iteration extends Program
@@ -16,6 +17,11 @@ public class Iteration extends Program
             throw new RuntimeException("Program is null");
         }
         this.program = program;
+    }
+
+    public Program getProgram()
+    {
+        return program;
     }
 
     @Override
@@ -40,5 +46,11 @@ public class Iteration extends Program
         Expression transitiveClosure = new UnaryExpression(UnaryExpression.Op.TCLOSURE, meaning);
         Expression reflexiveTransitiveClosure = new BinaryExpression(meaning, BinaryExpression.Op.UNION, transitiveClosure);
         return reflexiveTransitiveClosure;
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

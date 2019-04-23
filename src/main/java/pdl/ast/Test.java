@@ -2,6 +2,7 @@ package pdl.ast;
 
 import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class Test extends Program
@@ -35,6 +36,12 @@ public class Test extends Program
         }
         Test test = (Test) object;
         return this.formula.equals(test.formula);
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 
     @Override

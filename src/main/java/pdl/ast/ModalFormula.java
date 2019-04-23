@@ -2,6 +2,7 @@ package pdl.ast;
 
 import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class ModalFormula extends Formula
@@ -99,5 +100,11 @@ public class ModalFormula extends Formula
             }
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

@@ -4,6 +4,7 @@ import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
 import edu.uiowa.smt.smtAst.UnaryExpression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class BinaryFormula extends Formula
@@ -27,7 +28,7 @@ public class BinaryFormula extends Formula
         this.right = right;
     }
 
-    public Op getOP()
+    public Op getOp()
     {
         return this.op;
     }
@@ -109,5 +110,11 @@ public class BinaryFormula extends Formula
             }
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

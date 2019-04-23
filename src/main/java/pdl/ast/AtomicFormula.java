@@ -2,6 +2,7 @@ package pdl.ast;
 
 import edu.uiowa.smt.smtAst.Expression;
 import edu.uiowa.smt.smtAst.Variable;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class AtomicFormula extends Formula
@@ -48,5 +49,11 @@ public class AtomicFormula extends Formula
         {
             throw new RuntimeException(String.format("Proposition %s is undefined", symbol));
         }
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }

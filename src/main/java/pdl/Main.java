@@ -63,7 +63,7 @@ public class Main
                 KripkeFrame frame = result.getResultFrame();
                 FileUtils.writeStringToFile(new File(name + ".kripke"),
                         frame.toString(), StandardCharsets.UTF_8);
-                frame.writeToDotFile(name + ".dot", true);
+                result.writeToDotFile(name + ".dot", true);
             }
         } catch (ParseException exception)
         {

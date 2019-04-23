@@ -4,6 +4,7 @@ import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.smtAst.BoolConstant;
 import edu.uiowa.smt.smtAst.Expression;
 import edu.uiowa.smt.smtAst.UnaryExpression;
+import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
 public class ConstantFormula extends Formula
@@ -46,5 +47,11 @@ public class ConstantFormula extends Formula
         {
             return new UnaryExpression(UnaryExpression.Op.EMPTYSET, AbstractTranslator.setOfUnaryAtomSort);
         }
+    }
+
+    @Override
+    public void accept(PdlAstVisitor visitor)
+    {
+        visitor.visit(this);
     }
 }
