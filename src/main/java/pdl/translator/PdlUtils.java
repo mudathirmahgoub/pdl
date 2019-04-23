@@ -33,7 +33,7 @@ public class PdlUtils
 
     public static Result runCVC4(String pdl) throws Exception
     {
-        Result result = new Result();
+
         PdlProgram pdlProgram = parseProgram(pdl);
         PdlToSmtTranslator translator = new PdlToSmtTranslator(pdlProgram);
         SmtProgram smtProgram = translator.translate();
@@ -43,8 +43,10 @@ public class PdlUtils
         Cvc4Process process = Cvc4Process.start();
         TranslatorUtils.setSolverOptions(process);
         process.sendCommand(smtScript);
-        result.satResult = process.sendCommand(AbstractTranslator.CHECK_SAT);
-        if(result.satResult.equals("sat"))
+        String smt = smtScript + AbstractTranslator.CHECK_SAT;
+        String satResult = process.sendCommand(AbstractTranslator.CHECK_SAT);
+        Result result = new Result(smt, satResult);
+        if(satResult.equals("sat"))
         {
             String model = process.sendCommand(AbstractTranslator.GET_MODEL);
             result.smtModel = TranslatorUtils.parseModel(model);

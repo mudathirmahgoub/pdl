@@ -235,4 +235,22 @@ class PdlToSmtTranslatorTests
         assertEquals(1, pSet.size());
         assertNotEquals(0, aRelation.size() + bRelation.size());
     }
+
+
+    @Test
+    public void bookExample1() throws Exception
+    {
+        String pdl = "<a*>[(a;a)*] p and <a*> [(a;a)*] not p";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
+
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+
+        Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        assertEquals(0, pSet.size());
+        assertEquals(2, aRelation.size());
+    }
 }
