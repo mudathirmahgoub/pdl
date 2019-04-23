@@ -1,6 +1,8 @@
 package pdl.ast;
 
-import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.AbstractTranslator;
+import edu.uiowa.smt.TranslatorUtils;
+import edu.uiowa.smt.smtAst.*;
 import pdl.translator.PdlToSmtTranslator;
 
 public class Iteration extends Program
@@ -34,6 +36,9 @@ public class Iteration extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        Expression meaning = program.translate(translator);
+        Expression transitiveClosure = new UnaryExpression(UnaryExpression.Op.TCLOSURE, meaning);
+        Expression reflexiveTransitiveClosure = new BinaryExpression(meaning, BinaryExpression.Op.UNION, transitiveClosure);
+        return reflexiveTransitiveClosure;
     }
 }

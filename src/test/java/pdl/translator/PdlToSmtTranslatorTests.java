@@ -177,4 +177,62 @@ class PdlToSmtTranslatorTests
         assertEquals(1, pSet.size());
         assertEquals(1, aRelation.size());
     }
+
+    @Test
+    public void iteration() throws Exception
+    {
+        String pdl = "<a*> p";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
+
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+
+        Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        assertEquals(1, pSet.size());
+        assertEquals(1, aRelation.size());
+    }
+
+    @Test
+    public void composition() throws Exception
+    {
+        String pdl = "<a;b> p";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
+
+        FunctionDefinition b = TranslatorUtils.getFunctionDefinition(result.smtModel, "b");
+
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+
+        Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
+        Set<List<String>> bRelation = TranslatorUtils.getAtomRelation(b);
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        assertEquals(1, pSet.size());
+        assertEquals(1, aRelation.size());
+        assertEquals(1, bRelation.size());
+    }
+
+    @Test
+    public void choice() throws Exception
+    {
+        String pdl = "<a union b> p";
+        Result result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        FunctionDefinition a = TranslatorUtils.getFunctionDefinition(result.smtModel, "a");
+
+        FunctionDefinition b = TranslatorUtils.getFunctionDefinition(result.smtModel, "b");
+
+        FunctionDefinition p = TranslatorUtils.getFunctionDefinition(result.smtModel, "p");
+
+        Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
+        Set<List<String>> bRelation = TranslatorUtils.getAtomRelation(b);
+        Set<String> pSet = TranslatorUtils.getAtomSet(p);
+        assertEquals(1, pSet.size());
+        assertNotEquals(0, aRelation.size() + bRelation.size());
+    }
 }

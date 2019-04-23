@@ -1,5 +1,6 @@
 package pdl.ast;
 
+import edu.uiowa.smt.smtAst.BinaryExpression;
 import edu.uiowa.smt.smtAst.Expression;
 import pdl.translator.PdlToSmtTranslator;
 
@@ -78,6 +79,23 @@ public class BinaryProgram extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
+        Expression leftMeaning = left.translate(translator);
+        Expression rightMeaning = right.translate(translator);
+        switch (op)
+        {
+            case Composition:
+            {
+                //m(a;b) =  m(a) o m(b)
+                Expression join = new BinaryExpression(leftMeaning, BinaryExpression.Op.JOIN, rightMeaning);
+                return join;
+            }
+            case Choice:
+            {
+                //m(a;b) =  m(a) union m(b)
+                Expression union = new BinaryExpression(leftMeaning, BinaryExpression.Op.UNION, rightMeaning);
+                return union;
+            }
+        }
         throw new UnsupportedOperationException();
     }
 }

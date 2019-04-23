@@ -16,6 +16,7 @@ public class PdlToSmtTranslator extends AbstractTranslator
     private final SmtProgram smtProgram;
 
     public Expression statesUniverse;
+    public Expression statesIdentity;
     public Map<String, FunctionDeclaration> propositionMap;
     public Map<String, FunctionDeclaration> programsMap;
 
@@ -25,12 +26,53 @@ public class PdlToSmtTranslator extends AbstractTranslator
         this.smtProgram = new SmtProgram();
         this.propositionMap = new HashMap<>();
         this.programsMap = new HashMap<>();
+        statesUniverse =  atomUniverse.getVariable();
+        statesIdentity = atomIdentity.getVariable();
 
+        translateSpecialFunctions();
+    }
+
+    private void translateSpecialFunctions()
+    {
         this.smtProgram.addSort(atomSort);
         this.smtProgram.addSort(uninterpretedInt);
+        translateAtomUniverse();
+        translateAtomIdentity();
+    }
+
+    private void translateAtomUniverse()
+    {
         this.smtProgram.addFunction(atomUniverse);
-        statesUniverse =  AbstractTranslator.atomUniverse.getVariable();
-        this.smtProgram.addAssertion(new Assertion("Universe definition for Atom", new BinaryExpression(atomUniverse.getVariable(), BinaryExpression.Op.EQ, new UnaryExpression(UnaryExpression.Op.UNIVSET, setOfUnaryAtomSort))));
+        Expression universe = new UnaryExpression(UnaryExpression.Op.UNIVSET, setOfUnaryAtomSort);
+        Expression equal = new BinaryExpression(statesUniverse, BinaryExpression.Op.EQ, universe);
+        Assertion assertion = new Assertion("Universe definition for Atoms", equal);
+        this.smtProgram.addAssertion(assertion);
+    }
+
+    private void translateAtomIdentity()
+    {
+        this.smtProgram.addFunction(atomIdentity);
+        VariableDeclaration x = new VariableDeclaration("_x", AbstractTranslator.atomSort);
+        Expression xPair = new MultiArityExpression(MultiArityExpression.Op.MKTUPLE, x.getVariable(), x.getVariable());
+        Expression xPairMember = new BinaryExpression(xPair, BinaryExpression.Op.MEMBER, statesIdentity);
+        Expression axiom1 = new QuantifiedExpression(QuantifiedExpression.Op.FORALL, xPairMember, x);
+
+        VariableDeclaration y = new VariableDeclaration("_y", AbstractTranslator.atomSort);
+
+        Expression xyPair = new MultiArityExpression(MultiArityExpression.Op.MKTUPLE, x.getVariable(), y.getVariable());
+
+        Expression xyPairMember = new BinaryExpression(xyPair, BinaryExpression.Op.MEMBER, statesIdentity);
+
+        Expression equal = new BinaryExpression(x.getVariable(), BinaryExpression.Op.EQ, y.getVariable());
+
+        Expression implies = new BinaryExpression(xyPairMember, BinaryExpression.Op.IMPLIES, equal);
+
+        Expression axiom2 = new QuantifiedExpression(QuantifiedExpression.Op.FORALL, implies, x, y);
+
+        Assertion assertion1 = new Assertion("Identity axiom 1 for Atoms", axiom1);
+        this.smtProgram.addAssertion(assertion1);
+        Assertion assertion2 = new Assertion("Identity axiom 2 for Atoms", axiom2);
+        this.smtProgram.addAssertion(assertion2);
     }
 
     @Override

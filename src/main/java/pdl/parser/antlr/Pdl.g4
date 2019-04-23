@@ -51,7 +51,7 @@ program : | skip
           | program Semicolon program // composition
           | program Union program // choice
           | LeftParenthesis program RightParenthesis
-          | formula QuestionMark // test;
+          | formula QuestionMark ; // test
 
 skip : Skip ;
 
