@@ -40,8 +40,8 @@ public class PdlPrinter implements PdlAstVisitor
     public void visit(UnaryFormula unaryFormula)
     {
         // for negation
-        stringBuilder.append(unaryFormula.getOP());
-        stringBuilder.append(unaryFormula.getFormula());
+        stringBuilder.append("¬");
+        visit(unaryFormula.getFormula());
     }
 
     @Override

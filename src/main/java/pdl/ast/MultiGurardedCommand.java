@@ -77,61 +77,64 @@ public class MultiGurardedCommand extends Program
         {
             case If:
             {
-                // m(if p -> a | q -> b | r -> c fi) = p?a ; union q?b ; union r?c
-                List<Expression> commandsMeaning = guardedCommands
-                        .stream().map(g -> g.translate(translator))
+                // if p -> a | q -> b | r -> c fi = p?a ; union q?b ; union r?c
+                List<Program> commandsList = guardedCommands
+                        .stream().map(g -> getProgram(g))
                         .collect(Collectors.toList());
-                Expression union = commandsMeaning.get(0);
-                if(commandsMeaning.size() > 1)
+                Program union = commandsList.get(0);
+                if(commandsList.size() > 1)
                 {
-                    for (int i = 1; i < commandsMeaning.size(); i++)
+                    for (int i = 1; i < commandsList.size(); i++)
                     {
-                        union = new BinaryExpression(union, BinaryExpression.Op.UNION, commandsMeaning.get(i));
+                        union = new BinaryProgram(BinaryProgram.Op.Choice, union, commandsList.get(i));
                     }
                 }
-                return union;
+                return union.translate(translator);
             }
             case Do:
             {
-                // m(do p -> a | q -> b | r -> c od) =
+                // do p -> a | q -> b | r -> c od =
                 // (p?a ; union q?b ; union r?c)* ; (not p and not q and not r)?
-                List<Expression> commandsMeaning = guardedCommands
-                        .stream().map(g -> g.translate(translator))
-                        .collect(Collectors.toList());
-                List<Expression> guards = guardedCommands
-                        .stream()
-                        .map
-                        (   g -> new BinaryExpression
-                            (
-                                translator.statesUniverse,
-                                BinaryExpression.Op.INTERSECTION,
-                                g.getFormula().translate(translator)
-                            )
-                        )
+                List<Program> commandsList = guardedCommands
+                        .stream().map(g -> getProgram(g))
                         .collect(Collectors.toList());
 
-                Expression union = commandsMeaning.get(0);
-                Expression and = guards.get(0);
-                if(commandsMeaning.size() > 1)
+                List<Formula> guards = guardedCommands
+                        .stream().map(g -> getGuard(g.getFormula()))
+                        .collect(Collectors.toList());
+
+
+                Program choices = commandsList.get(0);
+                Formula and = guards.get(0);
+
+                if(commandsList.size() > 1)
                 {
-                    for (int i = 1; i < commandsMeaning.size(); i++)
+                    for (int i = 1; i < commandsList.size(); i++)
                     {
-                        union = new BinaryExpression(union, BinaryExpression.Op.UNION, commandsMeaning.get(i));
-                        and = new BinaryExpression(and, BinaryExpression.Op.INTERSECTION, guards.get(i));
+                        choices = new BinaryProgram(BinaryProgram.Op.Choice, choices, commandsList.get(i));
+                        and = new BinaryFormula(BinaryFormula.Op.And, and, guards.get(i));
                     }
                 }
-                Expression transitiveClosure = new UnaryExpression(UnaryExpression.Op.TCLOSURE, union);
-                Expression reflexiveTransitiveClosure = new BinaryExpression(union, BinaryExpression.Op.UNION, transitiveClosure);
-
-                Expression product = new BinaryExpression(and, BinaryExpression.Op.PRODUCT, and);
-                Expression intersection = new BinaryExpression(translator.statesIdentity,
-                        BinaryExpression.Op.INTERSECTION, product);
-                Expression composition = new BinaryExpression(reflexiveTransitiveClosure,
-                        BinaryExpression.Op.JOIN, intersection);
-                return composition;
+                Program test = new Test(and);
+                Program iteration = new Iteration(choices);
+                Program composition = new BinaryProgram(BinaryProgram.Op.Composition, iteration, test);
+                return composition.translate(translator);
             }
         }
         throw new UnsupportedOperationException();
+    }
+
+    private Formula getGuard(Formula formula)
+    {
+        return new UnaryFormula(UnaryFormula.Op.Not, formula);
+    }
+
+    private Program getProgram(GuardedCommand g)
+    {
+        Program test = new Test(g.getFormula());
+        Program composition = new BinaryProgram(BinaryProgram.Op.Composition,
+                test, g.getProgram());
+        return composition;
     }
 
     @Override

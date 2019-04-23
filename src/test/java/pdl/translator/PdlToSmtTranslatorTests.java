@@ -281,7 +281,15 @@ class PdlToSmtTranslatorTests
     {
         String pdl = "<do p -> a | q -> b od> (not p or not q)";
         PdlResult result = PdlUtils.runCVC4(pdl);
-        assertEquals("unsat", result.satResult);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0, 1}\n" +
+                        "m(p) = {1}\n" +
+                        "m(q) = {1}\n" +
+                        "m(a) = {(1,1), (1,0)}\n" +
+                        "m(b) = {}\n", frame.toString());
     }
 
     @Test
@@ -292,11 +300,11 @@ class PdlToSmtTranslatorTests
         assertEquals("sat", result.satResult);
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-            "K = {0}\n" +
-                    "m(p) = {0}\n" +
-                    "m(q) = {0}\n" +
+            "K = {0, 1}\n" +
+                    "m(p) = {1}\n" +
+                    "m(q) = {1}\n" +
                     "m(r) = {0}\n" +
-                    "m(a) = {(0,0)}\n" +
+                    "m(a) = {(1,1), (1,0)}\n" +
                     "m(b) = {}\n", frame.toString());
     }
 
@@ -308,11 +316,10 @@ class PdlToSmtTranslatorTests
         assertEquals("sat", result.satResult);
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-                "K = {0}\n" +
-                        "m(p) = {0}\n" +
-                        "m(q) = {0}\n" +
-                        "m(r) = {0}\n" +
-                        "m(a) = {(0,0)}\n" +
+                "K = {0, 1}\n" +
+                        "m(p) = {1}\n" +
+                        "m(q) = {1}\n" +
+                        "m(a) = {(1,1), (1,0)}\n" +
                         "m(b) = {}\n", frame.toString());
     }
 }
