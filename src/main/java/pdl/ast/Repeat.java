@@ -53,7 +53,11 @@ public class Repeat extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        // repeat a until p = a ; while not p do a
+        Formula not = new UnaryFormula(UnaryFormula.Op.Not, formula);
+        Program whileProgram = new While(not, program);
+        Program composition = new BinaryProgram(BinaryProgram.Op.Composition, program, whileProgram);
+        return composition.translate(translator);
     }
 
     @Override

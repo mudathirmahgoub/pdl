@@ -324,10 +324,38 @@ class PdlToSmtTranslatorTests
     }
 
     @Test
-    public void whileProgram() throws Exception
+    public void whileProgram1() throws Exception
     {
         String pdl = "<while p do a> p";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void whileProgram2() throws Exception
+    {
+        String pdl = "<while p do a> not p";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0, 1}\n" +
+                        "m(p) = {1}\n" +
+                        "m(a) = {(1,0)}\n", frame.toString());
+    }
+
+    @Test
+    public void repeatProgram() throws Exception
+    {
+        String pdl = "<repeat a until p> p";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0, 1}\n" +
+                        "m(p) = {0}\n" +
+                        "m(a) = {(0,1), (1,0)}\n", frame.toString());
     }
 }
