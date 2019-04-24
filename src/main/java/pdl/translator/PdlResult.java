@@ -126,19 +126,23 @@ public class PdlResult extends Result
             String name = TranslatorUtils.getFriendlyAtom(state, KripkeFrame.atomReplacement);
             stringBuilder.append(name);
 
-            if(statePropositions.size() == 1)
+            if(statePropositions.size() == 0)
             {
-                stringBuilder.append(String.format("[label=\"%1$s\n%2$s\"]",
+                stringBuilder.append(String.format("[label=\"%1$s\\n{}\"]", name));
+            }
+            else if(statePropositions.size() == 1)
+            {
+                stringBuilder.append(String.format("[label=\"%1$s\\n{%2$s}\"]",
                         name, statePropositions.get(0)));
             }
-            if(statePropositions.size() > 1)
+            else
             {
-                stringBuilder.append(String.format("[label=\"%1$s\\n", name));
+                stringBuilder.append(String.format("[label=\"%1$s\\n{", name));
                 for (int i = 0; i < statePropositions.size() - 1; i++)
                 {
                     stringBuilder.append(statePropositions.get(i) + ",");
                 }
-                stringBuilder.append(statePropositions.get(statePropositions.size() - 1) + "\"]");
+                stringBuilder.append(statePropositions.get(statePropositions.size() - 1) + "}\"]");
             }
             stringBuilder.append("\n");
         }
@@ -186,7 +190,9 @@ public class PdlResult extends Result
         stringBuilder.append(suffix);
         PdlPrinter printer = new PdlPrinter();
         printer.visit(pdlProgram.getFormula());
-        stringBuilder.append("// " + printer.print() + "\n");
+        stringBuilder.append("/*\n" + printer.print() + "\n");
+        stringBuilder.append(getResultFrame().toString());
+        stringBuilder.append("*/\n");
 
         try
         {
