@@ -162,7 +162,11 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     @Override
     public PdlAst visitHoarePartialCorrectness(PdlParser.HoarePartialCorrectnessContext ctx)
     {
-        throw new UnsupportedOperationException();
+        Formula precondition = (Formula) visitFormula(ctx.formula(0));
+        Program program = (Program) visitProgram(ctx.program());
+        Formula postcondition = (Formula) visitFormula(ctx.formula(1));
+        Formula partialCorrectness = new PartialCorrectnessFormula(precondition, program, postcondition);
+        return partialCorrectness;
     }
 
     @Override

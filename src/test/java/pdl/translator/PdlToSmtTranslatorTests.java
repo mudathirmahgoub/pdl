@@ -358,4 +358,34 @@ class PdlToSmtTranslatorTests
                         "m(p) = {0}\n" +
                         "m(a) = {(0,1), (1,0)}\n", frame.toString());
     }
+
+    @Test
+    public void hoarePartialCorrectness1() throws Exception
+    {
+        String pdl = "{p} a {q}";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
+                        "m(q) = {0}\n" +
+                        "m(a) = {}\n", frame.toString());
+    }
+
+    @Test
+    public void hoarePartialCorrectness2() throws Exception
+    {
+        String pdl = "<a>p and {p} a {q}";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(p) = {0}\n" +
+                        "m(q) = {0}\n" +
+                        "m(a) = {(0,0)}\n", frame.toString());
+    }
 }

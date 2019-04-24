@@ -64,7 +64,9 @@ public class PartialCorrectnessFormula extends Formula
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        Formula necessity = new ModalFormula(ModalFormula.Op.Box, program, postcondition);
+        Formula implies = new BinaryFormula(BinaryFormula.Op.Implies, precondition, necessity);
+        return implies.translate(translator);
     }
 
     @Override
