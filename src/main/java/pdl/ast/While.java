@@ -4,6 +4,9 @@ import edu.uiowa.smt.smtAst.Expression;
 import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class While extends Program
 {
     private final Formula formula;
@@ -53,7 +56,11 @@ public class While extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        // while p do a = do p -> a od
+        GuardedCommand command = new GuardedCommand(formula, program);
+        Program doProgram = new MultiGurardedCommand(MultiGurardedCommand.Op.Do,
+                Arrays.asList(command));
+        return doProgram.translate(translator);
     }
 
     @Override

@@ -322,4 +322,12 @@ class PdlToSmtTranslatorTests
                         "m(a) = {(1,1), (1,0)}\n" +
                         "m(b) = {}\n", frame.toString());
     }
+
+    @Test
+    public void whileProgram() throws Exception
+    {
+        String pdl = "<while p do a> p";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
 }
