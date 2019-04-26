@@ -127,11 +127,9 @@ LeftAngle : '<';
 
 RightAngle : '>';
 
-Identifier : IdentifierLetter (IdentifierLetter | Digit)* ;
+Identifier : (IdentifierLetter | Digit)+ ;
 
 IdentifierLetter : 'a'..'z'|'A'..'Z'|'_' ;
-
-Integer : Digit+ ;
 
 RightArrow : '->' | '→';
 

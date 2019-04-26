@@ -33,11 +33,10 @@ LeftAngle=32
 RightAngle=33
 Identifier=34
 IdentifierLetter=35
-Integer=36
-RightArrow=37
-LeftRightArrow=38
-Digit=39
-Whitespace=40
+RightArrow=36
+LeftRightArrow=37
+Digit=38
+Whitespace=39
 'K'=1
 '='=2
 ','=3
