@@ -33,7 +33,6 @@ public class PdlUtils
 
     public static PdlResult runCVC4(String pdl) throws Exception
     {
-
         PdlProgram pdlProgram = parseProgram(pdl);
         PdlToSmtTranslator translator = new PdlToSmtTranslator(pdlProgram);
         SmtProgram smtProgram = translator.translate();

@@ -40,7 +40,9 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
     public PdlAst visitKripkeFrame(PdlParser.KripkeFrameContext ctx)
     {
         List<String> states = ctx.states().Identifier()
-                                 .stream().map(n -> n.getText())
+                                 .stream()
+                                 .map(n -> n.getText())
+                                 .map(s -> handleNumbers(s))
                                  .collect(Collectors.toList());
         Map<String, List<String>> propositions = new HashMap<>();
 
@@ -64,10 +66,25 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
         return new KripkeFrame(states, propositions, programs);
     }
 
+    private String handleNumbers(String state)
+    {
+        try
+        {
+            Integer.parseInt(state);
+            // if state label is a number, convert it to cvc4 identifier
+            return "s" + state;
+        }
+        catch (NumberFormatException exception)
+        {
+            return state;
+        }
+    }
+
     private List<Transition> getProgramStates(PdlParser.ProgramMeaningContext c)
     {
         List<Transition> transitions = c.pair().stream()
-                                        .map(p -> new Transition(p.Identifier(0).getText(), p.Identifier(1).getText()))
+                                        .map(p -> new Transition(handleNumbers(p.Identifier(0).getText()),
+                                                handleNumbers(p.Identifier(1).getText())))
                                         .collect(Collectors.toList());
 
         return transitions;
@@ -75,8 +92,10 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
 
     private List<String> getPropositionStates(PdlParser.PropositionMeaningContext c)
     {
-        List<String> list = c.Identifier().stream().map(ParseTree::getText).collect(Collectors.toList());
+        List<String> list = c.Identifier().stream()
+                             .map(ParseTree::getText).collect(Collectors.toList());
         list = list.subList(1, list.size());
+        list = list.stream().map(s -> handleNumbers(s)).collect(Collectors.toList());
         return list;
     }
 

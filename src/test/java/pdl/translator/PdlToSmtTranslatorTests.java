@@ -390,7 +390,7 @@ class PdlToSmtTranslatorTests
     }
 
     @Test
-    public void bookExample1WithFrame() throws Exception
+    public void bookExample1WithFrameSat() throws Exception
     {
         String pdl =
                 "K = {u, v, w}\n" +
@@ -405,5 +405,17 @@ class PdlToSmtTranslatorTests
                 "K = {u, v, w}\n" +
                         "m(p) = {u, v}\n" +
                         "m(a) = {(u,v), (u,w), (v,w), (w,v)}\n", frame.toString());
+    }
+
+    @Test
+    public void bookExample1WithFrameUnsat() throws Exception
+    {
+        String pdl =
+                "K = {u, v, w}\n" +
+                        "m(p) = {u, v}\n" +
+                        "m(a) = {(u,v), (u,w), (v,w), (w,v)}\n" +
+                        "not (<a*>[(a;a)*] p and <a*> [(a;a)*] not p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
     }
 }

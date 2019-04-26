@@ -158,7 +158,9 @@ public class PdlResult extends Result
                         .replaceAll(",", " -> ");
                 if(edges.containsKey(edge))
                 {
-                    edges.get(edge).add(entry.getKey());
+                    List<String> list = new ArrayList<>(edges.get(edge));
+                    list.add(entry.getKey());
+                    edges.put(edge, new HashSet<>(list));
                 }
                 else
                 {
