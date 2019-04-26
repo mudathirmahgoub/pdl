@@ -15,6 +15,11 @@ import java.util.Map;
 
 public class SmtLibPrettyPrinter implements SmtAstVisitor
 {
+    public final static String CHECK_SAT = "(check-sat)";
+    public final static String GET_MODEL = "(get-model)";
+    public final static String PUSH = "(push 1)";
+    public final static String POP = "(pop 1)";
+
     private StringBuilder stringBuilder = new StringBuilder();
 
     public String getSmtLib()
