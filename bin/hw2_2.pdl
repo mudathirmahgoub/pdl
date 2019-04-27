@@ -1,0 +1,8 @@
+/* homework pdl section 2 problem 2 */
+
+// <a><b> 1 and ([a]<b> 1 -> [b]<a> 1)
+// not(<a><b> 1 and ([a]<b> 1 -> [b]<a> 1))
+// <a> 1 and ([a;a*] p -> <a> p)
+// not (<a> 1 and ([a;a*] p -> <a> p))
+// [a union b](p or q) -> ([a]p and [b] q)
+not([a union b](p or q) -> ([a]p and [b] q))
