@@ -416,4 +416,24 @@ class PdlToSmtTranslatorTests
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
+
+    @Test
+    public void examQuestion4() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                "m(p) = {01,2}\n" +
+                "m(q) = {3,4}\n" +
+                "m(r) = {4,5}\n" +
+                "m(a) = {(2,3), (4,5), (5,01)}\n" +
+                "m(b) = {(01,2), (3,4)}\n" +
+                "m(c) = {(2,3), (3,2)}" +
+                "<((b;a) union a)*> p";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01","s2","s3","s4","s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
 }
