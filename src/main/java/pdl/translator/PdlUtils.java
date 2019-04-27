@@ -90,6 +90,7 @@ public class PdlUtils
 
         SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
         String getValue = valuePrinter.printGetValue(set);
+        result.smtProgram = result.smtProgram + getValue + "\n";
         String getvalueResult = process.sendCommand(getValue);
         SmtValues smtValues = result.parseValues(getvalueResult);
         Expression value = smtValues.getValue(0);

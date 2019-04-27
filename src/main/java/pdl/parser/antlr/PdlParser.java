@@ -22,7 +22,8 @@ public class PdlParser extends Parser {
 		While=19, Repeat=20, Until=21, Union=22, Or=23, And=24, Not=25, LeftParenthesis=26, 
 		RightParenthesis=27, LeftSquareBracket=28, RightSquareBracket=29, LeftCurlyBracket=30, 
 		RightCurlyBracket=31, LeftAngle=32, RightAngle=33, Identifier=34, IdentifierLetter=35, 
-		RightArrow=36, LeftRightArrow=37, Digit=38, Comment=39, Whitespace=40;
+		RightArrow=36, LeftRightArrow=37, Digit=38, LineComment=39, MultiLineComment=40, 
+		Whitespace=41;
 	public static final int
 		RULE_pdl = 0, RULE_kripkeFrame = 1, RULE_states = 2, RULE_propositionMeaning = 3, 
 		RULE_programMeaning = 4, RULE_pair = 5, RULE_formula = 6, RULE_hoarePartialCorrectness = 7, 
@@ -57,7 +58,7 @@ public class PdlParser extends Parser {
 			"Repeat", "Until", "Union", "Or", "And", "Not", "LeftParenthesis", "RightParenthesis", 
 			"LeftSquareBracket", "RightSquareBracket", "LeftCurlyBracket", "RightCurlyBracket", 
 			"LeftAngle", "RightAngle", "Identifier", "IdentifierLetter", "RightArrow", 
-			"LeftRightArrow", "Digit", "Comment", "Whitespace"
+			"LeftRightArrow", "Digit", "LineComment", "MultiLineComment", "Whitespace"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -1724,7 +1725,7 @@ public class PdlParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\u00fc\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3+\u00fc\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\3\2\5\2.\n\2\3\2\3\2\3\3\3\3"+

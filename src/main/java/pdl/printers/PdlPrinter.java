@@ -208,6 +208,7 @@ public class PdlPrinter implements PdlAstVisitor
     public void visit(Iteration iteration)
     {
         visit(iteration.getProgram());
+        stringBuilder.append("*");
     }
 
     @Override

@@ -137,6 +137,8 @@ LeftRightArrow : '<->' | '↔' ;
 
 Digit : '0'..'9' ;
 
-Comment :  '//' ~( '\r' | '\n' )* -> skip ;
+LineComment :  '//' ~( '\r' | '\n' )* -> skip ;
+
+MultiLineComment :  '/*' .*? '*/' -> skip;
 
 Whitespace :  [ \t\r\n]+ -> skip ;

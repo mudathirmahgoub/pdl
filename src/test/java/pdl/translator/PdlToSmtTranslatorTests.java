@@ -418,7 +418,7 @@ class PdlToSmtTranslatorTests
     }
 
     @Test
-    public void examQuestion4() throws Exception
+    public void examQuestionA() throws Exception
     {
         String pdl =
                 "K = {01,2,3,4,5}\n" +
@@ -435,5 +435,265 @@ class PdlToSmtTranslatorTests
 
         Set<String> k = new HashSet<>(Arrays.asList("s01","s2","s3","s4","s5"));
         assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void examQuestionB() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                "m(p) = {01,2}\n" +
+                "m(q) = {3,4}\n" +
+                "m(r) = {4,5}\n" +
+                "m(a) = {(2,3), (4,5), (5,01)}\n" +
+                "m(b) = {(01,2), (3,4)}\n" +
+                "m(c) = {(2,3), (3,2)}" +
+                "<c>q -> <b>r";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01","s3","s4","s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void examQuestionC() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                "m(p) = {01,2}\n" +
+                "m(q) = {3,4}\n" +
+                "m(r) = {4,5}\n" +
+                "m(a) = {(2,3), (4,5), (5,01)}\n" +
+                "m(b) = {(01,2), (3,4)}\n" +
+                "m(c) = {(2,3), (3,2)}" +
+                "[b union c] <a> q";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01","s4","s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homeworkA() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                        "m(p) = {01,2,4}\n" +
+                        "m(q) = {01, 3}\n" +
+                        "m(r) = {5}\n" +
+                        "m(a) = {(01,2), (01,4), (2,4), (01,3)}\n" +
+                        "m(b) = {(01,3), (3,3)}\n" +
+                        "m(c) = {(5,5)}\n" +
+                        "p -> [b] q";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01","s2", "s3", "s4","s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homeworkB() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                        "m(p) = {01,2,4}\n" +
+                        "m(q) = {01, 3}\n" +
+                        "m(r) = {5}\n" +
+                        "m(a) = {(01,2), (01,4), (2,4), (01,3)}\n" +
+                        "m(b) = {(01,3), (3,3)}\n" +
+                        "m(c) = {(5,5)}\n" +
+                        "p -> (q -> [c]p)";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01","s2", "s3", "s4","s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homeworkC() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                        "m(p) = {01,2,4}\n" +
+                        "m(q) = {01, 3}\n" +
+                        "m(r) = {5}\n" +
+                        "m(a) = {(01,2), (01,4), (2,4), (01,3)}\n" +
+                        "m(b) = {(01,3), (3,3)}\n" +
+                        "m(c) = {(5,5)}\n" +
+                        "p and <b>[b*] q";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homeworkD() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                        "m(p) = {01,2,4}\n" +
+                        "m(q) = {01, 3}\n" +
+                        "m(r) = {5}\n" +
+                        "m(a) = {(01,2), (01,4), (2,4), (01,3)}\n" +
+                        "m(b) = {(01,3), (3,3)}\n" +
+                        "m(c) = {(5,5)}\n" +
+                        "[c*] r";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s01","s2", "s3", "s4","s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homeworkDPossibility() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                        "m(p) = {01,2,4}\n" +
+                        "m(q) = {01, 3}\n" +
+                        "m(r) = {5}\n" +
+                        "m(a) = {(01,2), (01,4), (2,4), (01,3)}\n" +
+                        "m(b) = {(01,3), (3,3)}\n" +
+                        "m(c) = {(5,5)}\n" +
+                        "<c*> r";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s5"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homeworkE() throws Exception
+    {
+        String pdl =
+                "K = {01,2,3,4,5}\n" +
+                        "m(p) = {01,2,4}\n" +
+                        "m(q) = {01, 3}\n" +
+                        "m(r) = {5}\n" +
+                        "m(a) = {(01,2), (01,4), (2,4), (01,3)}\n" +
+                        "m(b) = {(01,3), (3,3)}\n" +
+                        "m(c) = {(5,5)}\n" +
+                        "[a union b union c] (q and not p)";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        Set<String> k = new HashSet<>(Arrays.asList("s3", "s4"));
+        assertEquals(k, result.satisfyingStates);
+    }
+
+    @Test
+    public void homework1Satisfies() throws Exception
+    {
+        String pdl =
+                "<a><b> 1 and ([a]<b> 1 -> [b]<a> 1)";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(a) = {(0,0)}\n" +
+                        "m(b) = {(0,0)}\n", frame.toString());
+    }
+
+    @Test
+    public void homework1Falsifies() throws Exception
+    {
+        String pdl =
+                "not (<a><b> 1 and ([a]<b> 1 -> [b]<a> 1))";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(a) = {}\n" +
+                        "m(b) = {(0,0)}\n", frame.toString());
+    }
+
+    @Test
+    public void homework2Satisfies() throws Exception
+    {
+        String pdl =
+                "<a> 1 and ([a;a*] p -> <a> p)";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
+                        "m(a) = {(0,0)}\n", frame.toString());
+    }
+
+    @Test
+    public void homework2Falsifies() throws Exception
+    {
+        String pdl =
+                "not (<a> 1 and ([a;a*] p -> <a> p))";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(p) = {0}\n" +
+                        "m(a) = {}\n", frame.toString());
+    }
+
+    @Test
+    public void homework3Satisfies() throws Exception
+    {
+        String pdl =
+                "[a union b](p or q) -> ([a]p and [b] q)";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
+                        "m(q) = {}\n" +
+                        "m(a) = {(0,0)}\n" +
+                        "m(b) = {(0,0)}\n", frame.toString());
+    }
+
+    @Test
+    public void homework3Falsifies() throws Exception
+    {
+        String pdl =
+                "not([a union b](p or q) -> ([a]p and [b] q))";
+
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+
+        KripkeFrame frame = result.getResultFrame();
+        assertEquals(
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
+                        "m(q) = {0}\n" +
+                        "m(a) = {(0,0)}\n" +
+                        "m(b) = {}\n", frame.toString());
     }
 }

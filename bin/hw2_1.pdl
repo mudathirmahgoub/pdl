@@ -1,0 +1,22 @@
+/* homework pdl section 2 problem 1 */
+
+K = {01,2,3,4,5}
+m(p) = {01,2,4}
+m(q) = {01, 3}
+m(r) = {5}
+m(a) = {(01,2), (01,4), (2,4), (01,3)}
+m(b) = {(01,3), (3,3)}
+m(c) = {(5,5)}
+
+// problem a
+// p -> [b] q
+// problem b
+// p -> (q -> [c]p)
+// problem 2.c
+// p and <b>[b*] q
+// problem d
+// [c*] r
+// problem d possibility
+ // <c*> r
+// problem e
+ [a union b union c] (q and not p)

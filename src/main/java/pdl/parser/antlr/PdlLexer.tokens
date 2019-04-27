@@ -36,8 +36,9 @@ IdentifierLetter=35
 RightArrow=36
 LeftRightArrow=37
 Digit=38
-Comment=39
-Whitespace=40
+LineComment=39
+MultiLineComment=40
+Whitespace=41
 'K'=1
 '='=2
 ','=3
