@@ -94,7 +94,7 @@ public class PdlResult extends Result
         {
             try
             {
-                FileUtils.writeStringToFile(new File(filePath), satResult, StandardCharsets.UTF_8);
+                FileUtils.writeStringToFile(new File(filePath), satResult, StandardCharsets.UTF_16);
             }
             catch (Exception exception)
             {
@@ -206,10 +206,10 @@ public class PdlResult extends Result
 
         try
         {
-            FileUtils.writeStringToFile(new File(filePath), stringBuilder.toString(), StandardCharsets.UTF_8);
+            FileUtils.writeStringToFile(new File(filePath), stringBuilder.toString(), StandardCharsets.UTF_16);
             Process process = Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath);
             process.waitFor();
-            String output = new String(IOUtils.toByteArray(process.getInputStream()), StandardCharsets.UTF_8);
+            String output = new String(IOUtils.toByteArray(process.getInputStream()), StandardCharsets.UTF_16);
             System.out.println(output);
         }
         catch (Exception exception)
