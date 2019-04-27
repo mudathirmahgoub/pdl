@@ -4,6 +4,7 @@ import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import pdl.ast.KripkeFrame;
+import pdl.printers.PdlPrinter;
 import pdl.translator.PdlResult;
 import pdl.translator.PdlUtils;
 
@@ -62,8 +63,15 @@ public class Main
             if(result.satResult.equals("sat"))
             {
                 KripkeFrame frame = result.getResultFrame();
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(frame.toString());
+                PdlPrinter printer = new PdlPrinter();
+                printer.visit(result.pdlProgram.getFormula());
+                stringBuilder.append(printer.print() + "\n");
+                stringBuilder.append("Satisfying states: ");
+                stringBuilder.append(result.satisfyingStates + "\n");
                 FileUtils.writeStringToFile(new File(name + ".kripke"),
-                        frame.toString(), StandardCharsets.UTF_8);
+                        stringBuilder.toString(), StandardCharsets.UTF_16);
             }
         } catch (ParseException exception)
         {
