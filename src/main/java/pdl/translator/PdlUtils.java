@@ -42,29 +42,34 @@ public class PdlUtils
         Cvc4Process process = Cvc4Process.start();
         TranslatorUtils.setSolverOptions(process);
         process.sendCommand(smtScript);
-        String smt = smtScript + SmtLibPrettyPrinter.CHECK_SAT +
-                "\n" + SmtLibPrettyPrinter.GET_MODEL + "\n";
+        String smt = smtScript + SmtLibPrettyPrinter.CHECK_SAT + "\n" ;
         String satResult = process.sendCommand(SmtLibPrettyPrinter.CHECK_SAT);
-        PdlResult result = new PdlResult(pdlProgram, smt, satResult);
+
+        if(pdlProgram.isFrameProvided() && satResult.equals("sat"))
+        {
+            // Since the current CVC4 diverges when closures are used,
+            // the main formula is not asserted if the kripke frame is provided.
+            // Instead the formula is evaluated in the given kripke frame
+            SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
+            UnaryExpression expression = translator.getTranslatedFormula();
+            String getValue = valuePrinter.printGetValue(expression);
+            String getvalueResult = process.sendCommand(getValue);
+            SmtValues smtValues = TranslatorUtils.parseValues(getvalueResult);
+            BoolConstant constant = (BoolConstant) smtValues.getValue(0);
+            satResult = constant.getBooleanValue()? "sat": "unsat";
+            smt = smt + getValue + "\n";
+        }
+
+        SmtModel smtModel = null;
         if(satResult.equals("sat"))
         {
+            smt = smt + SmtLibPrettyPrinter.GET_MODEL + "\n";
             String model = process.sendCommand(SmtLibPrettyPrinter.GET_MODEL);
-            result.smtModel = TranslatorUtils.parseModel(model);
-            // Since the current CVC4 diverges when closures are used,
-            // the following hack fixes satResult when the frame is already provided
-            if(pdlProgram.isFrameProvided())
-            {
-                SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
-                UnaryExpression expression = translator.getTranslatedFormula();
-                String getValue = valuePrinter.printGetValue(expression);
-                String getvalueResult = process.sendCommand(getValue);
-                SmtValues smtValues = TranslatorUtils.parseValues(getvalueResult);
-                BoolConstant constant = (BoolConstant) smtValues.getValue(0);
-
-                satResult = constant.getBooleanValue()? "sat": "unsat";
-                result = new PdlResult(pdlProgram, smt + getValue, satResult);
-            }
+            smtModel = TranslatorUtils.parseModel(model);
         }
+
+        PdlResult result = new PdlResult(pdlProgram, smt, satResult);
+        result.smtModel = smtModel;
         return result;
     }
 }
