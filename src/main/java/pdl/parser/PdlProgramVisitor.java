@@ -5,10 +5,7 @@ import pdl.ast.*;
 import pdl.parser.antlr.PdlBaseVisitor;
 import pdl.parser.antlr.PdlParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
@@ -63,6 +60,16 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
                           .collect(Collectors.toMap(c -> c.Identifier().getText(),
                                   c -> getProgramStates(c)));
         }
+
+        Set<String> propositionsNames = propositions.keySet();
+        Set<String> programsNames = programs.keySet();
+        Set<String> intersection = new HashSet<>(propositionsNames);
+        intersection.retainAll(programsNames);
+        if(intersection.size() > 0)
+        {
+            throw new RuntimeException("The following identifiers are defined as both propositions and programs:" + intersection);
+        }
+
         return new KripkeFrame(states, propositions, programs);
     }
 
@@ -121,6 +128,11 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
                 }
                 else
                 {
+                    // check if the proposition is defined as a program
+                    if(frame.getPrograms().keySet().contains(proposition))
+                    {
+                        throw new RuntimeException("Expected a formula. Found program " + proposition);
+                    }
                     frame.addProposition(proposition);
                 }
             }
@@ -214,6 +226,11 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
                 }
                 else
                 {
+                    // check if the program is defined as a proposition
+                    if(frame.getPropositions().keySet().contains(program))
+                    {
+                        throw new RuntimeException("Expected a program. Found formula " + program);
+                    }
                     frame.addProgram(program);
                 }
             }
