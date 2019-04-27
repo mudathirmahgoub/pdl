@@ -193,6 +193,10 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     @Override
     public SmtAst visitConstant(SmtParser.ConstantContext ctx)
     {
+        if(ctx.boolConstant() != null)
+        {
+            return this.visitBoolConstant(ctx.boolConstant());
+        }
         if(ctx.integerConstant() != null)
         {
             return this.visitIntegerConstant(ctx.integerConstant());
@@ -206,6 +210,19 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
             return this.visitEmptySet(ctx.emptySet());
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public SmtAst visitBoolConstant(SmtParser.BoolConstantContext ctx)
+    {
+        if(ctx.True() != null)
+        {
+            return new BoolConstant(true);
+        }
+        else
+        {
+            return new BoolConstant(false);
+        }
     }
 
     @Override
@@ -242,5 +259,21 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
                 .filter(argument -> argument.getName().equals(ctx.getText()))
                 .findFirst().get().getVariable();
         return variable;
+    }
+
+    @Override
+    public SmtAst visitGetValue(SmtParser.GetValueContext ctx)
+    {
+        List<ExpressionValue> values = new ArrayList<>();
+
+        for(int i = 0; i < ctx.expression().size() ; i = i + 2)
+        {
+            Expression expression = (Expression) visitExpression(ctx.expression(i));
+            Expression value = (Expression) visitExpression(ctx.expression(i + 1));
+            ExpressionValue expressionValue = new ExpressionValue(expression, value);
+            values.add(expressionValue);
+        }
+
+        return new SmtValues(values);
     }
 }

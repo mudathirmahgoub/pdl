@@ -5,7 +5,7 @@ import edu.uiowa.smt.Result;
 import edu.uiowa.smt.TranslatorUtils;
 import edu.uiowa.smt.cvc4.Cvc4Process;
 import edu.uiowa.smt.printers.SmtLibPrettyPrinter;
-import edu.uiowa.smt.smtAst.SmtProgram;
+import edu.uiowa.smt.smtAst.*;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -50,6 +50,20 @@ public class PdlUtils
         {
             String model = process.sendCommand(SmtLibPrettyPrinter.GET_MODEL);
             result.smtModel = TranslatorUtils.parseModel(model);
+            // Since the current CVC4 diverges when closures are used,
+            // the following hack fixes satResult when the frame is already provided
+            if(pdlProgram.isFrameProvided())
+            {
+                SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
+                UnaryExpression expression = translator.getTranslatedFormula();
+                String getValue = valuePrinter.printGetValue(expression);
+                String getvalueResult = process.sendCommand(getValue);
+                SmtValues smtValues = TranslatorUtils.parseValues(getvalueResult);
+                BoolConstant constant = (BoolConstant) smtValues.getValue(0);
+
+                satResult = constant.getBooleanValue()? "sat": "unsat";
+                result = new PdlResult(pdlProgram, smt + getValue, satResult);
+            }
         }
         return result;
     }

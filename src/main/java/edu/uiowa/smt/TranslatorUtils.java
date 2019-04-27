@@ -329,4 +329,20 @@ public class TranslatorUtils
     {
         return uninterpretedConstant.replaceFirst("@uc_Atom_", replacement);
     }
+
+    public static SmtValues parseValues(String values)
+    {
+        CharStream charStream = CharStreams.fromString(values);
+
+        SmtLexer lexer = new SmtLexer(charStream);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        SmtParser parser = new SmtParser(tokenStream);
+
+        ParseTree tree = parser.getValue();
+        SmtModelVisitor visitor = new SmtModelVisitor();
+
+        SmtValues smtValues = (SmtValues) visitor.visit(tree);
+
+        return smtValues;
+    }
 }
