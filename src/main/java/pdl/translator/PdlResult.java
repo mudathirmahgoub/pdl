@@ -127,22 +127,23 @@ public class PdlResult extends Result
                     statePropositions.add(entry.getKey());
                 }
             }
+            String color = satisfyingStates.contains(state)? "green" : "red";
             // construct the label for the state
             String name = TranslatorUtils.getFriendlyAtom(state, KripkeFrame.atomReplacement);
             stringBuilder.append(name);
-
+            stringBuilder.append(String.format("[color=\"%1$s\" label=\"%2$s\\n{",
+                    color, name));
             if(statePropositions.size() == 0)
             {
-                stringBuilder.append(String.format("[label=\"%1$s\\n{}\"]", name));
+                stringBuilder.append(String.format("}\"]", name));
             }
             else if(statePropositions.size() == 1)
             {
-                stringBuilder.append(String.format("[label=\"%1$s\\n{%2$s}\"]",
-                        name, statePropositions.get(0)));
+                stringBuilder.append(String.format("%1$s}\"]",
+                        statePropositions.get(0)));
             }
             else
             {
-                stringBuilder.append(String.format("[label=\"%1$s\\n{", name));
                 for (int i = 0; i < statePropositions.size() - 1; i++)
                 {
                     stringBuilder.append(statePropositions.get(i) + ",");
@@ -199,6 +200,8 @@ public class PdlResult extends Result
         printer.visit(pdlProgram.getFormula());
         stringBuilder.append("/*\n" + printer.print() + "\n");
         stringBuilder.append(getResultFrame().toString());
+        stringBuilder.append("Satisfying states: ");
+        stringBuilder.append(satisfyingStates + "\n");
         stringBuilder.append("*/\n");
 
         try
