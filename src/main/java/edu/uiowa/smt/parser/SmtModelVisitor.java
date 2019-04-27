@@ -14,11 +14,15 @@ import edu.uiowa.smt.parser.antlr.SmtParser;
 import edu.uiowa.smt.AbstractTranslator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
 {
+    private Map<String, Variable> arguments = new HashMap<>();
+
     @Override
     public SmtAst visitModel(SmtParser.ModelContext ctx)
     {
@@ -31,7 +35,9 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
 
         for (SmtParser.FunctionDefinitionContext context: ctx.functionDefinition())
         {
-            model.addFunction((FunctionDefinition) this.visitFunctionDefinition(context));
+            FunctionDefinition definition = (FunctionDefinition) this.visitFunctionDefinition(context);
+            model.addFunction(definition);
+            arguments.put(definition.getName(), definition.getVariable());
         }
 
         return model;
@@ -99,13 +105,18 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     {
         String name = ctx.functionName().getText();
 
-        List<VariableDeclaration>  arguments   = ctx.argument().stream()
+        List<VariableDeclaration> arguments   = ctx.argument().stream()
             .map(argument -> (VariableDeclaration) this.visitArgument(argument))
             .collect(Collectors.toList());
 
         Sort returnSort = (Sort) visitSort(ctx.sort());
 
-        Expression expression = (Expression) this.visitExpression(ctx.expression(), arguments);
+        Map<String, Variable> functionArguments = arguments
+                .stream()
+                .collect(Collectors
+                        .toMap(v -> v.getName(), v -> v.getVariable()));
+
+        Expression expression = (Expression) this.visitExpression(ctx.expression(), functionArguments);
 
         FunctionDefinition definition   = new FunctionDefinition(name, arguments, returnSort,  expression);
 
@@ -120,7 +131,7 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
         return new VariableDeclaration(argumentName, argumentSort);
     }
 
-    public SmtAst visitExpression(SmtParser.ExpressionContext ctx, List<VariableDeclaration>  arguments)
+    public SmtAst visitExpression(SmtParser.ExpressionContext ctx, Map<String, Variable> arguments)
     {
         if(ctx.constant() != null)
         {
@@ -155,14 +166,14 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     }
 
     public SmtAst visitUnaryExpression(SmtParser.UnaryExpressionContext ctx,
-                                       List<VariableDeclaration>  arguments)
+                                       Map<String, Variable> arguments)
     {
         Expression expression       = (Expression) this.visitExpression(ctx.expression(), arguments);
         UnaryExpression.Op operator = UnaryExpression.Op.getOp(ctx.UnaryOperator().getText());
         return new UnaryExpression(operator, expression);
     }
 
-    public SmtAst visitBinaryExpression(SmtParser.BinaryExpressionContext ctx, List<VariableDeclaration>  arguments)
+    public SmtAst visitBinaryExpression(SmtParser.BinaryExpressionContext ctx, Map<String, Variable> arguments)
     {
         Expression left   = (Expression) this.visitExpression(ctx.expression(0), arguments);
         Expression right  = (Expression) this.visitExpression(ctx.expression(1), arguments);
@@ -171,7 +182,7 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
         return new BinaryExpression(left, operator, right);
     }
 
-    public SmtAst visitTernaryExpression(SmtParser.TernaryExpressionContext ctx, List<VariableDeclaration>  arguments)
+    public SmtAst visitTernaryExpression(SmtParser.TernaryExpressionContext ctx, Map<String, Variable> arguments)
     {
         List<Expression> expressions = ctx.expression().stream()
                 .map(expression -> (Expression) this.visitExpression(expression, arguments))
@@ -180,7 +191,7 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
         return new ITEExpression(expressions.get(0), expressions.get(1), expressions.get(2));
     }
 
-    public SmtAst visitMultiArityExpression(SmtParser.MultiArityExpressionContext ctx, List<VariableDeclaration>  arguments)
+    public SmtAst visitMultiArityExpression(SmtParser.MultiArityExpressionContext ctx, Map<String, Variable> arguments)
     {
         List<Expression> expressions = ctx.expression().stream()
                 .map(expression -> (Expression) this.visitExpression(expression, arguments))
@@ -249,15 +260,19 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     @Override
     public SmtAst visitEmptySet(SmtParser.EmptySetContext ctx)
     {
-        Sort sort = (Sort) this.visitSort(ctx.sort());
-        return new UnaryExpression(UnaryExpression.Op.EMPTYSET, sort);
+        Sort elementSort = (Sort) this.visitSort(ctx.sort());
+        Sort setSort = new SetSort(elementSort);
+        return new UnaryExpression(UnaryExpression.Op.EMPTYSET, setSort);
     }
 
-    public SmtAst visitVariable(SmtParser.VariableContext ctx, List<VariableDeclaration>  arguments)
+    public SmtAst visitVariable(SmtParser.VariableContext ctx, Map<String, Variable> arguments)
     {
-        Expression variable = arguments.stream()
-                .filter(argument -> argument.getName().equals(ctx.getText()))
-                .findFirst().get().getVariable();
+        String variableName = ctx.getText();
+        if(!arguments.containsKey(variableName))
+        {
+            throw new RuntimeException(String.format("The variable '%s' is undefined", variableName));
+        }
+        Expression variable = arguments.get(ctx.getText());
         return variable;
     }
 
@@ -268,12 +283,18 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
 
         for(int i = 0; i < ctx.expression().size() ; i = i + 2)
         {
-            Expression expression = (Expression) visitExpression(ctx.expression(i));
-            Expression value = (Expression) visitExpression(ctx.expression(i + 1));
+            Expression expression = (Expression) visitExpression(ctx.expression(i), arguments);
+            Expression value = (Expression) visitExpression(ctx.expression(i + 1), arguments);
             ExpressionValue expressionValue = new ExpressionValue(expression, value);
             values.add(expressionValue);
         }
 
         return new SmtValues(values);
+    }
+
+    @Override
+    public SmtAst visitExpression(SmtParser.ExpressionContext ctx)
+    {
+        throw new UnsupportedOperationException("Use the overloaded method visitExpression(SmtParser.ExpressionContext ctx, Map<String, Variable> arguments)");
     }
 }

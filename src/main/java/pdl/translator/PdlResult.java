@@ -11,7 +11,6 @@ import pdl.ast.PdlProgram;
 import pdl.ast.Transition;
 import pdl.printers.PdlPrinter;
 
-import java.awt.*;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -21,6 +20,12 @@ import java.util.stream.Collectors;
 public class PdlResult extends Result
 {
     public final PdlProgram pdlProgram;
+    public Set<String> satisfyingStates;
+
+    public PdlResult(PdlProgram pdlProgram)
+    {
+        this.pdlProgram = pdlProgram;
+    }
 
     public PdlResult(PdlProgram pdlProgram, String smtProgram, String satResult)
     {

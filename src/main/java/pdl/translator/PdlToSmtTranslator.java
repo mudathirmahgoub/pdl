@@ -22,7 +22,8 @@ public class PdlToSmtTranslator extends AbstractTranslator
     public Map<String, FunctionDeclaration> programsMap;
     public Map<String, FunctionDeclaration> statesMap;
 
-    private UnaryExpression translatedFormula;
+    private Expression boolExpression;
+    private Expression setExpression;
 
     PdlToSmtTranslator(PdlProgram program)
     {
@@ -38,9 +39,14 @@ public class PdlToSmtTranslator extends AbstractTranslator
     }
 
 
-    public UnaryExpression getTranslatedFormula()
+    public Expression getBoolExpression()
     {
-        return translatedFormula;
+        return boolExpression;
+    }
+
+    public Expression getSetExpression()
+    {
+        return setExpression;
     }
 
     private void translateSpecialFunctions()
@@ -259,11 +265,12 @@ public class PdlToSmtTranslator extends AbstractTranslator
 
     private void translateFormula()
     {
-        Expression expression = this.pdlProgram.getFormula().translate(this);
+        setExpression = this.pdlProgram.getFormula().translate(this);
+
         Expression emptySet = new UnaryExpression(UnaryExpression.Op.EMPTYSET, AbstractTranslator.setOfUnaryAtomSort);
-        Expression equal = new BinaryExpression(expression, BinaryExpression.Op.EQ, emptySet);
+        Expression equal = new BinaryExpression(setExpression, BinaryExpression.Op.EQ, emptySet);
         UnaryExpression not = new UnaryExpression(UnaryExpression.Op.NOT, equal);
-        translatedFormula = not;
+        boolExpression = not;
         // only assert when the frame is not provided
         if(!pdlProgram.isFrameProvided())
         {

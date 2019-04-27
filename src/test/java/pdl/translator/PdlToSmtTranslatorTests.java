@@ -6,6 +6,7 @@ import edu.uiowa.smt.smtAst.FunctionDefinition;
 import org.junit.jupiter.api.Test;
 import pdl.ast.KripkeFrame;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -412,10 +413,24 @@ class PdlToSmtTranslatorTests
     {
         String pdl =
                 "K = {u, v, w}\n" +
-                        "m(p) = {u, v}\n" +
-                        "m(a) = {(u,v), (u,w), (v,w), (w,v)}\n" +
-                        "not (<a*>[(a;a)*] p and <a*> [(a;a)*] not p)";
+                "m(p) = {u, v}\n" +
+                "m(a) = {(u,v), (u,w), (v,w), (w,v)}\n" +
+                "not (<a*>[(a;a)*] p and <a*> [(a;a)*] not p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void bookExample1WithFramesat() throws Exception
+    {
+        String pdl =
+                "K = {u, v, w}\n" +
+                "m(p) = {u, v}\n" +
+                "m(a) = {(u,v), (u,w), (v,w), (w,v)}\n" +
+                "(<a*>[(a;a)*] p and <a*> [(a;a)*] not p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("sat", result.satResult);
+        Set<String> uvw = new HashSet<>(Arrays.asList("u", "v", "w"));
+        assertEquals(uvw, result.satisfyingStates);
     }
 }

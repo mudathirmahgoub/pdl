@@ -1,7 +1,5 @@
 package pdl.translator;
 
-import edu.uiowa.smt.AbstractTranslator;
-import edu.uiowa.smt.Result;
 import edu.uiowa.smt.TranslatorUtils;
 import edu.uiowa.smt.cvc4.Cvc4Process;
 import edu.uiowa.smt.printers.SmtLibPrettyPrinter;
@@ -14,6 +12,12 @@ import pdl.ast.PdlProgram;
 import pdl.parser.PdlProgramVisitor;
 import pdl.parser.antlr.PdlLexer;
 import pdl.parser.antlr.PdlParser;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PdlUtils
 {
@@ -34,6 +38,7 @@ public class PdlUtils
     public static PdlResult runCVC4(String pdl) throws Exception
     {
         PdlProgram pdlProgram = parseProgram(pdl);
+        PdlResult result = new PdlResult(pdlProgram);
         PdlToSmtTranslator translator = new PdlToSmtTranslator(pdlProgram);
         SmtProgram smtProgram = translator.translate();
         SmtLibPrettyPrinter printer = new SmtLibPrettyPrinter();
@@ -42,34 +47,66 @@ public class PdlUtils
         Cvc4Process process = Cvc4Process.start();
         TranslatorUtils.setSolverOptions(process);
         process.sendCommand(smtScript);
-        String smt = smtScript + SmtLibPrettyPrinter.CHECK_SAT + "\n" ;
-        String satResult = process.sendCommand(SmtLibPrettyPrinter.CHECK_SAT);
+        result.smtProgram = smtScript + SmtLibPrettyPrinter.CHECK_SAT + "\n";
+        result.satResult = process.sendCommand(SmtLibPrettyPrinter.CHECK_SAT);
 
-        if(pdlProgram.isFrameProvided() && satResult.equals("sat"))
+        if (result.satResult.equals("sat"))
         {
-            // Since the current CVC4 diverges when closures are used,
-            // the main formula is not asserted if the kripke frame is provided.
-            // Instead the formula is evaluated in the given kripke frame
-            SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
-            UnaryExpression expression = translator.getTranslatedFormula();
-            String getValue = valuePrinter.printGetValue(expression);
-            String getvalueResult = process.sendCommand(getValue);
-            SmtValues smtValues = TranslatorUtils.parseValues(getvalueResult);
-            BoolConstant constant = (BoolConstant) smtValues.getValue(0);
-            satResult = constant.getBooleanValue()? "sat": "unsat";
-            smt = smt + getValue + "\n";
-        }
-
-        SmtModel smtModel = null;
-        if(satResult.equals("sat"))
-        {
-            smt = smt + SmtLibPrettyPrinter.GET_MODEL + "\n";
+            result.smtProgram = result.smtProgram + SmtLibPrettyPrinter.GET_MODEL + "\n";
             String model = process.sendCommand(SmtLibPrettyPrinter.GET_MODEL);
-            smtModel = TranslatorUtils.parseModel(model);
-        }
+            result.smtModel = result.parseModel(model);
 
-        PdlResult result = new PdlResult(pdlProgram, smt, satResult);
-        result.smtModel = smtModel;
+            if (pdlProgram.isFrameProvided())
+            {
+                // Since the current CVC4 diverges when closures are used,
+                // the main formula is not asserted if the kripke frame is provided.
+                // Instead the formula is evaluated in the given kripke frame
+                SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
+                Expression mainFormula = translator.getBoolExpression();
+                String getValue = valuePrinter.printGetValue(mainFormula);
+                String getvalueResult = process.sendCommand(getValue);
+                SmtValues smtValues = result.parseValues(getvalueResult);
+                BoolConstant constant = (BoolConstant) smtValues.getValue(0);
+                result.satResult = constant.getBooleanValue() ? "sat" : "unsat";
+                result.smtProgram = result.smtProgram + getValue + "\n";
+                if (result.satResult.equals("sat"))
+                {
+                    getSatisfyingStates(result, translator, process);
+                }
+            }
+            else
+            {
+                getSatisfyingStates(result, translator, process);
+            }
+        }
         return result;
+    }
+
+    private static void getSatisfyingStates(PdlResult result, PdlToSmtTranslator translator, Cvc4Process process) throws IOException
+    {
+        // evaluate the expression in the main formula to
+        // get the satisfying states
+        Expression set = translator.getSetExpression();
+
+        SmtLibPrettyPrinter valuePrinter = new SmtLibPrettyPrinter();
+        String getValue = valuePrinter.printGetValue(set);
+        String getvalueResult = process.sendCommand(getValue);
+        SmtValues smtValues = result.parseValues(getvalueResult);
+        Expression value = smtValues.getValue(0);
+        result.satisfyingStates = TranslatorUtils.getAtomSet(value);
+        if (result.pdlProgram.isFrameProvided())
+        {
+            // replace cvc4 uninterpreted constants with the corresponding states
+            Map<String, String> atomsMap = new HashMap<>();
+            for (String state : result.pdlProgram.getFrame().getStates())
+            {
+                FunctionDefinition definition = TranslatorUtils.getFunctionDefinition(result.smtModel, state);
+                String cvc4State = TranslatorUtils.getAtomSet(definition)
+                                                  .stream().collect(Collectors.toList()).get(0);
+                atomsMap.put(cvc4State, state);
+            }
+            result.satisfyingStates = result.satisfyingStates
+                    .stream().map(s -> atomsMap.get(s)).collect(Collectors.toSet());
+        }
     }
 }
