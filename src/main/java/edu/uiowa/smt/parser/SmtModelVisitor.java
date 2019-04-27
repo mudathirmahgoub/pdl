@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
 {
-    private Map<String, Variable> arguments = new HashMap<>();
+    private Map<String, Variable> environment = new HashMap<>();
 
     @Override
     public SmtAst visitModel(SmtParser.ModelContext ctx)
@@ -37,7 +37,11 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
         {
             FunctionDefinition definition = (FunctionDefinition) this.visitFunctionDefinition(context);
             model.addFunction(definition);
-            arguments.put(definition.getName(), definition.getVariable());
+            if(definition.getInputVariables().size() == 0)
+            {
+                environment.put(definition.getName(), definition.getVariable());
+            }
+            //ToDo: handle functions and lambda expressions
         }
 
         return model;
@@ -106,8 +110,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
         String name = ctx.functionName().getText();
 
         List<VariableDeclaration> arguments   = ctx.argument().stream()
-            .map(argument -> (VariableDeclaration) this.visitArgument(argument))
-            .collect(Collectors.toList());
+                                                   .map(argument -> (VariableDeclaration) this.visitArgument(argument))
+                                                   .collect(Collectors.toList());
 
         Sort returnSort = (Sort) visitSort(ctx.sort());
 
@@ -185,8 +189,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     public SmtAst visitTernaryExpression(SmtParser.TernaryExpressionContext ctx, Map<String, Variable> arguments)
     {
         List<Expression> expressions = ctx.expression().stream()
-                .map(expression -> (Expression) this.visitExpression(expression, arguments))
-                .collect(Collectors.toList());
+                                          .map(expression -> (Expression) this.visitExpression(expression, arguments))
+                                          .collect(Collectors.toList());
 
         return new ITEExpression(expressions.get(0), expressions.get(1), expressions.get(2));
     }
@@ -194,8 +198,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
     public SmtAst visitMultiArityExpression(SmtParser.MultiArityExpressionContext ctx, Map<String, Variable> arguments)
     {
         List<Expression> expressions = ctx.expression().stream()
-                .map(expression -> (Expression) this.visitExpression(expression, arguments))
-                .collect(Collectors.toList());
+                                          .map(expression -> (Expression) this.visitExpression(expression, arguments))
+                                          .collect(Collectors.toList());
 
         MultiArityExpression.Op operator = MultiArityExpression.Op.getOp(ctx.MultiArityOperator().getText());
         return new MultiArityExpression(operator, expressions);
@@ -283,8 +287,8 @@ public class SmtModelVisitor extends SmtBaseVisitor<SmtAst>
 
         for(int i = 0; i < ctx.expression().size() ; i = i + 2)
         {
-            Expression expression = (Expression) visitExpression(ctx.expression(i), arguments);
-            Expression value = (Expression) visitExpression(ctx.expression(i + 1), arguments);
+            Expression expression = (Expression) visitExpression(ctx.expression(i), environment);
+            Expression value = (Expression) visitExpression(ctx.expression(i + 1), environment);
             ExpressionValue expressionValue = new ExpressionValue(expression, value);
             values.add(expressionValue);
         }
