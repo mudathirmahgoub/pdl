@@ -307,6 +307,4 @@ public class PdlProgramVisitorTests
         Formula expectedFormula = new ModalFormula(ModalFormula.Op.Box, test, q);
         Assertions.assertEquals(expectedFormula, actualFormula);
     }
-
-
 }

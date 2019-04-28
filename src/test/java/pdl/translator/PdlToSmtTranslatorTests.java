@@ -696,4 +696,20 @@ class PdlToSmtTranslatorTests
                         "m(a) = {(0,0)}\n" +
                         "m(b) = {}\n", frame.toString());
     }
+
+    @Test
+    public void validity1() throws Exception
+    {
+        String pdl = "not (p or not p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void validity2() throws Exception
+    {
+        String pdl = "not ((p and (p -> q)) -> q)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
 }
