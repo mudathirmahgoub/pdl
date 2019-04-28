@@ -37,6 +37,11 @@ public class PdlUtils
 
     public static PdlResult runCVC4(String pdl) throws Exception
     {
+        return runCVC4(pdl, 30000); // 30 seconds
+    }
+
+    public static PdlResult runCVC4(String pdl, int timeLimit) throws Exception
+    {
         PdlProgram pdlProgram = parseProgram(pdl);
         PdlResult result = new PdlResult(pdlProgram);
         PdlToSmtTranslator translator = new PdlToSmtTranslator(pdlProgram);
@@ -45,9 +50,13 @@ public class PdlUtils
         printer.visit(smtProgram);
         String smtScript = printer.getSmtLib();
         Cvc4Process process = Cvc4Process.start();
+        Map<String, String> options = new HashMap<>();
+        options.put("tlimit", timeLimit + "");
+        String smtOptions = TranslatorUtils.translateOptions(options);
+        process.sendCommand(smtOptions);
         TranslatorUtils.setSolverOptions(process);
         process.sendCommand(smtScript);
-        result.smtProgram = smtScript + SmtLibPrettyPrinter.CHECK_SAT + "\n";
+        result.smtProgram = smtScript + smtOptions + SmtLibPrettyPrinter.CHECK_SAT + "\n";
         result.satResult = process.sendCommand(SmtLibPrettyPrinter.CHECK_SAT);
 
         if (result.satResult.equals("sat"))

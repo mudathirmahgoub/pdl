@@ -25,18 +25,25 @@ public class Main
 
         options.addOption(Option.builder("i").longOpt("input").desc("input file").hasArg().build());
         options.addOption(Option.builder("o").longOpt("output").desc("output file").hasArg().build());
+        options.addOption(Option.builder("t").longOpt("time").desc("Time limit in milliseconds. Default 30000").hasArg().build());
 
         try
         {
             CommandLine command = commandLineParser.parse(options, args);
 
+            int timeLimit = 30000; // 30 seconds
+            if(command.hasOption("t"))
+            {
+                String time = command.getOptionValue("t").trim();
+                timeLimit = Integer.parseInt(time);
+            }
             String output = defaultName;
             PdlResult result;
             if (command.hasOption("i"))
             {
                 String inputFile = command.getOptionValue("i").trim();
                 String pdl = new String(Files.readAllBytes(Paths.get(inputFile)), StandardCharsets.UTF_8);
-                result = PdlUtils.runCVC4(pdl);
+                result = PdlUtils.runCVC4(pdl, timeLimit);
                 output = inputFile;
             }
             else
