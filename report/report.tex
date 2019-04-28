@@ -1,0 +1,64 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{url}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Mudathir Mahgoub}
+\title{Project report}
+\begin{document}
+
+\maketitle
+
+\section{Description of PDL solver}
+This PDL solver checks the satisfiability of formulas in propositional dynamic logic (PDL).
+The input is a kripke frame, which is optional, followed by a formula in PDL. The output is the satisfiability result of this formula which is either \textit{unsat}, \textit{sat} or \textit{unknown}. If the result is \textit{sat}, the solver outputs a kripke frame that satisfies the formula. Furthermore, it specifies the set of states where the formula is satisfied. If this set is equal to $K$, the set of all states in the kripke frame, then the formula is valid in this kripke frame. Otherwise, this set satisfies the formula and its complement, with respect to $K$, falsifies the formula. 
+
+To check the validity of a formula in all kripke frames, its negation should be used as an input and if the result is \textit{unsat}, then it is valid. If the result is \textit{sat}, then the returned kripke frame is a counter example that falsifies the original formula.
+
+Since $NP??$ is the complexity of satisfiability of PDL formulas (discussed more in section \ref{sec:complexity}, then, it is possible for the solver to return \textit{unknown} as a result if the time limit is reached (default is 30 seconds). 
+\section{Complexity of PDL formulas} \label{sec:complexity}
+
+\section{Installation}
+
+The following commands download the source code from github and compile it to generate the solver file ``pdl.jar". 
+
+\begin{verbatim}
+git clone https://github.com/mudathirmahgoub/pdl
+cd pdl
+chmod 777 gradlew
+./gradlew build
+cd bin
+chmod 777 cvc4_linux
+java -jar pdl.jar -i test.pdl 
+java -jar plantuml.jar test.dot
+\end{verbatim}
+
+
+
+\section{Project components}
+
+The project is primarily code and would use the SMT solver CVC4 as a back end and apply the relation theory to implement the semantics of PDL. The project would import CVC4 abstract syntax tree (AST) for relations from another project that I am working on (Alloy2SMT translator\footnote{\url{https://github.com/CVC4/org.alloytools.alloy/tree/cvc4/alloy2smt}}) which supports type checking and SMT models parsing, albeit it needs some refactoring to be more generic.  For this project I would write a translator from PDL AST to CVC4 AST and display back the SMT models returned from CVC4 as Kripke frames and dot files for visualization using software like graphvis.
+
+Since CVC4 AST is written in Java, I am using Java for this project along with  gradle\footnote{\url{https://github.com/mudathirmahgoub/pdl}}. I have written an ANTLR4 grammar for PDL following the syntax in chapter 5 in \cite{dynamic}. The grammar also handles a kripke frame written using the set notation in chapter 5 with one difference ($m_{\mathfrak{K}}(a)$ would be written as $m(a)$). Lastly I  prepared classes for PDL AST for Kripke frames, formulas and programs. Next tasks would be parsing PDL input into PDL AST and translating this AST into CVC4 AST. 
+
+
+\section{PDL formula translation}
+
+
+
+\section{Examples}
+
+
+
+\bibliographystyle{plain}
+
+\bibliography{references}
+
+\end{document}
