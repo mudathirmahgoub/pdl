@@ -31,4 +31,12 @@ class HardTests
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
+
+    @Test
+    public void bookFormula3() throws Exception
+    {
+        String pdl = "not([if p then a else b]p <-> [if not p then b else a]p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
 }

@@ -4,6 +4,8 @@ import edu.uiowa.smt.smtAst.Expression;
 import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
+import java.util.Arrays;
+
 public class ITEProgram extends Program
 {
     private final Formula condition;
@@ -66,7 +68,11 @@ public class ITEProgram extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        GuardedCommand thenCommand = new GuardedCommand(condition, thenProgram);
+        UnaryFormula not = new UnaryFormula(UnaryFormula.Op.Not, condition);
+        GuardedCommand elseCommand = new GuardedCommand(not, elseProgram);
+        MultiGurardedCommand fi = new MultiGurardedCommand(MultiGurardedCommand.Op.If, Arrays.asList(thenCommand, elseCommand));
+        return fi.translate(translator);
     }
 
     @Override
