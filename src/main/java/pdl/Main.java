@@ -80,6 +80,11 @@ public class Main
                 FileUtils.writeStringToFile(new File(name + ".kripke"),
                         stringBuilder.toString(), StandardCharsets.UTF_16);
             }
+            else
+            {
+                FileUtils.writeStringToFile(new File(name + ".kripke"),
+                        result.satResult, StandardCharsets.UTF_16);
+            }
         } catch (ParseException exception)
         {
             HelpFormatter formatter = new HelpFormatter();
