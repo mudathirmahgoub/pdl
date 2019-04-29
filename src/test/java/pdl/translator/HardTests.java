@@ -39,4 +39,47 @@ class HardTests
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
+
+    @Test void deductiveSystem2() throws Exception
+    {
+        String pdl = "not([a](p -> q) -> ([a]p -> [a]q))";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+    @Test void deductiveSystem3() throws Exception
+    {
+        String pdl = "not([a](p and q) -> ([a]p and [a]q))";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+    @Test void deductiveSystem4() throws Exception
+    {
+        String pdl = "not([a union b]p <-> [a]p and [b]p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+    @Test void deductiveSystem5() throws Exception
+    {
+        String pdl = "not([a;b]p <-> [a][b]p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+    @Test void deductiveSystem6() throws Exception
+    {
+        String pdl = "not([q?]p <-> (q -> p))";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+    @Test void deductiveSystem7() throws Exception
+    {
+        String pdl = "not(p and [a][a*] p <-> [a*]p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+    @Test void deductiveSystem8() throws Exception
+    {
+        String pdl = "not(p and [a*](p -> [a]p) -> [a*]p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
 }
