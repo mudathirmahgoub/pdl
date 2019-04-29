@@ -1,18 +1,22 @@
 package pdl;
 
+import edu.uiowa.smt.TranslatorUtils;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import pdl.ast.KripkeFrame;
 import pdl.printers.PdlPrinter;
 import pdl.translator.PdlResult;
+import pdl.translator.PdlToSmtTranslator;
 import pdl.translator.PdlUtils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main
 {
@@ -76,7 +80,11 @@ public class Main
                 printer.visit(result.pdlProgram.getFormula());
                 stringBuilder.append(printer.print() + "\n");
                 stringBuilder.append("Satisfying states: ");
-                stringBuilder.append(result.satisfyingStates + "\n");
+                List<String> satisfyingStates = result.satisfyingStates
+                        .stream()
+                        .map(s -> TranslatorUtils.getFriendlyAtom(s, KripkeFrame.atomReplacement))
+                        .collect(Collectors.toList());
+                stringBuilder.append(satisfyingStates + "\n");
                 FileUtils.writeStringToFile(new File(name + ".kripke"),
                         stringBuilder.toString(), StandardCharsets.UTF_16);
             }

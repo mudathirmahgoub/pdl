@@ -201,7 +201,11 @@ public class PdlResult extends Result
         stringBuilder.append("/*\n" + printer.print() + "\n");
         stringBuilder.append(getResultFrame().toString());
         stringBuilder.append("Satisfying states: ");
-        stringBuilder.append(satisfyingStates + "\n");
+        List<String> satStates = satisfyingStates
+                .stream()
+                .map(s -> TranslatorUtils.getFriendlyAtom(s, KripkeFrame.atomReplacement))
+                .collect(Collectors.toList());
+        stringBuilder.append(satStates + "\n");
         stringBuilder.append("*/\n");
 
         try
