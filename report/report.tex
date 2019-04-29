@@ -26,8 +26,8 @@ To check the validity of a formula in all kripke frames, its negation should be 
 
 The satisfiability problem for PDL formulas is decidable, and it is \textit{EXPTIME-complete} (theorm 8.5 in \cite{dynamic}). Therefore the solver may fail to determine the satisfiability within the time limit (by default it is 30 seconds), and hence it returns \textit{unknown} result. 
 
-% THEOREM 6.5 ( SMALL MODEL THEOREM): Let $\phi$ be a satisfiable formula of
-% PDL. Then $\phi$ is satisfied in a Kripke frame with no more than $2^{\vert \phi \vert}$ % states.
+% THEOREM 6.5 ( SMALL MODEL THEOREM): Let $\varphi$ be a satisfiable formula of
+% PDL. Then $\varphi$ is satisfied in a Kripke frame with no more than $2^{\vert \varphi \vert}$ % states.
 
 On the other hand the satisfiability of a PDL formula in a given Kripke frame can be determined in polynomial time (exercise 6.4 in \cite{dynamic}). So one expects this to be easy for CVC4 when the model (Kripke frame) is given and ``check-sat" is executed. Unfortunately, CVC4 doesn't terminate if the formula is \textit{unsat} and uses transitive closure operation. After asking an expert (Andrew Reynolds), apparently CVC4 keeps  ``adding a repeating pattern of lemmas related to transitive closure" which needs to be reviewed. Fortunately I found a work around by just removing the constraint related to the PDL formula and asserting only the frame constraints. After CVC4 finds the model, the PDL formula is evaluated. If the result is true, then it is \textit{sat}, otherwise it is \textit{unsat}.
 
@@ -45,7 +45,7 @@ On the other hand the satisfiability of a PDL formula in a given Kripke frame ca
 For $\circ$ operation, the DFS algorithm stops at depth 2, and for $*$ it continues until the end. 
 If the graph is dense, both operations $\circ, *$ require maximum $O(\vert K \vert^3)$ to be computed for all states (all graph vertices). 
 
-\item If the number of operators in a given formula $\phi$ is $n$, then the formula semantics $m(\phi)$ can be evaluated in $O(n \vert K \vert ^3)$. Finally it takes constant time to evaluate $m(\phi) \neq \phi$   determine the satisfiability answer. 
+\item If the number of operators in a given formula $\varphi$ is $n$, then the formula semantics $m(\varphi)$ can be evaluated in $O(n \vert K \vert ^3)$. Finally it takes constant time to evaluate $m(\varphi) \neq \varphi$   determine the satisfiability answer. 
 \end{itemize}
 
 From the above discussion, the worst case scenario takes $O(n \vert K \vert ^3)$ time which is polynomial. 
@@ -78,7 +78,43 @@ Since CVC4 AST is written in Java, I am using Java for this project along with  
 
 What does it mean to have a satisfiable formula in PDL ?
 
-What does is the meaning of the operator $\rightarrow$
+A PDL formula $\varphi$ is satisfiable if there exists a kripke frame $\mathfrak{K}=(K, m_{\mathfrak{K}})$ and a state  $u$ such that $u \in m_{\mathfrak{K}}(\varphi) $, and we write $\mathfrak{K}, u \models \varphi$. In simple words, a formula is satisfiable if its meaning is nonempty in some kripke frame (i.e. $m_{\mathfrak{K}}(\varphi) \neq \phi$). 
+
+Since the PDL semantics uses set and relation operations, they are translated directly into their corresponding operations in the relation theory in CVC4. The only exception is the reflexive transitive closure $*$ which is not supported directly in CVC4, but supported through the built-in transitive closure. Table \ref{tab:translation} summarizes this translation. Other PDL operators are defined using the basic operators in table \ref{tab:translation}. 
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ll} 
+\toprule
+PDL & CVC4 \\    
+\midrule    
+$K=\lbrace u_0, u_1, \cdots u_n \rbrace$ &  
+$\begin{matrix}
+\text{\textbf{Atom} : \text{Uninterpreted sort}} \\
+u_0, u_1, \cdots, u_n: \textbf{Atom} \\
+\textit{atomUniverse}: \text{Set(Tuple (\textbf{Atom}))} = \lbrace \langle u_0 \rangle, \langle u_1 \rangle, \cdots , \langle u_n \rangle \rbrace \\
+\textit{atomIdentity}:  = \lbrace \langle u_0, u_0 \rangle, \langle u_1, u_1 \rangle, \cdots , \langle u_n, u_n \rangle \rbrace \\
+\end{matrix}$ \\ \midrule   
+\textbf{0} & \textit{emptyset} : (Set (Tuple \textbf{Atom})) \\
+\textbf{1} & \textit{atomUniverse} \\
+Atomic propositions $p, q, r, \cdots$ & $p, q, r, \cdots : \text{Set(Tuple (\textbf{Atom}))}$ \\
+Atomic programs $a, b, c, \cdots$ & $a, b, c \cdots : \text{Set(Tuple (\textbf{Atom}$\times$\textbf{Atom}))}$ \\
+$p \vee q$ & $p \cup q$ \\
+$p \wedge q$ & $p \cap q$ \\
+$\neg p$ & $\textit{atomUniverse} - p$ \\
+$p \rightarrow q$ & $(\textit{atomUniverse}- p)\cup q$ \\
+$a;b$ & $a \circ b$ where $\circ$ is the join operator\\
+$a;b$ & $a \circ b$ where $\circ$ is the join operator\\
+$a \cup b$ (choice) & $a \cup b$ (union)\\
+$a*$ (choice) & $a \cup a^+$  where $a^+$ is the transitive closure of $a$\\
+$p?$ (test) & $(p \times p) \cup \textit{atomIdentity}$ where $\times$ is the cross product\\
+\bottomrule
+\end{tabular}
+\end{center}
+\caption{PDL translation to CVC4} \label{tab:translation}
+\end{table}
+
+What does is the meaning of the operator $\leftrightarrow$
 
 \section{Examples}
 

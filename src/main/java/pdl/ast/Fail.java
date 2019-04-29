@@ -1,6 +1,8 @@
 package pdl.ast;
 
+import edu.uiowa.smt.AbstractTranslator;
 import edu.uiowa.smt.smtAst.Expression;
+import edu.uiowa.smt.smtAst.UnaryExpression;
 import pdl.printers.PdlAstVisitor;
 import pdl.translator.PdlToSmtTranslator;
 
@@ -34,7 +36,7 @@ public class Fail extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        return new UnaryExpression(UnaryExpression.Op.EMPTYSET, AbstractTranslator.setOfBinaryAtomSort);
     }
 
     @Override

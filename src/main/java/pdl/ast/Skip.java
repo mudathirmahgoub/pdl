@@ -34,7 +34,7 @@ public class Skip extends Program
     @Override
     public Expression translate(PdlToSmtTranslator translator)
     {
-        throw new UnsupportedOperationException();
+        return translator.statesIdentity;
     }
 
     @Override
