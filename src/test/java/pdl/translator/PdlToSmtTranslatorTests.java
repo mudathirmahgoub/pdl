@@ -288,7 +288,7 @@ class PdlToSmtTranslatorTests
         assertEquals(
                 "K = {0, 1}\n" +
                         "m(p) = {1}\n" +
-                        "m(q) = {1}\n" +
+                        "m(q) = {}\n" +
                         "m(a) = {(1,1), (1,0)}\n" +
                         "m(b) = {}\n", frame.toString());
     }
@@ -303,7 +303,7 @@ class PdlToSmtTranslatorTests
         assertEquals(
             "K = {0, 1}\n" +
                     "m(p) = {1}\n" +
-                    "m(q) = {1}\n" +
+                    "m(q) = {}\n" +
                     "m(r) = {0}\n" +
                     "m(a) = {(1,1), (1,0)}\n" +
                     "m(b) = {}\n", frame.toString());
@@ -319,7 +319,7 @@ class PdlToSmtTranslatorTests
         assertEquals(
                 "K = {0, 1}\n" +
                         "m(p) = {1}\n" +
-                        "m(q) = {1}\n" +
+                        "m(q) = {}\n" +
                         "m(a) = {(1,1), (1,0)}\n" +
                         "m(b) = {}\n", frame.toString());
     }
