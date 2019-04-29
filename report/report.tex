@@ -22,8 +22,33 @@ The input is a kripke frame, which is optional, followed by a formula in PDL. Th
 
 To check the validity of a formula in all kripke frames, its negation should be used as an input and if the result is \textit{unsat}, then it is valid. If the result is \textit{sat}, then the returned kripke frame is a counter example that falsifies the original formula.
 
-Since $NP??$ is the complexity of satisfiability of PDL formulas (discussed more in section \ref{sec:complexity}, then, it is possible for the solver to return \textit{unknown} as a result if the time limit is reached (default is 30 seconds). 
-\section{Complexity of PDL formulas} \label{sec:complexity}
+\section{PDL Complexity}
+
+The satisfiability problem for PDL formulas is decidable, and it is \textit{EXPTIME-complete} (theorm 8.5 in \cite{dynamic}). Therefore the solver may fail to determine the satisfiability within the time limit (by default it is 30 seconds), and hence it returns \textit{unknown} result. 
+
+% THEOREM 6.5 ( SMALL MODEL THEOREM): Let $\phi$ be a satisfiable formula of
+% PDL. Then $\phi$ is satisfied in a Kripke frame with no more than $2^{\vert \phi \vert}$ % states.
+
+On the other hand the satisfiability of a PDL formula in a given Kripke frame can be determined in polynomial time (exercise 6.4 in \cite{dynamic}). So one expects this to be easy for CVC4 when the model (Kripke frame) is given and ``check-sat" is executed. Unfortunately, CVC4 doesn't terminate if the formula is \textit{unsat} and uses transitive closure operation. After asking an expert (Andrew Reynolds), apparently CVC4 keeps  ``adding a repeating pattern of lemmas related to transitive closure" which needs to be reviewed. Fortunately I found a work around by just removing the constraint related to the PDL formula and asserting only the frame constraints. After CVC4 finds the model, the PDL formula is evaluated. If the result is true, then it is \textit{sat}, otherwise it is \textit{unsat}.
+
+
+\subsection{Exercise 6.4}
+
+ The following is my reasoning for this exercise where $K$ is the set of all states in the frame:
+\begin{itemize}
+\item Formulas $\textbf{0}$, $\textbf{1}$, and atomic propositions are subsets of $K$, therefore they can be computed in $O(\vert K \vert)$.
+\item Programs $\textbf{skip}?$, $\textbf{fail}?$, and atomic programs are subsets of $K \times K$, therefore the can be computed in $O(\vert K \vert^2)$.
+
+\item Boolean operators $\neg, \wedge, \vee, \rightarrow, \leftrightarrow$ involves set operations $-, \cap, \cup: \mathbb{P}(K) \times \mathbb{P}(K) \rightarrow \mathbb{P}(K)$ which can be computed in $O(\vert K \vert^2)$ ($O(\vert K \vert)$ if hash tables are used).
+
+\item Program operators $;, \cup, *$ and modal operators $[], \langle \rangle$ involves set operations and relation operations $\circ, *: \mathbb{P}(K \times K) \times \mathbb{P}(K \times K) \rightarrow \mathbb{P}(K \times K)$. Both $\circ$ and $*$ can be computed using graph data structures and DFS algorithm. 
+For $\circ$ operation, the DFS algorithm stops at depth 2, and for $*$ it continues until the end. 
+If the graph is dense, both operations $\circ, *$ require maximum $O(\vert K \vert^3)$ to be computed for all states (all graph vertices). 
+
+\item If the number of operators in a given formula $\phi$ is $n$, then the formula semantics $m(\phi)$ can be evaluated in $O(n \vert K \vert ^3)$. Finally it takes constant time to evaluate $m(\phi) \neq \phi$   determine the satisfiability answer. 
+\end{itemize}
+
+From the above discussion, the worst case scenario takes $O(n \vert K \vert ^3)$ time which is polynomial. 
 
 \section{Installation}
 
@@ -50,7 +75,6 @@ Since CVC4 AST is written in Java, I am using Java for this project along with  
 
 
 \section{PDL formula translation}
-
 
 
 \section{Examples}

@@ -60,9 +60,11 @@ public class PdlToSmtTranslator extends AbstractTranslator
     private void translateAtomUniverse()
     {
         this.smtProgram.addFunction(atomUniverse);
-        Expression universe = new UnaryExpression(UnaryExpression.Op.UNIVSET, setOfUnaryAtomSort);
-        Expression equal = new BinaryExpression(statesUniverse, BinaryExpression.Op.EQ, universe);
-        Assertion assertion = new Assertion("Universe definition for Atoms", equal);
+        VariableDeclaration x = new VariableDeclaration("_x_", AbstractTranslator.atomSort);
+        Expression xTuple = new MultiArityExpression(MultiArityExpression.Op.MKTUPLE, x.getVariable());
+        Expression member = new BinaryExpression(xTuple, BinaryExpression.Op.MEMBER, statesUniverse);
+        Expression forAll = new QuantifiedExpression(QuantifiedExpression.Op.FORALL, member, x);
+        Assertion assertion = new Assertion("Universe definition for Atoms", forAll);
         this.smtProgram.addAssertion(assertion);
     }
 
