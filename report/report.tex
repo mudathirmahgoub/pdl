@@ -9,6 +9,7 @@
 \usepackage{url}
 \usepackage{bm}
 \usepackage{booktabs}
+\usepackage{float}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \author{Mudathir Mahgoub}
 \title{Project report}
@@ -117,6 +118,77 @@ $p?$ (test) & $(p \times p) \cup \textit{atomIdentity}$ where $\times$ is the cr
 What does is the meaning of the operator $\leftrightarrow$
 
 \section{Examples}
+
+\subsection{A PDL formula without Kripke frame}
+
+\subsubsection*{Input}
+\begin{verbatim}
+(p and q) and
+<do p -> a | q -> b od>
+    (
+        (<b> (p and not q))  and
+        (<a> (q and not p))
+    )
+\end{verbatim}
+The above formula is equivalent to:
+\begin{align*}
+((p \wedge q) \wedge \langle\textbf{ do }p \rightarrow a \vert q \rightarrow b\textbf{ od }\rangle(\langle b\rangle(p \wedge \neg q) \wedge \langle a \rangle(q \wedge \neg p)))
+\end{align*}
+\subsection*{Output (.kripke file)}
+\begin{verbatim}
+K = {0, 2, 1, 3}
+m(p) = {0, 3}
+m(q) = {1, 3}
+m(a) = {(2,1), (3,2)}
+m(b) = {(2,0)}
+Satisfying states: [3]
+\end{verbatim}
+\subsection*{Output (.dot file)}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.4]{example1.png}
+
+\caption{The formula is satisfied in state $3$ (green) and unsatisfied in states $0, 1, 2$ (red). }
+\end{figure}
+
+
+\subsection{A PDL formula with Kripke frame}
+
+\subsubsection*{Input}
+\begin{verbatim}
+K = {01,2,3,4,5}
+m(p) = {01,2,4}
+m(q) = {01, 3}
+m(r) = {5}
+m(a) = {(01,2), (01,4), (2,4), (01,3)}
+m(b) = {(01,3), (3,3)}
+m(c) = {(5,5)}
+[a union b union c] (q and not p)
+\end{verbatim}
+The above formula is equivalent to:
+\begin{align*}
+[((a \cup b) \cup c)](q \wedge \neg p)
+\end{align*}
+\subsection*{Output (.kripke file)}
+\begin{verbatim}
+K = {s01, s2, s3, s4, s5}
+m(p) = {s01, s2, s4}
+m(q) = {s01, s3}
+m(r) = {s5}
+m(a) = {(s01,s2), (s01,s4), (s2,s4), (s01,s3)}
+m(b) = {(s01,s3), (s3,s3)}
+m(c) = {(s5,s5)}
+Satisfying states: [s3, s4]
+\end{verbatim}
+\subsection*{Output (.dot file)}
+
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.4]{example2.png}
+
+\caption{The formula is satisfied in states $s3, s4$ (green) and unsatisfied in states $s01, s2, s5$ (red). }
+\end{figure}
 
 
 
