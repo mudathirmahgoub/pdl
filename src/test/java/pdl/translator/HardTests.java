@@ -83,10 +83,4 @@ class HardTests
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void hoareLogic1() throws Exception
-    {
-        String pdl = "not({p} a {q} and {q} b {r} -> {p} a;b {r})";
-        PdlResult result = PdlUtils.runCVC4(pdl);
-        assertEquals("unsat", result.satResult);
-    }
 }

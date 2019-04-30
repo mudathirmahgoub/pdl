@@ -194,7 +194,7 @@ class PdlToSmtTranslatorTests
         Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
         Set<String> pSet = TranslatorUtils.getAtomSet(p);
         assertEquals(1, pSet.size());
-        assertEquals(1, aRelation.size());
+        assertEquals(0, aRelation.size());
     }
 
     @Test
@@ -252,13 +252,13 @@ class PdlToSmtTranslatorTests
 
         Set<List<String>> aRelation = TranslatorUtils.getAtomRelation(a);
         Set<String> pSet = TranslatorUtils.getAtomSet(p);
-        assertEquals(0, pSet.size());
-        assertEquals(2, aRelation.size());
+        assertEquals(1, pSet.size());
+        assertEquals(1, aRelation.size());
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
                 "K = {0, 1}\n" +
-                "m(p) = {}\n" +
-                "m(a) = {(0,1), (0,0)}\n", frame.toString());
+                        "m(p) = {1}\n" +
+                        "m(a) = {(1,0)}\n", frame.toString());
     }
 
     @Test
@@ -286,10 +286,10 @@ class PdlToSmtTranslatorTests
 
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-                "K = {0, 1}\n" +
-                        "m(p) = {1}\n" +
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
                         "m(q) = {}\n" +
-                        "m(a) = {(1,1), (1,0)}\n" +
+                        "m(a) = {}\n" +
                         "m(b) = {}\n", frame.toString());
     }
 
@@ -301,11 +301,11 @@ class PdlToSmtTranslatorTests
         assertEquals("sat", result.satResult);
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-            "K = {0, 1}\n" +
-                    "m(p) = {1}\n" +
+            "K = {0}\n" +
+                    "m(p) = {}\n" +
                     "m(q) = {}\n" +
                     "m(r) = {0}\n" +
-                    "m(a) = {(1,1), (1,0)}\n" +
+                    "m(a) = {}\n" +
                     "m(b) = {}\n", frame.toString());
     }
 
@@ -317,10 +317,10 @@ class PdlToSmtTranslatorTests
         assertEquals("sat", result.satResult);
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-                "K = {0, 1}\n" +
-                        "m(p) = {1}\n" +
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
                         "m(q) = {}\n" +
-                        "m(a) = {(1,1), (1,0)}\n" +
+                        "m(a) = {}\n" +
                         "m(b) = {}\n", frame.toString());
     }
 
@@ -341,9 +341,9 @@ class PdlToSmtTranslatorTests
 
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-                "K = {0, 1}\n" +
-                        "m(p) = {1}\n" +
-                        "m(a) = {(1,0)}\n", frame.toString());
+                "K = {0}\n" +
+                        "m(p) = {}\n" +
+                        "m(a) = {}\n", frame.toString());
     }
 
     @Test
@@ -355,9 +355,9 @@ class PdlToSmtTranslatorTests
 
         KripkeFrame frame = result.getResultFrame();
         assertEquals(
-                "K = {0, 1}\n" +
+                "K = {0}\n" +
                         "m(p) = {0}\n" +
-                        "m(a) = {(0,1), (1,0)}\n", frame.toString());
+                        "m(a) = {(0,0)}\n", frame.toString());
     }
 
     @Test
@@ -553,7 +553,7 @@ class PdlToSmtTranslatorTests
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("sat", result.satResult);
 
-        Set<String> k = new HashSet<>(Arrays.asList("s01","s2", "s3", "s4","s5"));
+        Set<String> k = new HashSet<>(Arrays.asList("s5"));
         assertEquals(k, result.satisfyingStates);
     }
 

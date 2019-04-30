@@ -161,7 +161,7 @@ $\neg p$ & $\textit{atomUniverse} - p$ \\
 $p \rightarrow q$ & $(\textit{atomUniverse}- p)\cup q$ \\
 $a;b$ & $a \circ b$ where $\circ$ is the join operator\\
 $a \cup b$ (choice) & $a \cup b$ (union)\\
-$a*$ (choice) & $a \cup a^+$, $a^+$ is the transitive closure\\
+$a^*$ (iteration) & $\textit{atomIdentity} \cup a^+$, (transitive closure)\\
 $p?$ (test) & $(p \times p) \cap \textit{atomIdentity}$\\
 \bottomrule
 \end{tabular}
@@ -225,57 +225,5 @@ m(a) = {(1,0)}
 \includegraphics[scale=0.3]{while.png}
 \end{tabular}
 \end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Examples}
-Axiom 7 in the Axiom system 5.5
-\begin{align*}
-p \wedge [a][a*] p \leftrightarrow [a*]p
-\end{align*}
-Its negation is
-\begin{align*}
-\neg (p \wedge [a][a*] p \leftrightarrow [a*]p)
-\end{align*}
-\small
-\begin{tabular}{ll} 
-\begin{lstlisting} 
-K = {0}
-m(p) = {}
-m(a) = {}
-Satisfying states: [0]
-\end{lstlisting} &
-\includegraphics[scale=0.3]{axiom7.png}
-\end{tabular}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Examples}
-Hoare Logic partial correctness assertion
-
-\begin{align*}
-\lbrace p \rbrace a \lbrace q \rbrace = p \rightarrow [a] q
-\end{align*}
-\begin{align*}
-\lbrace p \rbrace a \lbrace q \rbrace \wedge  \lbrace q \rbrace b \lbrace r \rbrace
-\rightarrow
-\lbrace p \rbrace a;b \lbrace r \rbrace
-\end{align*}
-Counter example
-\small
-\begin{tabular}{ll} 
-\begin{lstlisting} 
-K = {0, 1}
-m(p) = {0, 1}
-m(q) = {1}
-m(r) = {0}
-m(a) = {(0,1), (1,0)}
-m(b) = {(0,1), (1,1)}
-Satisfying states: [0]
-\end{lstlisting} 
-\includegraphics[scale=0.3]{hoare1.png}
-\end{tabular}
-\end{frame}
-
 
 \end{document}

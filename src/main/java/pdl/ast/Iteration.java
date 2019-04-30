@@ -44,7 +44,7 @@ public class Iteration extends Program
     {
         Expression meaning = program.translate(translator);
         Expression transitiveClosure = new UnaryExpression(UnaryExpression.Op.TCLOSURE, meaning);
-        Expression reflexiveTransitiveClosure = new BinaryExpression(meaning, BinaryExpression.Op.UNION, transitiveClosure);
+        Expression reflexiveTransitiveClosure = new BinaryExpression(translator.statesIdentity, BinaryExpression.Op.UNION, transitiveClosure);
         return reflexiveTransitiveClosure;
     }
 
