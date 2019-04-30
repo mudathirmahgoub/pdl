@@ -13,7 +13,7 @@
 \usepackage{listings}
 \usepackage{amsthm}
 \usetheme{CambridgeUS}
-
+\usepackage{booktabs}
 \usefonttheme{serif}
 
 \title{PDL SAT solver}
@@ -26,63 +26,44 @@
  
 \begin{frame}
 \frametitle{Project problem}
-Given a simple function (without pointers, loops, arrays, structs, etc) written in C which contains many assertions, are the boolean expressions in these assertions valid?
+Given a formula in propositional dynamic logic (PDL), and optionally a kripke frame, is this formula satisfiable?
 \end{frame}
-
-\begin{frame}
-\frametitle{Software components}
-\begin{figure}
- \centering
- \includegraphics[scale=.21,keepaspectratio=true]{./solver.png}
-\end{figure}
-\end{frame}
-
-%\definecolor{light-gray}{gray}{0.95}
-%\lstset{backgroundcolor= \color{light-gray}}
 
 \begin{frame}[fragile]
 \frametitle{Execution}
 \scriptsize
 
-\begin{block}{Input: test.c}
-\begin{lstlisting}  
-void f (int x, int y)
-{
-    if(x > 0)
-    {
-        y = x;
-    }
-    assert (y == x);
-}
-\end{lstlisting}
+\begin{block}{Input: test.pdl}
+\begin{verbatim}
+(p and q) and
+<do p -> a | q -> b od>
+    (
+        (<b> (p and not q))  and
+        (<a> (q and not p))
+    )
+\end{verbatim}
+Which is equivalent to :
+\begin{align*}
+((p \wedge q) \wedge \langle\textbf{ do }p \rightarrow a \vert q \rightarrow b\textbf{ od }\rangle(\langle b\rangle(p \wedge \neg q) \wedge \langle a \rangle(q \wedge \neg p)))
+\end{align*}
 \end{block}
 \end{frame}
 
 
 \begin{frame}[fragile]
 \frametitle{Execution}
-\begin{block} {Output: java -jar SymbolicEngine.jar -i test.c}
+\begin{block} {Output: java -jar pdl.jar -i test.pdl}
 \small
 \begin{lstlisting} 
-------------------
-Overall Answer: No
-------------------
-Assertion: (BinaryExpression(Variable(y) == Variable(x)))
-AssertionFormula:
-(assert (> _x1 0))
-(assert (not (= _x1 _x1)))
-Answer: Yes
-----------------------------
-AssertionFormula:
-(assert (not (> _x1 0)))
-(assert (not (= _x2 _x1)))
-Answer: No
-Counter example: {x=0, y=1}
-----------------------------
+K = {0, 2, 1, 3}
+m(p) = {0, 3}
+m(q) = {1, 3}
+m(a) = {(2,1), (3,2)}
+m(b) = {(2,0)}
+Satisfying states: [3]
 \end{lstlisting} 
 \end{block}
 \end{frame}
-
 
 \begin{frame}[fragile]
 \frametitle{Execution}
@@ -94,235 +75,180 @@ Demo
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Motivation or Importance of the problem}
-\begin{block}{Importance of symbolic execution}
+\frametitle{Problem complexity}
+\begin{block}{Without a kripke frame}
 \begin{itemize}
-\item Software verification for critical systems
-\item Security properties: e.g. access array within boundaries
-\item Safety properties: microwave should not run while its door is open
+\item The problem is decidable and it is \textit{EXPTIME-complete}
+\item Satisfiability problem in propositional logic is \textit{NP-complete}
+\item We don't know whether $NP = EXPTIME$
+ \vfill 
 \end{itemize}
+
+ \vfill 
+
 \end{block}
-
-\begin{block}{Personal motivation}
+\begin{block}{With kripke frame}
 \begin{itemize}
-\item Related to my research 
-\item A tedious question in the second midterm
-\end{itemize}
-\end{block}
-
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Challenges}
-\begin{block}{General challenges}
-\begin{itemize}
-\item Scalability
-\item Memory
-\item Environment
-\item Loops
-\item Solver limitations
+\item The problem is in $P$
+\item Can be solved using graph algorithms like DFS
 \end{itemize}
 \end{block}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Challenges}
-\begin{block}{Project challenges}
-\begin{itemize}
-\item A grammar for C
-\item A grammar for SMT-LIB
-\item Deadlock with Z3 process
 
-\end{itemize}
-\end{block}
+\begin{frame}
+\frametitle{Software components}
+\begin{figure}
+ \centering
+ \includegraphics[scale=.25,keepaspectratio=true]{./solver.png}
+\end{figure}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Existing approaches}
+
+
+\begin{frame}
+\frametitle{CVC4 Overview}
+
 \begin{itemize}
-\item Concolic execution
-\item Dynamic symbolic execution
-\item Selective symbolic execution
-\item Path selection
-\item Symbolic backward execution
-\item Fully symbolic memory
-\item Address concretization
-\item Partial memory modeling
-\item Lazy initialization
+\item Automatic theorem prover for satisfiability modulo theories (SMT) problems
+ \vfill 
+\item Can be used to prove the validity (or the satisfiability) of first-order formulas in many logical theories and their combination
 
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{My approach}
+\frametitle{CVC4 Overview}
+\huge
+\centering
+
+Demo
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{PDL Translation to CVC4}
+\begin{tabular}{ll} 
+\toprule
+PDL & CVC4 \\    
+\midrule    
+$K=\lbrace u_0, u_1, \cdots u_n \rbrace$ &  
+$\begin{matrix}
+\text{\textbf{Atom} : \text{Uninterpreted sort}} \\
+u_0, u_1, \cdots, u_n: \textbf{Atom} \\
+\textit{atomUniverse} = \lbrace \langle u_0 \rangle, \langle u_1 \rangle, \cdots , \langle u_n \rangle \rbrace \\
+\textit{atomIdentity}:  = \lbrace \langle u_0, u_0 \rangle, \langle u_1, u_1 \rangle, \cdots , \langle u_n, u_n \rangle \rbrace \\
+\end{matrix}$ \\ \bottomrule
+\end{tabular}
+\end{frame} 
+
+\begin{frame}[fragile]
+\frametitle{PDL Translation to CVC4}
+\begin{tabular}{ll} 
+\toprule
+PDL & CVC4 \\    
+\midrule   
+
+\textbf{0} & \textit{emptyset} : (Set (Tuple \textbf{Atom})) \\
+\textbf{1} & \textit{atomUniverse} \\
+Atomic propositions $p, q, r, \cdots$ & $p, q, r, \cdots : \text{Set(Tuple (\textbf{Atom}))}$ \\
+Atomic programs $a, b, c, \cdots$ & $a, b, c \cdots : \text{Set(Tuple (\textbf{Atom}$,$\textbf{Atom}))}$ \\
+$p \vee q$ & $p \cup q$ \\
+$p \wedge q$ & $p \cap q$ \\
+$\neg p$ & $\textit{atomUniverse} - p$ \\
+$p \rightarrow q$ & $(\textit{atomUniverse}- p)\cup q$ \\
+$a;b$ & $a \circ b$ where $\circ$ is the join operator\\
+$a \cup b$ (choice) & $a \cup b$ (union)\\
+$a*$ (choice) & $a \cup a^+$, $a^+$ is the transitive closure\\
+$p?$ (test) & $(p \times p) \cap \textit{atomIdentity}$\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Satisfiability  validity}
+
 \begin{itemize}
-\item Only handles functions
-\item Simple integer variables
-\item No pointers, arrays, structs 
-\item No bitwise operations
-\item No loops
-\item Fully symbolic execution
+\item When do we say a PDL formula $\varphi$ is satisfiable? \\
+\pause
+A PDL formula $\varphi$ is satisfiable if its meaning is nonempty in some kripke frame (i.e. $\exists \mathfrak{K} . \; m_{\mathfrak{K}}(\varphi) \neq \phi$). 
+\vfill
+\item When do we say a PDL formula $\varphi$ is valid in all kripke frames? \\
+\pause 
+A PDL formula $\varphi$ is valid if  $\forall \mathfrak{K} .(m_{\mathfrak{K}}(\varphi) = K$) \\
+Alternatively  \\
+A PDL formula $\varphi$ is valid if  $\neg \varphi$ is unsatisfiable in all kripke frames \\
+\vfill
+\item A PDL formula $\varphi$ is valid in a given Kripke frame $\mathfrak{K}$ if $m(\varphi) = K$ or $m(\neg \varphi) = \phi$)
 \end{itemize}
+
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-\item Start with function definition
-\item Assign a new symbolic value to each argument variable
-\item Set the initial path constraint to empty (i.e. $true$)
-\item \textbf{Initial start state} = argument variables(with symbolic values) + empty constraint
-\item Each statement has \textbf{start states} and \textbf{end states}. A statement can't modify its \textbf{start states}
-
-\item The block of the function has one \textbf{start state} = \textbf{Initial start state}
-
-\item The first statement in each block has the same \textbf{start states} of its block
-
-\item Each subsequent statement has the same \textbf{start states} of the previous statement
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-\item An assignment statement ($variable = expression$) has \textbf{end states} exactly as \textbf{start states} except with the updated $variable$ which gets the symbolic value of the $expression$
-
-\item A variable definition statement without assignment has \textbf{end states} exactly as \textbf{start states} except with the addition of the new variable which gets a new symbolic value
-
-\begin{lstlisting}  
-void f()
-{
-	int z;
-	assert (z == z);
-}
-\end{lstlisting}
-
-\item  A variable definition statement with assignment has \textbf{end states} exactly as \textbf{start states} except with the addition of the new variable which gets the value of the $expression$
-
-\end{itemize}
+\frametitle{Examples}
+\small
+\begin{align*}
+[((a \cup b) \cup c)](q \wedge \neg p)
+\end{align*}
+\begin{tabular}{ll} 
+\begin{lstlisting} 
+K = {01,2,3,4,5}
+m(p) = {01,2,4}
+m(q) = {01,3}
+m(r) = {5}
+m(a) = {(01,2),(01,4),(2,4),(01,3)}
+m(b) = {(01,3),(3,3)}
+m(c) = {(5,5)}
+\end{lstlisting} &
+\includegraphics[scale=0.3]{example2.png}
+\end{tabular}
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-\item Statements like (++i) or (i++) are rewritten as assignment statements (e.g. i = i + 1;)
-\item \textbf{If statement} will add its condition to the path constraint of each start state of its
-\textbf{true statement}. Likewise, the \textbf{If statement} will add the negation of its condition to the
-path constraint of each start state of its \textbf{false statement}
-
-
-\end{itemize}
+\frametitle{Examples}
+\small
+\begin{align*}
+\langle \textbf{while } p\textbf{ do }a \rangle p
+\end{align*}
+Unsat
+\begin{align*}
+\langle \textbf{while } p\textbf{ do }a \rangle \neg p
+\end{align*}
+\begin{tabular}{ll} 
+\begin{lstlisting} 
+K = {0, 1}
+m(p) = {1}
+m(a) = {(1,0)}
+\end{lstlisting} &
+\includegraphics[scale=0.3]{while.png}
+\end{tabular}
 \end{frame}
 
 
 \begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-
-\item If the \textbf{If statement} has no \textbf{false statement}, NoOperation statement will be used instead
-
-\begin{lstlisting}  
-void f (int x, int y) 
-{ 
-	if(x > 0) y = x;  
-	assert (y == x);
-}
-\end{lstlisting}
-
-\begin{lstlisting}  
-void f (int x, int y) 
-{ 
-	if(x > 0) y = x;  
-	else NoOperation();
-	assert (y == x);
-}
-\end{lstlisting}
-
-\end{itemize}
+\frametitle{Examples}
+Axiom 7 in the Axiom system 5.5
+\begin{align*}
+p \wedge [a][a*] p \leftrightarrow [a*]p
+\end{align*}
+Its negation is
+\begin{align*}
+\neg (p \wedge [a][a*] p \leftrightarrow [a*]p)
+\end{align*}
+\small
+\begin{tabular}{ll} 
+\begin{lstlisting} 
+K = {0}
+m(p) = {}
+m(a) = {}
+Satisfying states: [0]
+\end{lstlisting} &
+\includegraphics[scale=0.3]{axiom7.png}
+\end{tabular}
 \end{frame}
 
-
-\begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-
-\item For each division operation, a new assertion statement would be added. The \textbf{start states} of this assertion would be the \textbf{start states} of the statement where the division resides
-
-\begin{lstlisting}  
-void f (int x, int y) 
-{
-	x = x / y;
-}
-\end{lstlisting}
-
-\begin{lstlisting}  
-void f (int x, int y) 
-{
-	assert(y != 0);
-	x = x / y;
-}
-\end{lstlisting}
-
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-
-\item Integers as booleans
-
-\begin{lstlisting}  
-void f (int x, int y) 
-{ 	
-	assert (x+y);
-	assert (0);
-}
-\end{lstlisting}
-
-\begin{lstlisting}  
-void f (int x, int y) 
-{ 	
-	assert (x+y > 0);
-	assert (0 > 0);
-}
-\end{lstlisting}
-
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{My approach}
-\begin{itemize}
-
-\item Unknown
-
-\begin{lstlisting}  
-void f (int x, int y, int z)  +
-{
-	assert(!((x*x*x + y*y*y == z*z*z) && 
-	(x>10) && (y>10) && (z>10)));
-};
-\end{lstlisting}
-
-
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]
-\frametitle{Work Division}
-Since there is only one person in this project, all the work is done by him
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{References}
-Roberto Baldoni, Emilio Coppa, Daniele Cono D’Elia, Camil Demetrescu, and Irene Finocchi.
-A survey of symbolic execution techniques. CoRR, abs/1610.00502, 2016
-\end{frame}
 
 
 \end{document}

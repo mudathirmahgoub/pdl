@@ -103,16 +103,15 @@ u_0, u_1, \cdots, u_n: \textbf{Atom} \\
 \textbf{0} & \textit{emptyset} : (Set (Tuple \textbf{Atom})) \\
 \textbf{1} & \textit{atomUniverse} \\
 Atomic propositions $p, q, r, \cdots$ & $p, q, r, \cdots : \text{Set(Tuple (\textbf{Atom}))}$ \\
-Atomic programs $a, b, c, \cdots$ & $a, b, c \cdots : \text{Set(Tuple (\textbf{Atom}$\times$\textbf{Atom}))}$ \\
+Atomic programs $a, b, c, \cdots$ & $a, b, c \cdots : \text{Set(Tuple (\textbf{Atom}$,$\textbf{Atom}))}$ \\
 $p \vee q$ & $p \cup q$ \\
 $p \wedge q$ & $p \cap q$ \\
 $\neg p$ & $\textit{atomUniverse} - p$ \\
 $p \rightarrow q$ & $(\textit{atomUniverse}- p)\cup q$ \\
 $a;b$ & $a \circ b$ where $\circ$ is the join operator\\
-$a;b$ & $a \circ b$ where $\circ$ is the join operator\\
 $a \cup b$ (choice) & $a \cup b$ (union)\\
 $a*$ (choice) & $a \cup a^+$  where $a^+$ is the transitive closure of $a$\\
-$p?$ (test) & $(p \times p) \cup \textit{atomIdentity}$ where $\times$ is the cross product\\
+$p?$ (test) & $(p \times p) \cap \textit{atomIdentity}$ where $\times$ is the cross product\\
 \bottomrule
 \end{tabular}
 \end{center}
