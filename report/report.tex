@@ -71,15 +71,13 @@ java -jar plantuml.jar test.dot
 \section{Software components}
 \begin{figure}[H]
 \center
-\includegraphics[scale=0.3]{solver.png}
+\includegraphics[scale=0.35]{solver.png}
 \caption{Software components}
 \end{figure}
 
+As shown in the figure above, the input string is parsed into PDL abstract syntax tree (AST) which is read by the translator. Then it gets translated into SMT AST which is sent to CVC4 as SMT-LIB code. CVC4 checks the satisfiability and returns either \textit{sat}, \textit{unsat} or \textit{unknown}. When \textit{sat} result is returned, CVC4 is asked to return the SMT model and the values of additional SMT expressions. The returned SMT model and values are parsed into SMT ASTs which are converted into a kripke frame and a set of states satisfied by the PDL formula. Finally kripke, and dot files are generated. 
 
-The project is primarily code and would use the SMT solver CVC4 as a back end and apply the relation theory to implement the semantics of PDL. The project would import CVC4 abstract syntax tree (AST) for relations from another project that I am working on (Alloy2SMT translator\footnote{\url{https://github.com/CVC4/org.alloytools.alloy/tree/cvc4/alloy2smt}}) which supports type checking and SMT models parsing, albeit it needs some refactoring to be more generic.  For this project I would write a translator from PDL AST to CVC4 AST and display back the SMT models returned from CVC4 as Kripke frames and dot files for visualization using software like graphvis.
-
-Since CVC4 AST is written in Java, I am using Java for this project along with  gradle\footnote{\url{https://github.com/mudathirmahgoub/pdl}}. I have written an ANTLR4 grammar for PDL following the syntax in chapter 5 in \cite{dynamic}. The grammar also handles a kripke frame written using the set notation in chapter 5 with one difference ($m_{\mathfrak{K}}(a)$ would be written as $m(a)$). Lastly I  prepared classes for PDL AST for Kripke frames, formulas and programs. Next tasks would be parsing PDL input into PDL AST and translating this AST into CVC4 AST. 
-
+The project is written in Java 8 \footnote{\url{https://github.com/mudathirmahgoub/pdl}}. To build the project, Gradle is used to download and compile the project and generate the jar files. Graphviz software is needed to visualize the generated dot file\footnote{\url{https://www.graphviz.org}}. 
 
 \section{PDL formula translation}
 
