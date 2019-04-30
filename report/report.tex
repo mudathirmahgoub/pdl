@@ -68,7 +68,13 @@ java -jar plantuml.jar test.dot
 
 
 
-\section{Project components}
+\section{Software components}
+\begin{figure}[H]
+\center
+\includegraphics[scale=0.3]{solver.png}
+\caption{Software components}
+\end{figure}
+
 
 The project is primarily code and would use the SMT solver CVC4 as a back end and apply the relation theory to implement the semantics of PDL. The project would import CVC4 abstract syntax tree (AST) for relations from another project that I am working on (Alloy2SMT translator\footnote{\url{https://github.com/CVC4/org.alloytools.alloy/tree/cvc4/alloy2smt}}) which supports type checking and SMT models parsing, albeit it needs some refactoring to be more generic.  For this project I would write a translator from PDL AST to CVC4 AST and display back the SMT models returned from CVC4 as Kripke frames and dot files for visualization using software like graphvis.
 
