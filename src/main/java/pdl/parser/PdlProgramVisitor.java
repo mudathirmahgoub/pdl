@@ -261,6 +261,11 @@ public class PdlProgramVisitor extends PdlBaseVisitor<PdlAst>
             Program program = (Program) visitProgram(ctx.program(0));
             return new Iteration(program);
         }
+        if (ctx.Overline() != null)
+        {
+            Program program = (Program) visitProgram(ctx.program(0));
+            return new Converse(program);
+        }
         if (ctx.Semicolon() != null)
         {
             Program left = (Program) visitProgram(ctx.program(0));

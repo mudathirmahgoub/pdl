@@ -48,6 +48,7 @@ program : | skip
           | whileProgram
           | repeatProgram
           | program Star // iteration
+          | program Overline // converse
           | program Semicolon program // composition
           | program Union program // choice
           | LeftParenthesis program RightParenthesis
@@ -80,6 +81,8 @@ Semicolon : ';' ;
 QuestionMark : '?' ;
 
 Bar : '|';
+
+Overline: '‾' ;
 
 Skip : 'skip' ;
 

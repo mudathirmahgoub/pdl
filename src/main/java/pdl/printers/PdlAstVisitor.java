@@ -36,6 +36,8 @@ public interface PdlAstVisitor
 
     void visit(Iteration iteration);
 
+    void visit(Converse converse);
+
     void visit(ITEProgram iteProgram);
 
     void visit(BinaryProgram binaryProgram);

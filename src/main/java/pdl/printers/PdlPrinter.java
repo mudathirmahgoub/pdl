@@ -109,6 +109,11 @@ public class PdlPrinter implements PdlAstVisitor
             visit((While) program);
             return;
         }
+        if(program instanceof Converse)
+        {
+            visit((Converse) program);
+            return;
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -209,6 +214,13 @@ public class PdlPrinter implements PdlAstVisitor
     {
         visit(iteration.getProgram());
         stringBuilder.append("*");
+    }
+
+    @Override
+    public void visit(Converse converse)
+    {
+        visit(converse.getProgram());
+        stringBuilder.append("‾");
     }
 
     @Override

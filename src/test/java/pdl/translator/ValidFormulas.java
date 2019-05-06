@@ -278,4 +278,36 @@ class ValidFormulas
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
+
+    @Test
+    public void theorem13_1() throws Exception
+    {
+        String pdl = "not(p -> [a]<a‾>p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void theorem13_2() throws Exception
+    {
+        String pdl = "not(p -> [a‾]<a>p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void theorem13_3() throws Exception
+    {
+        String pdl = "not(<a>[a‾]p -> p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
+
+    @Test
+    public void theorem13_4() throws Exception
+    {
+        String pdl = "not(<a‾>[a]p -> p)";
+        PdlResult result = PdlUtils.runCVC4(pdl);
+        assertEquals("unsat", result.satResult);
+    }
 }
