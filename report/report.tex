@@ -110,12 +110,12 @@ $\neg p$ & $\textit{atomUniverse} - p$ \\
 $p \rightarrow q$ & $(\textit{atomUniverse}- p)\cup q$ \\
 $a;b$ & $a \circ b$ where $\circ$ is the join operator\\
 $a \cup b$ (choice) & $a \cup b$ (union)\\
-$a*$ (choice) & $a \cup a^+$  where $a^+$ is the transitive closure of $a$\\
-$p?$ (test) & $(p \times p) \cap \textit{atomIdentity}$ where $\times$ is the cross product\\
+$a^*$ (iteration) & $\textit{atomIdentity} \cup a^+$, (transitive closure)\\
+$p?$ (test) & $(p \times p) \cap \textit{atomIdentity}$\\
 \bottomrule
 \end{tabular}
 \end{center}
-\caption{PDL translation to CVC4} \label{tab:translation}
+\caption{PDL translation to CVC4.} \label{tab:translation}
 \end{table}
 
 What does is the meaning of the operator $\leftrightarrow$
