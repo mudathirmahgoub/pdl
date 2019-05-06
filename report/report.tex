@@ -38,15 +38,15 @@ On the other hand the satisfiability of a PDL formula in a given Kripke frame ca
  The following is my reasoning for this exercise where $K$ is the set of all states in the frame:
 \begin{itemize}
 \item Formulas $\textbf{0}$, $\textbf{1}$, and atomic propositions are subsets of $K$, therefore they can be computed in $O(\vert K \vert)$.
-\item Programs $\textbf{skip}?$, $\textbf{fail}?$, and atomic programs are subsets of $K \times K$, therefore the can be computed in $O(\vert K \vert^2)$.
+\item Programs $\textbf{skip}?$, $\textbf{fail}?$, and atomic programs are subsets of $K \times K$, therefore they can be computed in $O(\vert K \vert^2)$.
 
-\item Boolean operators $\neg, \wedge, \vee, \rightarrow, \leftrightarrow$ involves set operations $-, \cap, \cup: \mathbb{P}(K) \times \mathbb{P}(K) \rightarrow \mathbb{P}(K)$ which can be computed in $O(\vert K \vert^2)$ ($O(\vert K \vert)$ if hash tables are used).
+\item Boolean operators $\neg, \wedge, \vee, \rightarrow, \leftrightarrow$ involve set operations $-, \cap, \cup: \mathbb{P}(K) \times \mathbb{P}(K) \rightarrow \mathbb{P}(K)$ where $\mathbb{P}$ denotes the power set. These set operations be computed in $O(\vert K \vert^2)$ or $O(\vert K \vert)$ if hash tables are used.
 
-\item Program operators $;, \cup, *$ and modal operators $[], \langle \rangle$ involves set operations and relation operations $\circ, *: \mathbb{P}(K \times K) \times \mathbb{P}(K \times K) \rightarrow \mathbb{P}(K \times K)$. Both $\circ$ and $*$ can be computed using graph data structures and DFS algorithm. 
+\item Program operators $;, \cup, *$ and modal operators $[], \langle \rangle$ involve set operations and relation operations $\circ, *: \mathbb{P}(K \times K) \times \mathbb{P}(K \times K) \rightarrow \mathbb{P}(K \times K)$. Both $\circ$ and $*$ can be computed using graph data structures and DFS algorithm. 
 For $\circ$ operation, the DFS algorithm stops at depth 2, and for $*$ it continues until the end. 
-If the graph is dense, both operations $\circ, *$ require maximum $O(\vert K \vert^3)$ to be computed for all states (all graph vertices). 
+If the graph is dense, both operations $\circ, *$ require at most $O(\vert K \vert^3)$ to be computed for all states (all graph vertices). 
 
-\item If the number of operators in a given formula $\varphi$ is $n$, then the formula semantics $m(\varphi)$ can be evaluated in $O(n \vert K \vert ^3)$. Finally it takes constant time to evaluate $m(\varphi) \neq \varphi$   determine the satisfiability answer. 
+\item If the number of operators in a given formula $\varphi$ is $n$, then the formula semantics $m(\varphi)$ can be evaluated in $O(n \vert K \vert ^3)$. Finally it takes constant time to evaluate $m(\varphi) \neq \varphi$ to  determine the satisfiability answer. 
 \end{itemize}
 
 From the above discussion, the worst case scenario takes $O(n \vert K \vert ^3)$ time which is polynomial. 
@@ -77,7 +77,7 @@ java -jar plantuml.jar test.dot
 
 As shown in the figure above, the input string is parsed into PDL abstract syntax tree (AST) which is read by the translator. Then it gets translated into SMT AST which is sent to CVC4 as SMT-LIB code. CVC4 checks the satisfiability and returns either \textit{sat}, \textit{unsat} or \textit{unknown}. When \textit{sat} result is returned, CVC4 is asked to return the SMT model and the values of additional SMT expressions. The returned SMT model and values are parsed into SMT ASTs which are converted into a kripke frame and a set of states satisfied by the PDL formula. Finally kripke, and dot files are generated. 
 
-The project is written in Java 8 \footnote{\url{https://github.com/mudathirmahgoub/pdl}}. To build the project, Gradle is used to download and compile the project and generate the jar files. Graphviz software is needed to visualize the generated dot file\footnote{\url{https://www.graphviz.org}}. 
+The project is written in Java 8 and available in github\footnote{\url{https://github.com/mudathirmahgoub/pdl}}. To build the project, Gradle is used to download and compile the project and generate the jar files. Graphviz software is needed to visualize the generated dot file\footnote{\url{https://www.graphviz.org}}. 
 
 \section{PDL formula translation}
 
