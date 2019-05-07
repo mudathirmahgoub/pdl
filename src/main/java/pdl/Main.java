@@ -68,6 +68,7 @@ public class Main
                 output = command.getOptionValue("o").trim();
             }
             String name = FilenameUtils.removeExtension(output);
+            System.out.println(result.satResult);
             FileUtils.writeStringToFile(new File(name + ".smt2"),
                     result.smtProgram, StandardCharsets.UTF_8);
             result.writeToDotFile(name + ".dot", true);

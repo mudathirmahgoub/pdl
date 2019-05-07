@@ -207,19 +207,5 @@ public class PdlResult extends Result
                 .collect(Collectors.toList());
         stringBuilder.append(satStates + "\n");
         stringBuilder.append("*/\n");
-
-        try
-        {
-            FileUtils.writeStringToFile(new File(filePath), stringBuilder.toString(), StandardCharsets.UTF_16);
-            Process process = Runtime.getRuntime().exec("java -jar plantuml.jar" + filePath);
-            process.waitFor();
-            String output = new String(IOUtils.toByteArray(process.getInputStream()), StandardCharsets.UTF_16);
-            System.out.println(output);
-        }
-        catch (Exception exception)
-        {
-            System.out.println(exception.toString());
-            exception.printStackTrace();
-        }
     }
 }
