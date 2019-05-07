@@ -35,8 +35,15 @@ On the other hand the satisfiability of a PDL formula in a given Kripke frame ca
 
 
 \subsection{Exercise 6.4}
+Exercise 6.4 in the book says: 
+\begin{quote}
+Give a polynomial time algorithm to check whether a given PDL formula
+is satisfied at a given state in a given Kripke frame. Describe briefly the data
+structures you would use to represent the formula and the Kripke frame. Specify
+your algorithm at a high level and give a brief complexity analysis
+\end{quote}
 
- The following is my reasoning for this exercise where $K$ is the set of all states in the frame:
+The following is my reasoning for this exercise where $K$ is the set of all states in the frame:
 \begin{itemize}
 \item Formulas $\textbf{0}$, $\textbf{1}$, and atomic propositions are subsets of $K$, therefore they can be computed in $O(\vert K \vert)$.
 \item Programs $\textbf{skip}?$, $\textbf{fail}?$, and atomic programs are subsets of $K \times K$, therefore they can be computed in $O(\vert K \vert^2)$.
