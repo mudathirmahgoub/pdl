@@ -301,7 +301,7 @@ public class TranslatorUtils
     public static String setSolverOptions(Cvc4Process cvc4Process) throws IOException
     {
         Map<String, String> options = new HashMap<>();
-        options.put("tlimit", "30000");
+        options.put("tlimit", "60000");
         String script = translateOptions(options);
         cvc4Process.sendCommand(script);
         return script;

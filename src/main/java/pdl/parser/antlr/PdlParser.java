@@ -45,9 +45,9 @@ public class PdlParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'K'", "'='", "','", "'m'", "'0'", "'1'", "'*'", "';'", "'?'", 
-			"'|'", "'\u203E'", "'skip'", "'fail'", "'if'", "'fi'", "'do'", "'od'", 
-			"'then'", "'else'", "'while'", "'repeat'", "'until'", null, null, null, 
-			null, "'('", "')'", "'['", "']'", "'{'", "'}'", "'<'", "'>'"
+			"'|'", null, "'skip'", "'fail'", "'if'", "'fi'", "'do'", "'od'", "'then'", 
+			"'else'", "'while'", "'repeat'", "'until'", null, null, null, null, "'('", 
+			"')'", "'['", "']'", "'{'", "'}'", "'<'", "'>'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();

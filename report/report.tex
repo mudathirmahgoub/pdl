@@ -281,6 +281,139 @@ Satisfying states: [s3, s4]
 \end{figure}
 
 
+\subsection{A valid PDL formula}
+\subsubsection*{Input}
+\begin{verbatim}
+not (<a converse> [a] p -> p)
+\end{verbatim}
+The above formula is equivalent to 
+\begin{align*}
+\neg(\langle a^{\_} \rangle [a] p \rightarrow p)
+\end{align*}
+
+\subsubsection*{Output}
+unsat
+
+
+This means the formula $\langle a^{\_} \rangle [a] p \rightarrow p$ is valid in all kripke frames.
+\section{Benchmark}
+To rigorously test the PDL solver, I used the valid formulas from chapter 5 as a benchmark. The total number of valid formulas in the benchmark is 42. The PDL solver managed to prove 24 formulas in less than 2 seconds, and timed out after 1 minute in 18 formulas.  I guess this benchmark can be used for the relation theory in CVC4. Table \ref{tab:benchmark} summarizes the result. 
+
+\begin{table}[H]
+\center
+\begin{tabular}{lccr}
+\toprule
+Label & PDL formula & Output & Duration \\
+\midrule
+Book formula 1 & $\neg ([a](p \wedge q) \leftrightarrow  [a] p \wedge [a]q)$   & unknown   & 60,000 ms \\
+Book formula 2 & $\neg ([a;b]p  \leftrightarrow  [a][b]p)$  & unknown   & 60,000 ms \\
+Book formula 3 & $\neg ([\textit{if }p\textit{ then }a\textit{ else }b]p  \leftrightarrow  [\textit{if }\neg  p\textit{ then }b\textit{ else }a]p)$  & unknown   & 60,000 ms \\
+	
+Deductive system 2 & $\neg ([a](p \rightarrow  q) \rightarrow  ([a]p \rightarrow  [a]q))$  & unsat & 100 ms \\
+	
+Deductive system 3 & $\neg ([a](p \wedge q) \rightarrow  ([a]p \wedge [a]q))$  & unknown   & 60,000 ms \\
+	
+Deductive system 4 & $\neg ([a \cup b]p  \leftrightarrow  [a]p \wedge [b]p)$  & unknown   & 60,000 ms \\
+	
+Deductive system 5 & $\neg ([a;b]p  \leftrightarrow  [a][b]p)$  & unknown   & 60,000 ms \\
+	
+Deductive system 6 & $\neg ([q?]p  \leftrightarrow  (q \rightarrow  p))$  & unsat  & 77 ms \\
+	
+Deductive system 7 & $\neg (p \wedge [a][a^{*}] p  \leftrightarrow  [a^{*}]p)$  & unknown   & 60,000 ms \\
+	
+Deductive system 8 & $\neg (p \wedge [a^{*}](p \rightarrow  [a]p) \rightarrow  [a^{*}]p)$  & unknown   & 60,000 ms \\
+	
+Deductive system 9 MP & $\neg ((p \wedge (p \rightarrow  q)) \rightarrow  q)$  & unsat  & 73 ms \\
+	
+
+Theorem 6.1 & $\neg ( \langle  a \rangle  (p \vee q)  \leftrightarrow   \langle  a \rangle  p \vee  \langle  a \rangle  q)$  & unsat & 90 ms \\
+	
+
+Theorem 6.2 & $\neg ([a](p \wedge q)  \leftrightarrow  [a]p \wedge [a]q)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 6.3 & $\neg ( \langle  a \rangle  p \wedge [a] q \rightarrow   \langle  a \rangle  (p \wedge q))$  & unsat & 78 ms \\
+	
+
+Theorem 6.4 & $\neg ([a](p \rightarrow  q) \rightarrow  ([a]p \rightarrow  [a] q))$  & unsat & 99 ms \\
+	
+
+Theorem 6.5 & $\neg ( \langle  a \rangle  (p \wedge q) \rightarrow   \langle  a \rangle   p \wedge  \langle  a \rangle   q)$  & unsat & 67 ms \\
+	
+
+Theorem 6.6 & $\neg ([a]p \vee [a] q \rightarrow  [a] (p \vee q))$  & unknown   & 60,000 ms \\
+	
+
+Theorem 6.7 & $\neg ( \langle  a \rangle   0  \leftrightarrow  0)$  & unsat & 57 ms \\
+	
+
+Theorem 6.8 & $\neg ([a]p  \leftrightarrow  \neg   \langle  a \rangle   \neg  p)$  & unsat & 95 ms \\
+	
+
+Theorem 8.1 & $\neg ( \langle  a \cup b \rangle   p  \leftrightarrow   \langle  a \rangle   p \vee  \langle  b \rangle   p)$  & unsat & 82 ms \\
+	
+
+Theorem 8.2 & $\neg ([a \cup b] p  \leftrightarrow  [a] p \wedge [b] p)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 10.1 & $\neg ( \langle  a ; b \rangle   p  \leftrightarrow   \langle  a \rangle   \langle  b \rangle   p)$  & unsat  & 93 ms  \\
+	
+
+Theorem 10.2 & $\neg ([a ; b] p  \leftrightarrow  [a][b] p)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 11.1 & $\neg ( \langle  p? \rangle   q  \leftrightarrow  p \wedge q)$  & unsat & 82 ms \\
+	
+
+Theorem 11.2 & $\neg ([p?] q  \leftrightarrow  (p \rightarrow  q))$  & unsat & 82 ms \\
+	
+
+Theorem 12.1 & $\neg ([p?] q  \leftrightarrow  (p \rightarrow  q))$  & unsat  & 80 ms \\
+	
+
+Theorem 15.1 & $\neg ([a^{*}]p \rightarrow  p)$  & unsat  & 66 ms \\
+	
+
+Theorem 15.2 & $\neg (p \rightarrow   \langle  a^{*} \rangle   p)$  & unsat & 68 ms \\
+	
+
+Theorem 15.3 & $\neg ([a^{*}]p \rightarrow  [a]p)$  & unsat & 74 ms \\
+	
+
+Theorem 15.4 & $\neg ( \langle  a \rangle  p \rightarrow   \langle  a^{*} \rangle  p)$  & unsat  & 71 ms \\
+	
+
+Theorem 15.5 & $\neg ([a^{*}]p  \leftrightarrow  [a^{*};a^{*}]p)$  & unsat &  1,200 ms\\
+	
+
+Theorem 15.6 & $\neg ( \langle  a^{*} \rangle  p  \leftrightarrow   \langle  a^{*};a^{*} \rangle  p)$  & unsat & 109ms \\
+	
+
+Theorem 15.7 & $\neg ([a^{*}]p  \leftrightarrow  [(a^*)^*]p)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 15.8 & $\neg ( \langle  a^{*} \rangle  p  \leftrightarrow   \langle  (a^*)^* \rangle  p)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 15.9 & $\neg ([a^{*}]p  \leftrightarrow  p \wedge [a][a^{*}]p)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 15.10 & $\neg ( \langle  a^{*} \rangle  p  \leftrightarrow  p \vee  \langle  a \rangle   \langle  a^{*} \rangle  p)$  & unknown   & 60,000 ms \\
+	
+
+Theorem 15.11 & $\neg ([a^{*}]p  \leftrightarrow  p \wedge [a^{*}](p \rightarrow  [a]p))$  & unknown   & 60,000 ms \\
+	
+
+Theorem 15.12 & $\neg ( \langle  a^{*} \rangle  p  \leftrightarrow  p \vee  \langle  a^{*} \rangle  (\neg  p \wedge  \langle  a \rangle  p))$  & unknown   & 60,000 ms \\
+theorem 13.1 & $\neg (p \rightarrow  [a] \langle  a^{\_} \rangle  p)$  & unsat & 375 ms \\
+theorem 13.2 & $\neg (p \rightarrow  [a^{\_}] \langle  a \rangle  p)$  & unsat & 73 ms \\
+theorem 13.3 & $\neg ( \langle  a \rangle  [a^{\_}]p \rightarrow  p)$  & unsat & 79 ms \\
+theorem 13.4 & $\neg ( \langle  a^{\_} \rangle  [a]p \rightarrow  p)$  & unsat & 74 ms \\  
+\bottomrule 
+\end{tabular}
+\caption{PDL solver results for chapter 5 valid formulas with 1 minute timeout.}
+\label{tab:benchmark}
+\end{table}
 
 \bibliographystyle{plain}
 

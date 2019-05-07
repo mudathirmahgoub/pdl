@@ -90,189 +90,189 @@ class ValidFormulas
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_1() throws Exception
+    @Test void theorem6_1() throws Exception
     {
         String pdl = "not(<a>(p or q) <-> <a>p or <a>q)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_2() throws Exception
+    @Test void theorem6_2() throws Exception
     {
         String pdl = "not([a](p and q) <-> [a]p and [a]q)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_3() throws Exception
+    @Test void theorem6_3() throws Exception
     {
         String pdl = "not(<a>p and [a] q -> <a>(p and q))";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_4() throws Exception
+    @Test void theorem6_4() throws Exception
     {
         String pdl = "not([a](p -> q) -> ([a]p -> [a] q))";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_5() throws Exception
+    @Test void theorem6_5() throws Exception
     {
         String pdl = "not(<a>(p and q) -> <a> p and <a> q)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_6() throws Exception
+    @Test void theorem6_6() throws Exception
     {
         String pdl = "not([a]p or [a] q -> [a] (p or q))";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_7() throws Exception
+    @Test void theorem6_7() throws Exception
     {
         String pdl = "not(<a> 0 <-> 0)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream6_8() throws Exception
+    @Test void theorem6_8() throws Exception
     {
         String pdl = "not([a]p <-> not <a> not p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream8_1() throws Exception
+    @Test void theorem8_1() throws Exception
     {
         String pdl = "not(<a union b> p <-> <a> p or <b> p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream8_2() throws Exception
+    @Test void theorem8_2() throws Exception
     {
         String pdl = "not([a union b] p <-> [a] p and [b] p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream10_1() throws Exception
+    @Test void theorem10_1() throws Exception
     {
         String pdl = "not(<a ; b> p <-> <a><b> p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream10_2() throws Exception
+    @Test void theorem10_2() throws Exception
     {
         String pdl = "not([a ; b] p <-> [a][b] p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream11_1() throws Exception
+    @Test void theorem11_1() throws Exception
     {
         String pdl = "not(<p?> q <-> p and q)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream11_2() throws Exception
+    @Test void theorem11_2() throws Exception
     {
         String pdl = "not([p?] q <-> (p -> q))";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream12_1() throws Exception
+    @Test void theorem12_1() throws Exception
     {
         String pdl = "not([p?] q <-> (p -> q))";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_1() throws Exception
+    @Test void theorem15_1() throws Exception
     {
         String pdl = "not([a*]p -> p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_2() throws Exception
+    @Test void theorem15_2() throws Exception
     {
         String pdl = "not(p -> <a*> p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_3() throws Exception
+    @Test void theorem15_3() throws Exception
     {
         String pdl = "not([a*]p -> [a]p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_4() throws Exception
+    @Test void theorem15_4() throws Exception
     {
         String pdl = "not(<a>p -> <a*>p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_5() throws Exception
+    @Test void theorem15_5() throws Exception
     {
         String pdl = "not([a*]p <-> [a*;a*]p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_6() throws Exception
+    @Test void theorem15_6() throws Exception
     {
         String pdl = "not(<a*>p <-> <a*;a*>p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_7() throws Exception
+    @Test void theorem15_7() throws Exception
     {
         String pdl = "not([a*]p <-> [a**]p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_8() throws Exception
+    @Test void theorem15_8() throws Exception
     {
         String pdl = "not(<a*>p <-> <a**>p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_9() throws Exception
+    @Test void theorem15_9() throws Exception
     {
         String pdl = "not([a*]p <-> p and [a][a*]p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_10() throws Exception
+    @Test void theorem15_10() throws Exception
     {
         String pdl = "not(<a*>p <-> p or <a><a*>p)";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_11() throws Exception
+    @Test void theorem15_11() throws Exception
     {
         String pdl = "not([a*]p <-> p and [a*](p -> [a]p))";
         PdlResult result = PdlUtils.runCVC4(pdl);
         assertEquals("unsat", result.satResult);
     }
 
-    @Test void theoream15_12() throws Exception
+    @Test void theorem15_12() throws Exception
     {
         String pdl = "not(<a*>p <-> p or <a*>(not p and <a>p))";
         PdlResult result = PdlUtils.runCVC4(pdl);

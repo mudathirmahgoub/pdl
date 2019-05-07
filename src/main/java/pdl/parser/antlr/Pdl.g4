@@ -82,7 +82,7 @@ QuestionMark : '?' ;
 
 Bar : '|';
 
-Overline: '‾' ;
+Overline: '‾' | 'converse';
 
 Skip : 'skip' ;
 
