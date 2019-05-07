@@ -8,6 +8,7 @@
 \usepackage{lmodern}
 \usepackage{url}
 \usepackage{bm}
+\usepackage{color}
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
@@ -85,9 +86,13 @@ What does it mean to have a satisfiable formula in PDL ?
 
 A PDL formula $\varphi$ is satisfiable if there exists a kripke frame $\mathfrak{K}=(K, m_{\mathfrak{K}})$ and a state  $u$ such that $u \in m_{\mathfrak{K}}(\varphi) $, and we write $\mathfrak{K}, u \models \varphi$. In simple words, a formula is satisfiable if its meaning is nonempty in some kripke frame (i.e. $m_{\mathfrak{K}}(\varphi) \neq \phi$). 
 
-Since the PDL semantics uses set and relation operations, they are translated directly into their corresponding operations in the relation theory in CVC4. The only exception is the reflexive transitive closure $*$ which is not supported directly in CVC4, but supported through the built-in transitive closure. Table \ref{tab:translation} summarizes this translation. Other PDL operators are defined using the basic operators in table \ref{tab:translation}. 
+Since the PDL semantics uses set and relation operations, they are translated directly into their corresponding operations in the relation theory in CVC4. The only exception is the reflexive transitive closure $*$ which is not supported directly in CVC4, but supported through the built-in transitive closure. Table \ref{tab:translation} summarizes this translation. Other PDL operators are defined using the basic operators in table \ref{tab:translation}. The book \cite{dynamic} introduces the converse operator $^{\_}$ in page 177 for \textit{backtracking} programs which was not covered in class. Its semantics is the transpose relation which is defined as:
+\begin{align*}
+m_{\mathfrak{K}}(a^{\_}) = m_{\mathfrak{K}}(a)^{\_} = \lbrace (v, u) \; \vert \; (u, v) \in m_{\mathfrak{K}}(a) \rbrace
+\end{align*}
 
-\begin{table}
+
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{ll} 
 \toprule
@@ -112,13 +117,95 @@ $a;b$ & $a \circ b$ where $\circ$ is the join operator\\
 $a \cup b$ (choice) & $a \cup b$ (union)\\
 $a^*$ (iteration) & $\textit{atomIdentity} \cup a^+$, (transitive closure)\\
 $p?$ (test) & $(p \times p) \cap \textit{atomIdentity}$\\
+\color{red}
+$a^{\_}$ (converse) & \color{red} $a^t (transpose)$\\
+
 \bottomrule
 \end{tabular}
 \end{center}
 \caption{PDL translation to CVC4.} \label{tab:translation}
 \end{table}
 
-What does is the meaning of the operator $\leftrightarrow$
+\subsection{The semantics of the equivalence operator $\leftrightarrow$}
+
+The textbook \cite{dynamic} did not mention explicitly the semantics of the operator $\leftrightarrow$. However in theorem 5.8 (and other theorems), the book proves the validity of the formula
+\begin{align*}
+\langle \alpha \cup \beta \rangle \varphi \leftrightarrow \langle \alpha \rangle \varphi \vee \langle \beta \rangle \varphi
+\end{align*}
+by proving this set equality 
+\begin{align*}
+m_\mathfrak{K}( \langle \alpha \cup \beta \rangle \varphi ) = m_\mathfrak{K}(\langle \alpha \rangle\varphi  \vee  \langle \beta \rangle \varphi)
+\end{align*}
+
+This set equality $=_{\mathbb{P}(K)} : \mathbb{P}(K) \times \mathbb{P}(K) \rightarrow \lbrace \textit{true, false} \rbrace$ ($\mathbb{P}(K)$ is the power set of $K$) is an operation that returns a boolean. This is different than the semantics of operators $\rightarrow, \wedge, \vee: \mathbb{P}(K) \times \mathbb{P}(K) \rightarrow \mathbb{P}(K)$ which returns a subset of $K$. It is possible to use the set equality in $CVC4$ with an $ite$ (\textit{if-then-else}) expression to return a subset of $K$ as follows: 
+\begin{align*}
+m_\mathfrak{K} (p \leftrightarrow q) = ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right)) 
+\end{align*}
+
+In my translation, however,  I used the following semantics:
+\begin{align*}
+m_\mathfrak{K} (p \leftrightarrow q) = m_\mathfrak{K} ((p \rightarrow q) \wedge (q \rightarrow p))
+\end{align*}
+The following two lemmas connect between these three approaches in PDL formulas. 
+
+\subsection*{Lemma 1}
+
+\begin{align*}
+m_\mathfrak{K} ((p \rightarrow q) \wedge (q \rightarrow p)) = ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right)) 
+\end{align*}
+\subsubsection*{\textit{Proof}}
+\begin{enumerate}
+\item Case $m_\mathfrak{K} (p) =  m_\mathfrak{K}(q)$:
+\begin{align*}
+m_\mathfrak{K} ((p \rightarrow q) \wedge (q \rightarrow p)) &= 
+((K - m_\mathfrak{K}(p)) \cup m_\mathfrak{K} (q)) \cap 
+((K - m_\mathfrak{K}(p)) \cup m_\mathfrak{K} (q)) \\
+&= K \cap K  \\
+&=K  = ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right)) 
+\end{align*}
+\item Case $m_\mathfrak{K} (p) \neq  m_\mathfrak{K}(q)$:
+\begin{align*}
+m_\mathfrak{K} ((p \rightarrow q) \wedge (q \rightarrow p)) &= 
+((K - m_\mathfrak{K}(p)) \cup m_\mathfrak{K} (q)) \cap 
+((K - m_\mathfrak{K}(p)) \cup m_\mathfrak{K} (q)) \\
+&= \left( K - (m_\mathfrak{K}(p) - m_\mathfrak{K}(q) \right)  \cap 
+   \left( K - (m_\mathfrak{K}(q) - m_\mathfrak{K}(p) \right) \\
+&=  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right) \\
+&= ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right)) 
+\end{align*}
+\end{enumerate}
+
+
+\subsection*{Lemma 2}
+
+The PDL formula $p \leftrightarrow q$ is valid using the textbook definition $m_\mathfrak{K}(p)= m_\mathfrak{K}(q)$ if and only if the formula $\neg ((p \rightarrow q) \wedge (q \rightarrow p))$ is \textit{unsatisfiable}.
+\subsubsection*{\textit{Proof}}
+Assume the formula $p \leftrightarrow q$ is valid. This means $m_\mathfrak{K}(p)= m_\mathfrak{K}(q)$. Then
+\begin{align*}
+m_\mathfrak{K}(\neg ((p \rightarrow q) \wedge (q \rightarrow p))) 
+&= K - m_\mathfrak{K}((p \rightarrow q) \wedge (q \rightarrow p)) \\
+&= K - ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right))  \tag{\text{using lemma 1}} \\
+&= \phi
+\end{align*}
+
+Assume the formula $\neg ((p \rightarrow q) \wedge (q \rightarrow p))$ is \textit{unsatisfiable}. Then 
+\begin{align*}
+m_\mathfrak{K}(\neg ((p \rightarrow q) \wedge (q \rightarrow p))) &= \phi \Rightarrow \\
+K- m_\mathfrak{K}((p \rightarrow q) \wedge (q \rightarrow p)) &= \phi \Rightarrow \\
+K - ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right)) &= \phi \Rightarrow \\
+   ite(m_\mathfrak{K} (p) =  m_\mathfrak{K}(q), K,  K - \left( (m_\mathfrak{K}(p) - m_\mathfrak{K}(q))  \cup 
+   (m_\mathfrak{K}(q) - m_\mathfrak{K}(p)) \right)) &= K \Rightarrow \\
+   m_\mathfrak{K} (p) =  m_\mathfrak{K}(q)
+\end{align*}
+
+
 
 \section{Examples}
 
