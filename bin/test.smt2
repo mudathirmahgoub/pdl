@@ -9,14 +9,18 @@
 (declare-fun atomUniverse () (Set (Tuple Atom)))
 (declare-fun atomIdentity () (Set (Tuple Atom Atom)))
 (declare-fun p () (Set (Tuple Atom)))
+(declare-fun q () (Set (Tuple Atom)))
 (declare-fun a () (Set (Tuple Atom Atom)))
+(declare-fun b () (Set (Tuple Atom Atom)))
 ; Universe definition for Atoms
-(assert (= atomUniverse (as univset (Set (Tuple Atom)))))
+(assert (forall ((_x_ Atom)) (member (mkTuple _x_) atomUniverse)))
 ; Identity axiom 1 for Atoms
 (assert (forall ((_x Atom)) (member (mkTuple _x _x) atomIdentity)))
 ; Identity axiom 2 for Atoms
 (assert (forall ((_x Atom)(_y Atom)) (=> (member (mkTuple _x _y) atomIdentity) (= _x _y))))
 ; Main formula
-(assert (not (= (intersection (join (union a (tclosure a)) (setminus atomUniverse (join (union (join a a) (tclosure (join a a))) (setminus atomUniverse p)))) (join (union a (tclosure a)) (setminus atomUniverse (join (union (join a a) (tclosure (join a a))) (setminus atomUniverse (setminus atomUniverse p)))))) (as emptyset (Set (Tuple Atom))))))
+(assert (not (= (intersection (intersection p q) (join (join (union atomIdentity (tclosure (union (join (intersection atomIdentity (product p p)) a) (join (intersection atomIdentity (product q q)) b)))) (intersection atomIdentity (product (intersection (setminus atomUniverse p) (setminus atomUniverse q)) (intersection (setminus atomUniverse p) (setminus atomUniverse q))))) (intersection (join b (intersection p (setminus atomUniverse q))) (join a (intersection q (setminus atomUniverse p)))))) (as emptyset (Set (Tuple Atom))))))
+(set-option :tlimit 30000)
 (check-sat)
 (get-model)
+(get-value ((intersection (intersection p q) (join (join (union atomIdentity (tclosure (union (join (intersection atomIdentity (product p p)) a) (join (intersection atomIdentity (product q q)) b)))) (intersection atomIdentity (product (intersection (setminus atomUniverse p) (setminus atomUniverse q)) (intersection (setminus atomUniverse p) (setminus atomUniverse q))))) (intersection (join b (intersection p (setminus atomUniverse q))) (join a (intersection q (setminus atomUniverse p))))))))
